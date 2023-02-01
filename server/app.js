@@ -1,28 +1,16 @@
-// import express from "express";
-// import dotenv from "dotenv";
+import express from "express";
+import morgan from "morgan";
 
-// const app = express();
-// dotenv.config();
-
-// // app.get("/api/v1/auth");
-// // app.use(express.json());
-// app.listen(process.env.PORT, () => {
-//    console.log(`Server está corriendo ${process.env.PORT}`);
-// });
-
-import express from 'express';
-import morgan from 'morgan';
+import userRouter from "./routes/users.routes.js";
 
 // ? MIDDLEWARES
 const app = express();
-app.use(morgan('dev'));
+app.use(morgan("dev"));
 app.use(express.json());
 
-// ? SERVE PUBLIC FILES
-// app.use(express.static(`${__dirname}/public`));
-
 // ? ROUTES
-app.use('/api/v1/users', userRouter);
+
+app.use("/api/v1/users", userRouter);
 
 const port = 3000;
 
