@@ -15,7 +15,7 @@ function LOGIN() {
     let { email, password } = form;
 
     if ((!email && email !== "") || email == "") {
-      newErrors.email = "Espacio de correo vacio !";
+      newErrors.email = "Espacio de Username Vacio !";
       //email = "";
     }
     // validate with regex
@@ -32,7 +32,6 @@ function LOGIN() {
     let newErrors = findErrors();
 
     if (Object.keys(newErrors).length > 0) {
-      console.log("entro");
       setErrors(newErrors);
     } else {
       //LLAMEN A LA API
@@ -51,16 +50,16 @@ function LOGIN() {
                   <h2 className="fw-bold mb-2 text-uppercase ">
                     Iniciar Sesion
                   </h2>
-                  <p>Por favor ingrese el correo electronico y Contrasena</p>
+                  <p>Por favor ingrese el Nombre de Usuario y Contrasena</p>
                   <div className="mb-3">
                     <Form onSubmit={handleSubmit}>
                       <Form.Group className="mb-3" controlId="formBasicEmail">
                         <Form.Label className="text-center">
-                          Direccion de correo
+                          Nombre de usuario
                         </Form.Label>
                         <Form.Control
-                          type="email"
-                          placeholder="Enter email"
+                          type="text"
+                          placeholder="Ingrese Usuario"
                           onChange={(e) => setField("email", e.target.value)}
                           isInvalid={!!errors.email}
                         />
@@ -73,7 +72,7 @@ function LOGIN() {
                         <Form.Label>Contrasena</Form.Label>
                         <Form.Control
                           type="password"
-                          placeholder="Password"
+                          placeholder="Contrasena"
                           onChange={(e) => setField("password", e.target.value)}
                           isInvalid={!!errors.password}
                         />
