@@ -1,5 +1,8 @@
-import express from 'express';
-import morgan from 'morgan';
+
+import express from "express";
+import morgan from "morgan";
+import dotenv from "dotenv";
+
 
 import authRoutes from './routes/auth.routes.js';
 import usersRoutes from './routes/users.routes.js';
@@ -7,6 +10,8 @@ import orderRoutes from './routes/orders.routes.js';
 import AppError from './utilities/app.error.js';
 
 // ! ERROR HANDLER
+
+dotenv.config();
 
 // ? MIDDLEWARES
 const app = express();
@@ -34,8 +39,10 @@ app.use((err, req, res, next) => {
     });
 });
 
-const port = 3000;
+const {PORT} = process.env;
 
-app.listen(port, () => {
-    console.log(`App running on port ${port}`);
+
+app.listen(PORT, () => {
+  console.log(`App running on port ${PORT}`);
+
 });

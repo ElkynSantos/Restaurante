@@ -14,7 +14,7 @@ function LOGIN() {
                   <h2 className="fw-bold mb-2 text-uppercase ">
                     Iniciar Sesion
                   </h2>
-                  <p>Por favor ingrese correo electronico y Contrasena</p>
+                  <p>Por favor ingrese correo electrónico y contraseña</p>
                   <div className="mb-3">
                     <Form>
                       <Form.Group className="mb-3" controlId="formBasicEmail">
@@ -23,7 +23,7 @@ function LOGIN() {
                         </Form.Label>
                         <Form.Control
                           type="email"
-                          placeholder="Enter email"
+                          placeholder="Ingresar correo"
                           onChange={(e) => setField("email", e.target.value)}
                         />
                       </Form.Group>
@@ -32,8 +32,8 @@ function LOGIN() {
                         className="mb-3"
                         controlId="formBasicPassword"
                       >
-                        <Form.Label>Contrasena</Form.Label>
-                        <Form.Control type="password" placeholder="Password" />
+                        <Form.Label>Contraseña</Form.Label>
+                        <Form.Control type="password" placeholder="Contraseña" />
                       </Form.Group>
                       <Form.Group
                         className="mb-3"
