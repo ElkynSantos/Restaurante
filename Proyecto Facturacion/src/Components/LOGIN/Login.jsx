@@ -1,7 +1,44 @@
-import React from "react";
+import React, { useState } from "react";
 import { Col, Button, Row, Container, Card, Form } from "react-bootstrap";
 
 function LOGIN() {
+  const [form, setForm] = useState({});
+  const [errors, setErrors] = useState({});
+  const setField = (field, value) => {
+    setForm({
+      ...form,
+      [field]: value,
+    });
+  };
+  function findErrors() {
+    const newErrors = {};
+    let { email, password } = form;
+
+    if ((!email && email !== "") || email == "") {
+      newErrors.email = "Espacio de correo vacio !";
+      //email = "";
+    }
+    // validate with regex
+    if ((!password && password !== "") || password == "") {
+      newErrors.password = "Espacio de contrasena vacio !";
+      //password = "";
+    }
+
+    console.log(newErrors.password);
+    return newErrors;
+  }
+  async function handleSubmit(e) {
+    e.preventDefault();
+    let newErrors = findErrors();
+
+    if (Object.keys(newErrors).length > 0) {
+      console.log("entro");
+      setErrors(newErrors);
+    } else {
+      //LLAMEN A LA API
+    }
+  }
+
   return (
     <div>
       <Container>
@@ -14,9 +51,9 @@ function LOGIN() {
                   <h2 className="fw-bold mb-2 text-uppercase ">
                     Iniciar Sesion
                   </h2>
-                  <p>Por favor ingrese correo electronico y Contrasena</p>
+                  <p>Por favor ingrese el correo electronico y Contrasena</p>
                   <div className="mb-3">
-                    <Form>
+                    <Form onSubmit={handleSubmit}>
                       <Form.Group className="mb-3" controlId="formBasicEmail">
                         <Form.Label className="text-center">
                           Direccion de correo
@@ -25,6 +62,7 @@ function LOGIN() {
                           type="email"
                           placeholder="Enter email"
                           onChange={(e) => setField("email", e.target.value)}
+                          isInvalid={!!errors.email}
                         />
                       </Form.Group>
 
@@ -33,7 +71,12 @@ function LOGIN() {
                         controlId="formBasicPassword"
                       >
                         <Form.Label>Contrasena</Form.Label>
-                        <Form.Control type="password" placeholder="Password" />
+                        <Form.Control
+                          type="password"
+                          placeholder="Password"
+                          onChange={(e) => setField("password", e.target.value)}
+                          isInvalid={!!errors.password}
+                        />
                       </Form.Group>
                       <Form.Group
                         className="mb-3"
