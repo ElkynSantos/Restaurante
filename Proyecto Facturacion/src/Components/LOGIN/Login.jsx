@@ -15,6 +15,7 @@ function LOGIN() {
     let { email, password } = form;
 
     if ((!email && email !== "") || email == "") {
+      //En realidad es username
       newErrors.email = "Espacio de Username Vacio !";
       //email = "";
     }
