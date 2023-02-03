@@ -44,7 +44,7 @@ function LOGIN() {
     <div>
       <Container>
         <Row className="vh-100 d-flex justify-content-center align-items-center">
-          <Col md={88} lg={100} xs={15}>
+          <Col md={88} lg={6} xs={15}>
             <div className="border border-3 border-primary"></div>
             <Card className="shadow">
               <Card.Body>
