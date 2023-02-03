@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Col, Button, Row, Container, Card, Form } from "react-bootstrap";
+import "./LOGIN.css";
 
 function LOGIN() {
   const [form, setForm] = useState({});
