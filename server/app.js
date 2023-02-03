@@ -1,17 +1,26 @@
-
-import express from "express";
-import morgan from "morgan";
-import dotenv from "dotenv";
-
+import express from 'express';
+import morgan from 'morgan';
+import dotenv from 'dotenv';
 
 import authRoutes from './routes/auth.routes.js';
 import usersRoutes from './routes/users.routes.js';
 import orderRoutes from './routes/orders.routes.js';
 import AppError from './utilities/app.error.js';
 
+import db from './db.js';
+
 // ! ERROR HANDLER
 
 dotenv.config();
+
+// ? DATABASE
+
+try {
+    await db.authenticate();
+    console.log('Conexión Correcta a la DB');
+} catch (error) {
+    console.log(`Error en la conexión: ${error}`);
+}
 
 // ? MIDDLEWARES
 const app = express();
@@ -39,10 +48,8 @@ app.use((err, req, res, next) => {
     });
 });
 
-const {PORT} = process.env;
-
+const { PORT } = process.env;
 
 app.listen(PORT, () => {
-  console.log(`App running on port ${PORT}`);
-
+    console.log(`App running on port ${PORT}`);
 });
