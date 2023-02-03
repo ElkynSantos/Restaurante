@@ -1,12 +1,50 @@
-import React from "react";
+import React, { useState } from "react";
 import { Col, Button, Row, Container, Card, Form } from "react-bootstrap";
+import "./LOGIN.css";
 
 function LOGIN() {
+  const [form, setForm] = useState({});
+  const [errors, setErrors] = useState({});
+  const setField = (field, value) => {
+    setForm({
+      ...form,
+      [field]: value,
+    });
+  };
+  function findErrors() {
+    const newErrors = {};
+    let { email, password } = form;
+
+    if ((!email && email !== "") || email == "") {
+      //En realidad es username
+      newErrors.email = "Espacio de Username Vacio !";
+      //email = "";
+    }
+    // validate with regex
+    if ((!password && password !== "") || password == "") {
+      newErrors.password = "Espacio de contrasena vacio !";
+      //password = "";
+    }
+
+    console.log(newErrors.password);
+    return newErrors;
+  }
+  async function handleSubmit(e) {
+    e.preventDefault();
+    let newErrors = findErrors();
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+    } else {
+      //LLAMEN A LA API
+    }
+  }
+
   return (
     <div>
       <Container>
         <Row className="vh-100 d-flex justify-content-center align-items-center">
-          <Col md={88} lg={100} xs={15}>
+          <Col md={88} lg={6} xs={15}>
             <div className="border border-3 border-primary"></div>
             <Card className="shadow">
               <Card.Body>
@@ -14,17 +52,15 @@ function LOGIN() {
                   <h2 className="fw-bold mb-2 text-uppercase ">
                     Iniciar Sesion
                   </h2>
-                  <p>Por favor ingrese correo electrónico y contraseña</p>
                   <div className="mb-3">
-                    <Form>
+                    <Form onSubmit={handleSubmit}>
                       <Form.Group className="mb-3" controlId="formBasicEmail">
                         <Form.Label className="text-center">
-                          Direccion de correo
+                          Nombre de usuario
                         </Form.Label>
                         <Form.Control
-                          type="email"
-                          placeholder="Ingresar correo"
                           onChange={(e) => setField("email", e.target.value)}
+                          isInvalid={!!errors.email}
                         />
                       </Form.Group>
 
@@ -32,8 +68,7 @@ function LOGIN() {
                         className="mb-3"
                         controlId="formBasicPassword"
                       >
-                        <Form.Label>Contraseña</Form.Label>
-                        <Form.Control type="password" placeholder="Contraseña" />
+
                       </Form.Group>
                       <Form.Group
                         className="mb-3"

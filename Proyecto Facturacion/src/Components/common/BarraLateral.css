@@ -1,0 +1,13 @@
+body {
+  width: 100% !important;
+}
+
+.imagen {
+  width: 320px;
+  height: 100px;
+}
+
+.imagen2 {
+  width: 400px;
+  height: 200px;
+}
