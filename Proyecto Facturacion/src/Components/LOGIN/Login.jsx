@@ -52,7 +52,6 @@ function LOGIN() {
                   <h2 className="fw-bold mb-2 text-uppercase ">
                     Iniciar Sesion
                   </h2>
-                  <p>Por favor ingrese el Nombre de Usuario y Contrasena</p>
                   <div className="mb-3">
                     <Form onSubmit={handleSubmit}>
                       <Form.Group className="mb-3" controlId="formBasicEmail">
@@ -60,8 +59,6 @@ function LOGIN() {
                           Nombre de usuario
                         </Form.Label>
                         <Form.Control
-                          type="text"
-                          placeholder="Ingrese Usuario"
                           onChange={(e) => setField("email", e.target.value)}
                           isInvalid={!!errors.email}
                         />
@@ -71,13 +68,7 @@ function LOGIN() {
                         className="mb-3"
                         controlId="formBasicPassword"
                       >
-                        <Form.Label>Contrasena</Form.Label>
-                        <Form.Control
-                          type="password"
-                          placeholder="Contrasena"
-                          onChange={(e) => setField("password", e.target.value)}
-                          isInvalid={!!errors.password}
-                        />
+
                       </Form.Group>
                       <Form.Group
                         className="mb-3"
