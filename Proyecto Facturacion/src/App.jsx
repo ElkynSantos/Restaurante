@@ -1,10 +1,20 @@
-import LOGIN from "./Components/LOGIN/index";
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import LOGIN from './Components/LOGIN/index';
 
-import "./App.css";
-import { useDispatch, useSelector } from "react-redux";
+import INICIO from './Components/INICIO/index';
+
+import './App.css';
+import { useDispatch, useSelector } from 'react-redux';
 
 function App() {
-  return <LOGIN />;
+    return (
+        <BrowserRouter>
+            <Routes>
+                <Route index element={<LOGIN />} />
+                <Route path="/Home" element={<INICIO />} />
+            </Routes>
+        </BrowserRouter>
+    );
 }
 
 export default App;
