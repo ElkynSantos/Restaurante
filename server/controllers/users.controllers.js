@@ -7,7 +7,7 @@ import { integerSanitizer } from '../utilities/data.sanitizer.js';
 import db from '../db.js';
 import { encrypt } from '../utilities/handle.bcrypt.js';
 
-import userIdGenerator from '../utilities/random.users.js';
+import { userIdGenerator, generateToken } from '../utilities/random.users.js';
 
 const allUsers = async (req, res, next) => {
     try {
@@ -36,7 +36,6 @@ const createUser = async (req, res, next) => {
             phone,
             email,
             password,
-            token,
         } = req.body;
 
         const emptyParams = Object.values({
@@ -50,7 +49,6 @@ const createUser = async (req, res, next) => {
             phone,
             email,
             password,
-            token,
         }).some((val) => !val);
 
         if (emptyParams) {
@@ -64,13 +62,16 @@ const createUser = async (req, res, next) => {
         const userName = userIdGenerator(
             name,
             lastName,
-            dni,
             new Date().getDate().toString()
         );
 
         //TODO: Función para encriptación de passwords
 
         const hashedPass = await encrypt(password);
+
+        //TODO: Función para crear random tokens
+
+        const token = generateToken();
 
         //TODO: Función para creación de usuarios
 
@@ -166,7 +167,7 @@ const editUserStaus = async (req, res, next) => {
     try {
         const { opt, userDni } = req.body;
 
-        const [userDeleted] = await db.query(
+        const [changeUserStatus] = await db.query(
             `CALL edit_user_status(:opt, :userDni)`,
             {
                 replacements: {
@@ -176,17 +177,47 @@ const editUserStaus = async (req, res, next) => {
             }
         );
 
-        if (userDeleted.response === 0) {
-            return next(new AppError(userDeleted.msg, 401));
+        if (changeUserStatus.response === 0) {
+            return next(new AppError(changeUserStatus.msg, 401));
         }
 
         return res.status(200).json({
             status: 'Ok',
-            msg: userDeleted.msg,
+            msg: changeUserStatus.msg,
         });
     } catch (error) {
         return next(new AppError(`Error en la base de datos ${error}`, 500));
     }
 };
 
-export { allUsers, createUser, getUser, updateUser, editUserStaus };
+const updatePassword = async (req, res, next) => {
+    try {
+        const { token, newPassword } = req.body;
+
+        const hashedPass = await encrypt(newPassword);
+        const [passwordUpdated] = await db.query(
+            'CALL update_password(:token, :updatedPassword)',
+            {
+                replacements: {
+                    token: token,
+                    updatedPassword: hashedPass,
+                },
+            }
+        );
+        return res.status(200).json({
+            status: 'Ok',
+            msg: passwordUpdated.msg,
+        });
+    } catch (error) {
+        return next(new AppError(`Error en la base de datos ${error}`, 500));
+    }
+};
+
+export {
+    allUsers,
+    createUser,
+    getUser,
+    updateUser,
+    editUserStaus,
+    updatePassword,
+};

@@ -1,5 +1,9 @@
-import AppError from '../utilities/app.error.js';
+//TODO: Librerias importadas
 
+import jwt from 'jsonwebtoken';
+
+//TODO: Funciones programadas
+import AppError from '../utilities/app.error.js';
 import db from '../db.js';
 import { comparePassword } from '../utilities/handle.bcrypt.js';
 
