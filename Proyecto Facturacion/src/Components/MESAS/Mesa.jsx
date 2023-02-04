@@ -79,13 +79,13 @@ function MENU() {
                                             variant="primary"
                                             onClick={handleShow}
                                         >
-                                            Launch demo modal
+                                            Seleccionar
                                         </Button>
 
                                         <Modal show={show} onHide={handleClose}>
                                             <Modal.Header closeButton>
                                                 <Modal.Title>
-                                                    Modal heading
+                                                    Informacion de Cliente
                                                 </Modal.Title>
                                             </Modal.Header>
                                             <Modal.Body>
@@ -95,11 +95,10 @@ function MENU() {
                                                         controlId="exampleForm.ControlInput1"
                                                     >
                                                         <Form.Label>
-                                                            Email address
+                                                            Nombre Cliente
                                                         </Form.Label>
                                                         <Form.Control
-                                                            type="email"
-                                                            placeholder="name@example.com"
+                                                            placeholder="(nombre)"
                                                             autoFocus
                                                         />
                                                     </Form.Group>
