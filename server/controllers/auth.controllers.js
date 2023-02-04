@@ -1,11 +1,30 @@
-import AppError from '../utilities/app.error.js';
+//TODO: Librerias importadas
 
+import jwt from 'jsonwebtoken';
+
+//TODO: Funciones programadas
+import AppError from '../utilities/app.error.js';
 import db from '../db.js';
 import { comparePassword } from '../utilities/handle.bcrypt.js';
+
+const signToken = (id, rol, name) => {
+    return jwt.sign({ id, rol, name }, process.env.JWT_SECRET, {
+        expiresIn: process.env.JWT_EXPIRES_IN,
+    });
+};
 
 const login = async (req, res, next) => {
     try {
         const { user, userPassword } = req.body;
+
+        if (!user || !userPassword) {
+            return next(
+                new AppError(
+                    `El usuario o la contraseña no pueden ir vacíos`,
+                    400
+                )
+            );
+        }
 
         const [userExists] = await db.query(
             'CALL user_authentication(:userName)',
@@ -29,8 +48,15 @@ const login = async (req, res, next) => {
             return next(new AppError(`Usuario o contraseña invalidos`, 401));
         }
 
+        const jwtToken = signToken(
+            userExists.id,
+            userExists.rol,
+            userExists.name
+        );
+
         return res.status(200).json({
             status: 'Ok',
+            jwtToken,
             msg: `¡Bienvenido al sistema, ${userExists.name}!`,
         });
     } catch (error) {
