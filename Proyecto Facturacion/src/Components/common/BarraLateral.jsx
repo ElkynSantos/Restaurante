@@ -64,7 +64,7 @@ function Example() {
                                 <BsFillFileEarmarkBarGraphFill></BsFillFileEarmarkBarGraphFill>
                                 <p>Reportes</p>
                             </Button>
-                            <Button variant="primary" size="lg">
+                            <Button href="/" variant="primary" size="lg">
                                 <IoIosExit></IoIosExit>
                                 <p>Salir</p>
                             </Button>
