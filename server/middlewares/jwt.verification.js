@@ -13,14 +13,27 @@ const tokenVerification = async (req, res, next) => {
     }
 
     if (!token) {
-        return next(new AppError('Not logged in', 401));
+        return next(new AppError('El usuario no ha ingresado', 401));
     }
 
     // ? Validate if the token is valid
 
-    const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
-    console.log(decoded);
-    // ? Check if the user still exists in the database
+    try {
+        const decoded = await promisify(jwt.verify)(
+            token,
+            process.env.JWT_SECRET
+        );
+
+        // ? Check if the user still exists in the database
+
+        //TODO: Estoy implementando la busqueda del usuario
+    } catch (error) {
+        let errorType =
+            error.message == 'invalid signature'
+                ? 'Token Invalido'
+                : 'Token Vencido';
+        return next(new AppError(errorType, 401));
+    }
 };
 
 export { tokenVerification };
