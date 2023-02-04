@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Col, Button, Row, Container, Card, Form } from 'react-bootstrap';
 import './LOGIN.css';
-
+import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
 function LOGIN(props) {
     const [form, setForm] = useState({});
@@ -32,12 +32,19 @@ function LOGIN(props) {
         return newErrors;
     }
     async function handleSubmit(e) {
-        e.preventDefault();
         let newErrors = findErrors();
 
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors);
         } else {
+            Swal.fire({
+                position: 'top-center',
+                icon: 'success',
+                title: 'Your work has been saved',
+                showConfirmButton: false,
+                timer: 1500,
+            });
+
             navigate('/home');
         }
     }

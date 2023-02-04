@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import LOGIN from './Components/LOGIN/index';
-import Barralateral from './Components/common';
+
 import INICIO from './Components/INICIO/index';
 
 import './App.css';

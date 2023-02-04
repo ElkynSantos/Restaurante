@@ -44,23 +44,27 @@ function Example() {
                 <Offcanvas.Body>
                     <Container>
                         <div className="d-grid gap-2">
-                            <Button variant="primary" size="lg">
+                            <Button href="/home" variant="primary" size="lg">
                                 <BsHouseFill></BsHouseFill>
                                 <p>Inicio</p>
                             </Button>
-                            <Button variant="primary" size="lg">
+                            <Button href="Pedidos" variant="primary" size="lg">
                                 <IoRestaurantSharp></IoRestaurantSharp>
                                 <p>Pedidos</p>
                             </Button>
-                            <Button variant="primary" size="lg">
+                            <Button href="Roles" variant="primary" size="lg">
                                 <BsFillBookmarkFill></BsFillBookmarkFill>
                                 <p>Roles</p>
                             </Button>
-                            <Button variant="primary" size="lg">
+                            <Button href="Usuarios" variant="primary" size="lg">
                                 <BsFillPersonPlusFill></BsFillPersonPlusFill>
                                 <p> Usuarios</p>
                             </Button>
-                            <Button variant="primary" size="lg">
+                            <Button
+                                href="/Reportes "
+                                variant="primary"
+                                size="lg"
+                            >
                                 <BsFillFileEarmarkBarGraphFill></BsFillFileEarmarkBarGraphFill>
                                 <p>Reportes</p>
                             </Button>
