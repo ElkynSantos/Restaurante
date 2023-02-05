@@ -1,8 +1,10 @@
 import React from "react";
 import { Col, Button, Row, Container, Card, Form } from "react-bootstrap";
 
-function LOGIN() {
+
+function FormPassword() {
   return (
+
     <div>
       <Container>
         <Row className="vh-100 d-flex justify-content-center align-items-center">
@@ -12,14 +14,16 @@ function LOGIN() {
               <Card.Body>
                 <div className="mb-3 mt-md-4">
                   <h2 className="fw-bold mb-2 text-uppercase ">
-                    Iniciar Sesion
+                   Recuperacion de Contraseña
                   </h2>
-                  <p>Por favor ingrese correo electrónico y contraseña</p>
+                
                   <div className="mb-3">
                     <Form>
                       <Form.Group className="mb-3" controlId="formBasicEmail">
                         <Form.Label className="text-center">
-                          Direccion de correo
+                        <Form.Label className="text-center">
+                         
+                         </Form.Label>
                         </Form.Label>
                         <Form.Control
                           type="email"
@@ -28,26 +32,20 @@ function LOGIN() {
                         />
                       </Form.Group>
 
-                      <Form.Group
-                        className="mb-3"
-                        controlId="formBasicPassword"
-                      >
-                        <Form.Label>Contraseña</Form.Label>
-                        <Form.Control type="password" placeholder="Contraseña" />
-                      </Form.Group>
+                      
                       <Form.Group
                         className="mb-3"
                         controlId="formBasicCheckbox"
                       ></Form.Group>
-                      <div className="d-grid">
+                     <div className="d-grid">
                         <Button variant="primary" type="submit">
-                          Ingresar
+                          Enviar
                         </Button>
                       </div>
                     </Form>
                     <div className="mt-3">
                       <p className="mb-0  text-center">
-                        Desea recuperar contrasena?{" "}
+                        Para regresar haga {" "}
                         <a href="/" className="text-primary fw-bold">
                           Click aqui
                         </a>
@@ -62,7 +60,8 @@ function LOGIN() {
         </Row>
       </Container>
     </div>
+  
   );
 }
 
-export default LOGIN;
+export default FormPassword;
