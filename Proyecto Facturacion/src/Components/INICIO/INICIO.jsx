@@ -35,9 +35,9 @@ function INICIO() {
                         <Card className="shadow">
                             <Card.Body>
                                 <div className="mb-3 mt-md-4">
-                                    <Container fluid>
+                                    <Container fluid className='bg-blue rounded p-2'>
                                         <img
-                                            src={imagenes}
+                                            src="/assets/images/logo.png"
                                             className="imagen2"
                                         ></img>
                                     </Container>
