@@ -33,6 +33,7 @@ function LOGIN(props) {
         return newErrors;
     }
     async function handleSubmit(e) {
+        e.preventDefault();
         let newErrors = findErrors();
 
         if (Object.keys(newErrors).length > 0) {
@@ -55,7 +56,7 @@ function LOGIN(props) {
                 Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
-                    text: 'Usuario no encontrado',
+                    text: 'Usuario No encontrado',
                 });
             }
         }
@@ -137,7 +138,7 @@ function LOGIN(props) {
                                             <p className="mb-0  text-center">
                                                 Desea recuperar contrasena?{' '}
                                                 <a
-                                                    href="/Recuperacion"
+                                                    href="/Recuperar"
                                                     className="text-primary fw-bold"
                                                 >
                                                     Click aqui
