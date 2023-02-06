@@ -77,5 +77,33 @@ const getProductos = async (req, res,next) => {
         return next(new AppError('Ups! Error en la base de datos', 500));
     }
 }
+
+const crearProducto = async (req, res, next) => {
+    try {
+        const{
+            productCode,
+            productDescription,
+            producPrice,
+        } = req.body;
+
+        const emptyParams = Object.values({
+            productCode,
+            productDescription,
+            producPrice,
+        }).some((val) => !val);
+
+        if (emptyParams){
+            return next(new AppError('Favor completar todos los campos', 401));
+        }
+        const [newProduct] = await db.query('INSERT INTO db_restaurante.productos (codigo_producto, nombre_producto, precio_producto) VALUES ?, ?, ?', [productCode, productDescription, producPrice]);
+
+        return res.status(200).json({
+            status: 'Ok',
+        });
+    } catch (error){
+        console.log(error);
+        return next(new AppError('Ha ocurrido algún error', 500));
+    }
+};
  
-export { getProductoCodigoORDescripcion, getProductos };
+export { getProductoCodigoORDescripcion, getProductos, crearProducto };
