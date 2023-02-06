@@ -12,8 +12,15 @@ import React, { useState, useEffect } from 'react';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
 
+import BarraLateral from '../common/index';
+
 function MENU() {
     const [show, setShow] = useState(false);
+
+    const handleSelect = () => {
+        setShow(false);
+        <Nav.Link eventKey="/mesas">Link</Nav.Link>;
+    };
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
@@ -57,7 +64,7 @@ function MENU() {
 
     return (
         <Container>
-            {' '}
+            <BarraLateral />
             <Row className="add-space">
                 {array1.map((mesa) => (
                     <Col lg>
@@ -124,8 +131,9 @@ function MENU() {
                                                     Close
                                                 </Button>
                                                 <Button
+                                                    href="\facturacion"
                                                     variant="primary"
-                                                    onClick={handleClose}
+                                                    onClick={handleSelect}
                                                 >
                                                     Save Changes
                                                 </Button>

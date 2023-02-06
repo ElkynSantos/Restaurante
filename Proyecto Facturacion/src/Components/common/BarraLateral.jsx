@@ -17,6 +17,8 @@ import { IoRestaurantSharp } from 'react-icons/io5';
 import './BarraLateral.css';
 import imagenes from './imagenes/pantalla.jpeg';
 
+import MESA from '../MESAS/Mesa';
+
 function Example() {
     const [show, setShow] = useState(false);
 
