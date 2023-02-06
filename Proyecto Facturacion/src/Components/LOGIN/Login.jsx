@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Col, Button, Row, Container, Card, Form } from 'react-bootstrap';
 import './LOGIN.css';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
+import { login } from '../../services/LOGIN';
 function LOGIN(props) {
     const [form, setForm] = useState({});
+
     const [errors, setErrors] = useState({});
     const navigate = useNavigate();
     const setField = (field, value) => {
@@ -15,20 +17,19 @@ function LOGIN(props) {
     };
     function findErrors() {
         const newErrors = {};
-        let { email, password } = form;
+        let { user, userpassword } = form;
 
-        if ((!email && email !== '') || email == '') {
+        if ((!user && user !== '') || user == '') {
             //En realidad es username
-            newErrors.email = 'Espacio de Username Vacio !';
+            newErrors.user = 'Espacio de Username Vacio !';
             //email = "";
         }
         // validate with regex
-        if ((!password && password !== '') || password == '') {
-            newErrors.password = 'Espacio de contrasena vacio !';
+        if ((!userpassword && userpassword !== '') || userpassword == '') {
+            newErrors.userpassword = 'Espacio de contrasena vacio !';
             //password = "";
         }
 
-        console.log(newErrors.password);
         return newErrors;
     }
     async function handleSubmit(e) {
@@ -37,15 +38,26 @@ function LOGIN(props) {
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors);
         } else {
-            Swal.fire({
-                position: 'top-center',
-                icon: 'success',
-                title: 'Your work has been saved',
-                showConfirmButton: false,
-                timer: 1500,
-            });
+            console.log(form.user);
+            console.log(form.userpassword);
+            try {
+                const data = await login(form.user, form.userpassword);
 
-            navigate('/home');
+                Swal.fire({
+                    position: 'top-center',
+                    icon: 'success',
+                    title: 'Bienvenido',
+                    showConfirmButton: false,
+                    timer: 1500,
+                });
+                navigate('/home');
+            } catch (error) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Usuario no encontrado',
+                });
+            }
         }
     }
 
@@ -79,11 +91,11 @@ function LOGIN(props) {
                                                     placeholder="Ingrese Usuario"
                                                     onChange={(e) =>
                                                         setField(
-                                                            'email',
+                                                            'user',
                                                             e.target.value
                                                         )
                                                     }
-                                                    isInvalid={!!errors.email}
+                                                    isInvalid={!!errors.user}
                                                 />
                                             </Form.Group>
 
@@ -99,12 +111,12 @@ function LOGIN(props) {
                                                     placeholder="Contrasena"
                                                     onChange={(e) =>
                                                         setField(
-                                                            'password',
+                                                            'userpassword',
                                                             e.target.value
                                                         )
                                                     }
                                                     isInvalid={
-                                                        !!errors.password
+                                                        !!errors.userpassword
                                                     }
                                                 />
                                             </Form.Group>
@@ -125,7 +137,7 @@ function LOGIN(props) {
                                             <p className="mb-0  text-center">
                                                 Desea recuperar contrasena?{' '}
                                                 <a
-                                                    href="/"
+                                                    href="/Recuperacion"
                                                     className="text-primary fw-bold"
                                                 >
                                                     Click aqui
