@@ -78,4 +78,4 @@ const getProductos = async (req, res,next) => {
     }
 }
  
-export { getProductoCodigo, getProductoDescripcion, getProductos };
+export { getProductoCodigoORDescripcion, getProductos };
