@@ -1,9 +1,6 @@
 import BarraLateral from '../common/index.js';
-import { Col, Button, Row, Container, Card, Form } from 'react-bootstrap';
-import { useState, useEffect } from 'react';
-import DataTable from 'react-data-table-component';
 
-function PEDIDOS() {
+function FACTURACION() {
     return (
         <Container>
             <BarraLateral />
@@ -12,4 +9,4 @@ function PEDIDOS() {
     );
 }
 
-export default PEDIDOS;
+export default FACTURACION;
