@@ -56,7 +56,7 @@ function LOGIN(props) {
                 Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
-                    text: 'Usuario No encontrado',
+                    text: 'Usuario o contrasena no valido',
                 });
             }
         }
