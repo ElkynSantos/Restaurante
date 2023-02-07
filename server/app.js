@@ -1,6 +1,7 @@
 import express from 'express';
 import morgan from 'morgan';
 import dotenv from 'dotenv';
+import cors from "cors";
 
 import authRoutes from './routes/auth.routes.js';
 import usersRoutes from './routes/users.routes.js';
@@ -24,8 +25,9 @@ try {
 
 // ? MIDDLEWARES
 const app = express();
-app.use(morgan('dev'));
 app.use(express.json());
+app.use(cors());
+app.use(morgan('dev'));
 
 // ? ROUTES
 app.use('/auth', authRoutes);

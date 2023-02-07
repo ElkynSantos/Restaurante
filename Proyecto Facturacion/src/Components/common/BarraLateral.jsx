@@ -15,7 +15,6 @@ import { IoIosExit } from 'react-icons/io';
 import { IoRestaurantSharp } from 'react-icons/io5';
 
 import './BarraLateral.css';
-import imagenes from './imagenes/pantalla.jpeg';
 
 function Example() {
     const [show, setShow] = useState(false);
