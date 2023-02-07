@@ -28,7 +28,7 @@ function Example() {
         <>
             <Navbar bg="light" expand="lg">
                 <Container>
-                    <Button className='bg-blue' size="xxl" onClick={handleShow}>
+                    <Button className="bg-blue" size="xxl" onClick={handleShow}>
                         <List></List>
                     </Button>
                     <p>Garifunas Food</p>
@@ -36,9 +36,16 @@ function Example() {
             </Navbar>
 
             <Offcanvas show={show} onHide={handleClose}>
-                <Offcanvas.Header className='bg-blue' closeButton closeVariant='white'>
+                <Offcanvas.Header
+                    className="bg-blue"
+                    closeButton
+                    closeVariant="white"
+                >
                     <Container fluid>
-                        <img src="/assets/images/logo.png" className="imagen"></img>
+                        <img
+                            src="/assets/images/logo.png"
+                            className="imagen"
+                        ></img>
                     </Container>
                 </Offcanvas.Header>
                 <Offcanvas.Body>
@@ -56,7 +63,7 @@ function Example() {
                                 <BsFillBookmarkFill></BsFillBookmarkFill>
                                 <p>Roles</p>
                             </Button>
-                            <Button href="Usuarios" variant="primary" size="lg">
+                            <Button href="Users" variant="primary" size="lg">
                                 <BsFillPersonPlusFill></BsFillPersonPlusFill>
                                 <p> Usuarios</p>
                             </Button>
@@ -71,6 +78,7 @@ function Example() {
                             <Button href="/" variant="primary" size="lg">
                                 <IoIosExit></IoIosExit>
                                 <p>Salir</p>
+                                <Borrar />
                             </Button>
                         </div>
                     </Container>
@@ -80,4 +88,7 @@ function Example() {
     );
 }
 
+function Borrar() {
+    localStorage.removeItem('USERNAME');
+}
 export default Example;

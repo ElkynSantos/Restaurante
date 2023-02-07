@@ -7,7 +7,8 @@ import INICIO from './Components/INICIO/index';
 import MESAS from './Components/MESAS/index';
 import PEDIDOS from './Components/PEDIDOS/index';
 import FACTURACION from './Components/FACTURACION/index';
-import USERS from './Components/USERS';
+import USERS from './Components/USERS/index';
+import FormPassword from './Components/FormPassword/index';
 
 import './App.css';
 import { useDispatch, useSelector } from 'react-redux';
@@ -26,6 +27,7 @@ function App() {
                 <Route path="/mesas" element={<MESAS />} />
                 <Route path="/facturacion" element={<FACTURACION />} />
                 <Route path="/Users" element={<USERS />} />
+                <Route path="/Recuperar" element={<FormPassword />} />
             </Routes>
         </BrowserRouter>
     );
