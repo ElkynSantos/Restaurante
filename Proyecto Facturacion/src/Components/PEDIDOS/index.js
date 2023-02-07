@@ -1,3 +1,3 @@
-import PEDIDOS from './Pedidos';
+import PEDIDOS1 from './Pedidos';
 
-export default PEDIDOS;
+export default PEDIDOS1;
