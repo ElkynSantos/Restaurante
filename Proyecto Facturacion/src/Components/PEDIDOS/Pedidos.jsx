@@ -17,7 +17,7 @@ function PEDIDOS() {
     const handleChange2 = ({}) => {
         // You can set state or di spatch with something like Redux so we can use the retrieved data
 
-        console.log('Selected Rows 2: ', row);
+        console.log('Selected Rows 2: ');
     };
     const columns = [
         {
@@ -46,6 +46,22 @@ function PEDIDOS() {
         {
             name: 'Precio',
             selector: (row) => row.precio_producto,
+        },
+        {
+            name: 'Añadir',
+            cell: (row) => (
+                <button onClick={clickHandler} id={row.ID}>
+                    Action
+                </button>
+            ),
+        },
+        {
+            name: 'Eliminar',
+            cell: (row) => (
+                <button onClick={clickHandler} id={row.ID}>
+                    Action
+                </button>
+            ),
         },
     ];
 
@@ -87,8 +103,9 @@ function PEDIDOS() {
                     <DataTable
                         columns={columns}
                         data={DATO}
-                        selectableRows
-                        onSelectedRowsChange={handleChange}
+                        // selectableRows
+
+                        onRowClicked={handleChange}
                     />
                 </Col>
 
