@@ -15,7 +15,6 @@ import { IoIosExit } from 'react-icons/io';
 import { IoRestaurantSharp } from 'react-icons/io5';
 
 import './BarraLateral.css';
-import imagenes from './imagenes/pantalla.jpeg';
 
 import MESA from '../MESAS/Mesa';
 
@@ -29,18 +28,17 @@ function Example() {
         <>
             <Navbar bg="light" expand="lg">
                 <Container>
-                    <Button variant="primary" size="xxl" onClick={handleShow}>
+                    <Button className='bg-blue' size="xxl" onClick={handleShow}>
                         <List></List>
-                        Menu
                     </Button>
                     <p>Garifunas Food</p>
                 </Container>
             </Navbar>
 
             <Offcanvas show={show} onHide={handleClose}>
-                <Offcanvas.Header closeButton>
+                <Offcanvas.Header className='bg-blue' closeButton closeVariant='white'>
                     <Container fluid>
-                        <img src={imagenes} className="imagen"></img>
+                        <img src="/assets/images/logo.png" className="imagen"></img>
                     </Container>
                 </Offcanvas.Header>
                 <Offcanvas.Body>

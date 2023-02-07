@@ -6,13 +6,39 @@
 
   color-scheme: light dark;
   color: rgba(0, 110, 255, 0.87);
-  background-color: aqua;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
+  --yellow: #fff000;
+  --yellow-light: #fef691;
+  --blue: #2d2f94;
+}
+
+
+/** BACKGROUNDS */
+.bg-blue {
+  background-color: var(--blue) !important;
+}
+
+.bg-yellow {
+  background-color: var(--yellow) !important;
+}
+
+.bg-yellow-light {
+  background-color: var(--yellow-light) !important;
+}
+
+.text-blue {
+  color: var(--blue) !important;
+}
+
+.btn-transparent {
+  background-color: transparent !important;
+  border: none;
+  padding: 0;
 }
 
 a {
@@ -30,7 +56,7 @@ body {
   place-items: center;
   min-width: 320px;
 
-  background-color: aqua;
+  background-color: var(--blue) !important;
 }
 
 h1 {
