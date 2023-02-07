@@ -18,6 +18,7 @@ const allUsers = async (req, res, next) => {
             allUsers,
         });
     } catch (error) {
+        console.log(error);
         return next(new AppError(`Ups! Error en la base de datos`, 500));
     }
 };
@@ -130,6 +131,25 @@ const updateUser = async (req, res, next) => {
             email,
         } = req.body;
 
+        const emptyParams = Object.values({
+            name,
+            lastName,
+            rol,
+            dni,
+            gender,
+            birthday,
+            placeofBirth,
+            phone,
+            email,
+            password,
+        }).some((val) => !val);
+
+        if (emptyParams) {
+            return next(
+                new AppError(`Por favor complete todos los campos`, 401)
+            );
+        }
+
         const [updatedUser] = await db.query(
             'CALL edit_user(:id ,:userStatus ,:userName, :userLastName, :userId, :rol, :userDni, :userGender, :userBirthday, :placeOfBirth, :userPhone, :userEmail)',
             {
@@ -166,6 +186,10 @@ const updateUser = async (req, res, next) => {
 const editUserStaus = async (req, res, next) => {
     try {
         const { opt, userDni } = req.body;
+
+        if (!opt || !userDni) {
+            return next(new AppError(`No se permiten campos vacios`, 400));
+        }
 
         const [changeUserStatus] = await db.query(
             `CALL edit_user_status(:opt, :userDni)`,
