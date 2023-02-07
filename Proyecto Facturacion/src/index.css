@@ -13,6 +13,19 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
+  --yellow: #fff000;
+  --yellow-light: #fef691;
+  --blue: #2d2f94;
+}
+
+
+/** BACKGROUNDS */
+.bg-blue {
+  background-color: var(--blue) !important;
+}
+
+.bg-yellow {
+  background-color: var(--yellow) !important;
 }
 
 a {
@@ -30,7 +43,7 @@ body {
   place-items: center;
   min-width: 320px;
 
-  background-color: aqua;
+  background-color: var(--blue) !important;
 }
 
 h1 {

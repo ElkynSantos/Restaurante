@@ -27,18 +27,17 @@ function Example() {
         <>
             <Navbar bg="light" expand="lg">
                 <Container>
-                    <Button variant="primary" size="xxl" onClick={handleShow}>
+                    <Button className='bg-blue' size="xxl" onClick={handleShow}>
                         <List></List>
-                        Menu
                     </Button>
                     <p>Garifunas Food</p>
                 </Container>
             </Navbar>
 
             <Offcanvas show={show} onHide={handleClose}>
-                <Offcanvas.Header closeButton>
+                <Offcanvas.Header className='bg-blue' closeButton closeVariant='white'>
                     <Container fluid>
-                        <img src={imagenes} className="imagen"></img>
+                        <img src="/assets/images/logo.png" className="imagen"></img>
                     </Container>
                 </Offcanvas.Header>
                 <Offcanvas.Body>
