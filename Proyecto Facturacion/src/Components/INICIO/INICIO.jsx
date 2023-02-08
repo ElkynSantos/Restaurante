@@ -52,7 +52,8 @@ function INICIO() {
                                         ></img>
                                     </Container>
                                     <h2 className="fw-bold mb-2 text-uppercase ">
-                                        Bienvenido al Sistema de facturacion
+                                        <br></br>Bienvenido al Sistema de
+                                        facturación
                                     </h2>
 
                                     <div className="mb-3">
