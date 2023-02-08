@@ -21,7 +21,7 @@ function App() {
     return (
         <BrowserRouter>
             <Routes>
-                <Route index element={<CREARUSUARIO />} />
+                <Route index element={<LOGIN />} />
                 <Route path="/Home" element={<INICIO />} />
                 <Route path="/Pedidos" element={<CREARUSUARIO />} />
                 <Route path="/mesas" element={<MESAS />} />

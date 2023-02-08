@@ -10,13 +10,12 @@ import {
     FormControl,
     FormLabel,
 } from 'react-bootstrap';
-import Dropdown from 'react-bootstrap/Dropdown';
-import DropdownButton from 'react-bootstrap/DropdownButton';
+import Swal from 'sweetalert2';
+import { Register } from '../../services/REGISTER';
 
 function Example() {
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
 
     return (
         <>
@@ -98,7 +97,38 @@ function CREARUSUARIO() {
             setErrors(newErrors);
         } else {
             //LLAMEN A LA API
-            alert('FUNCIONA');
+            let rol = parseInt(form.rol);
+            let dni = parseInt(form.DNI);
+            let numero = parseInt(form.numero);
+
+            const data = await Register(
+                form.nombre,
+                form.apellido,
+                form.rol,
+                form.DNI,
+                form.genero,
+                form.fecha,
+                form.lugar,
+                form.numero,
+                form.email,
+                form.password
+            );
+            Swal.fire({
+                position: 'top-center',
+                icon: 'success',
+                title: 'Usuario Creado',
+                showConfirmButton: false,
+                timer: 1500,
+            });
+
+            try {
+            } catch (error) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Hubo un problema al crear usuario',
+                });
+            }
         }
     }
 
@@ -131,18 +161,30 @@ function CREARUSUARIO() {
                                 setField('apellido', e.target.value)
                             }
                             required
-                            // isInvalid={!!errors.apellido}
+                        />
+                    </Form.Group>
+                    <Form.Group className="mb-3">
+                        <Form.Label className="text-center">DNI</Form.Label>
+                        <Form.Control
+                            type="text"
+                            placeholder="Ingrese el nombre"
+                            onChange={(e) => setField('DNI', e.target.value)}
+                            required
+                            // isInvalid={!!errors.nombre}
                         />
                     </Form.Group>
 
                     <Form.Label className="text-center">Género</Form.Label>
                     <Form.Group>
-                        <Form.Select aria-label="Género">
+                        <Form.Select
+                            aria-label="Género"
+                            onChange={(e) => setField('genero', e.target.value)}
+                        >
                             <option disabled selected value>
                                 Escoger género
                             </option>
-                            <option value="2">Masculino</option>
-                            <option value="3">Femenino</option>
+                            <option value="H">Masculino</option>
+                            <option value="F">Femenino</option>
                         </Form.Select>
                     </Form.Group>
                     <Form.Group>
@@ -189,6 +231,7 @@ function CREARUSUARIO() {
                                     event.preventDefault();
                                 }
                             }}
+                            onChange={(e) => setField('numero', e.target.value)}
                         />
                     </Form.Group>
                     <br></br>
@@ -196,11 +239,19 @@ function CREARUSUARIO() {
                     <Form.Label className="text-center">
                         Rol que asignará al usuario
                     </Form.Label>
-                    <Form.Select aria-label="Asignar impuesto">
-                        <option value="1">Administrador de sistema</option>
-                        <option value="2">Gerente</option>
-                        <option value="3">Facturador</option>
-                    </Form.Select>
+                    <Form.Group>
+                        <Form.Select
+                            aria-label="Asignar impuesto"
+                            onChange={(e) => setField('rol', e.target.value)}
+                        >
+                            <option disabled selected value>
+                                Escoger Rol
+                            </option>
+                            <option value="1">Administrador de sistema</option>
+                            <option value="2">Gerente</option>
+                            <option value="3">Facturador</option>
+                        </Form.Select>
+                    </Form.Group>
                     <Form.Group
                         className="mb-3"
                         controlId="formBasicCheckbox"
