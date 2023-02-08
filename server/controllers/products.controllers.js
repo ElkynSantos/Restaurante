@@ -104,6 +104,37 @@ const crearProducto = async (req, res, next) => {
         console.log(error);
         return next(new AppError('Ha ocurrido algún error', 500));
     }
-};
+}
  
-export { getProductoCodigoORDescripcion, getProductos, crearProducto };
+const editarProducto = async (req, res, next) => {
+    try{
+        const{
+            productCode,
+            productDescription,
+            producPrice,
+        } = req.body;
+
+        var idGuia = await db.query('SELECT id FROM bd_restaurante.productos WHERE codigo_producto = ? OR nombre_producto = ?', [productCode, productDescription]);
+
+        const emptyParams = Object.values({
+            productCode,
+            productDescription,
+            producPrice,
+        }).some((val) => !val);
+
+        if (emptyParams){
+            return next(new AppError('Favor completar todos los campos', 401));
+        }
+
+        const [editProduct] = await db.query('UPDATE bd_restaurante.productos SET codigo_producto = ?, nombre_producto = ?, precio_producto = ? WHERE id = ?', [productCode, productDescription, producPrice, idGuia]);
+
+        return res.status(200).json({
+            status: 'Ok',
+        });
+    } catch (error){
+        console.log(error);
+        return next(new AppError('Ha ocurrido algún error', 500));
+    }
+}
+
+export { getProductoCodigoORDescripcion, getProductos, crearProducto, editarProducto };
