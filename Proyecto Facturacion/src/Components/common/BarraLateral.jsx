@@ -26,19 +26,23 @@ function Example() {
 
     return (
         <>
-            <Navbar className='bg-blue' expand="lg">
+            <Navbar className="bg-blue" expand="lg">
                 <Container>
-<<<<<<< HEAD
-                    <Button className="bg-blue" size="xxl" onClick={handleShow}>
-=======
-                    <Button className='btn-navbar' size="xxl" onClick={handleShow}>
->>>>>>> origin/Alan
+                    <Button
+                        className="btn-navbar"
+                        size="xxl"
+                        onClick={handleShow}
+                    >
                         <List></List>
                     </Button>
                     <a href="/home">
-                        <img id="nav-brand" src="/assets/images/logo.png" className="imagen"></img>
+                        <img
+                            id="nav-brand"
+                            src="/assets/images/logo.png"
+                            className="imagen"
+                        ></img>
                     </a>
-                    
+
                     {/* <p>Garifunas Food</p> */}
                 </Container>
             </Navbar>
@@ -62,33 +66,31 @@ function Example() {
                             <Button href="/home" className="bg-blue" size="lg">
                                 <BsHouseFill></BsHouseFill> Inicio
                             </Button>
-                            <Button href="Pedidos" className="bg-blue" size="lg">
+                            <Button
+                                href="Pedidos"
+                                className="bg-blue"
+                                size="lg"
+                            >
                                 <IoRestaurantSharp></IoRestaurantSharp> Pedidos
                             </Button>
                             <Button href="Roles" className="bg-blue" size="lg">
                                 <BsFillBookmarkFill></BsFillBookmarkFill> Roles
                             </Button>
-<<<<<<< HEAD
-                            <Button href="Users" variant="primary" size="lg">
-                                <BsFillPersonPlusFill></BsFillPersonPlusFill>
-                                <p> Usuarios</p>
-=======
                             <Button href="/users" className="bg-blue" size="lg">
-                                <BsFillPersonPlusFill></BsFillPersonPlusFill> Usuarios
->>>>>>> origin/Alan
+                                <BsFillPersonPlusFill></BsFillPersonPlusFill>{' '}
+                                Usuarios
                             </Button>
-                            <Button href="/Reportes " className="bg-blue" size="lg" >
-                                <BsFillFileEarmarkBarGraphFill></BsFillFileEarmarkBarGraphFill> Reportes
+                            <Button
+                                href="/Reportes "
+                                className="bg-blue"
+                                size="lg"
+                            >
+                                <BsFillFileEarmarkBarGraphFill></BsFillFileEarmarkBarGraphFill>{' '}
+                                Reportes
                             </Button>
-<<<<<<< HEAD
-                            <Button href="/" variant="primary" size="lg">
-                                <IoIosExit></IoIosExit>
-                                <p>Salir</p>
-                                <Borrar />
-=======
                             <Button href="/" className="bg-blue" size="lg">
                                 <IoIosExit></IoIosExit> Salir
->>>>>>> origin/Alan
+                                <Borrar />
                             </Button>
                         </div>
                     </Container>
