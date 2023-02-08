@@ -13,7 +13,7 @@ import {
 
 import { IoIosExit } from 'react-icons/io';
 import { IoRestaurantSharp } from 'react-icons/io5';
-
+import CREARUSUARIO from '../CREARUSUARIO/index';
 import './BarraLateral.css';
 
 import MESA from '../MESAS/Mesa';
