@@ -16,7 +16,7 @@ const signToken = (id, rol, name) => {
 const login = async (req, res, next) => {
     try {
         const { user, userPassword } = req.body;
-        
+
         if (!user || !userPassword) {
             return next(
                 new AppError(
@@ -34,9 +34,9 @@ const login = async (req, res, next) => {
                 },
             }
         );
-        
+
         if (userExists.response === 0) {
-            return next(new AppError(userExists.msg, 401));
+            return next(new AppError(userExists.msg, 404));
         }
 
         const rightPassword = await comparePassword(

@@ -97,15 +97,14 @@ const createUser = async (req, res, next) => {
         );
 
         if (newUser.response === 0) {
-            return next(new AppError(newUser.msg, 401));
+            return next(new AppError(newUser.msg, 400));
         }
 
-        return res.status(200).json({
+        return res.status(201).json({
             status: 'Ok',
             msg: newUser.msg,
         });
     } catch (error) {
-        console.log(error);
         return next(new AppError(`Ha ocurrido un error en el servidor`, 500));
     }
 };
@@ -146,7 +145,7 @@ const updateUser = async (req, res, next) => {
 
         if (emptyParams) {
             return next(
-                new AppError(`Por favor complete todos los campos`, 401)
+                new AppError(`Por favor complete todos los campos`, 400)
             );
         }
 
@@ -202,7 +201,7 @@ const editUserStaus = async (req, res, next) => {
         );
 
         if (changeUserStatus.response === 0) {
-            return next(new AppError(changeUserStatus.msg, 401));
+            return next(new AppError(changeUserStatus.msg, 404));
         }
 
         return res.status(200).json({
