@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Col, Button, Row, Container, Card, Form } from 'react-bootstrap';
+
 import BarraLateral from '../common/index';
-import imagenes from './imagenes/pantalla.jpeg';
 
 function INICIO() {
     const [fecha, setFecha] = useState(null);
@@ -25,6 +25,7 @@ function INICIO() {
     //
 
     setInterval(updateTime, 1000);
+    
     return (
         <div>
             <BarraLateral />
@@ -32,6 +33,7 @@ function INICIO() {
                 <Row className="vh-100 d-flex justify-content-center align-items-center">
                     <Col md={88} lg={6} xs={15}>
                         <div className="border border-3 border-primary"></div>
+
                         <Card className="shadow">
                             <Card.Body>
                                 <div className="mb-3 mt-md-4">
