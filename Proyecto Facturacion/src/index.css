@@ -14,6 +14,7 @@
   -webkit-text-size-adjust: 100%;
   --yellow: #fff000;
   --yellow-light: #fef691;
+  --yellow-lighter: #fbf7c0;
   --blue: #2d2f94;
 }
 
@@ -31,6 +32,11 @@
   background-color: var(--yellow-light) !important;
 }
 
+.bg-yellow-lighter {
+  background-color: var(--yellow-lighter) !important;
+}
+
+/** TEXTS */
 .text-blue {
   color: var(--blue) !important;
 }
@@ -56,7 +62,8 @@ body {
   place-items: center;
   min-width: 320px;
 
-  background-color: var(--blue) !important;
+  /* background-color: var(--blue) !important; */
+  background-color: var(--yellow-lighter) !important;
 }
 
 h1 {
