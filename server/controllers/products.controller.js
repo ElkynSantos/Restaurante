@@ -5,7 +5,7 @@ import db from '../db.js';
 
 const getAllProductos = async (req, res, next) => {
     try {
-        const allProductos = await db.query(`SELECT * FROM bd_res.productos;`);
+        const allProductos = await db.query(`SELECT * FROM db_rest.productos;`);
 
         console.log(allProductos[1]);
 
