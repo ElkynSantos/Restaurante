@@ -82,13 +82,13 @@ function CREARUSUARIO() {
       {
         newErrors.password = 'Espacio de contraseña vacío !';
       } 
-     // const passwordPattern = new RegExp(
-   //     /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/
-    //  );
-     // if (!passwordPattern.test(password)) 
-     // {
-    //  newErrors.password = "Formato de contraseña inválido.";
-     // }
+      const passwordPattern = new RegExp(
+        /^(.{0,7}|[^0-9]*|[^A-Z]*|[^a-z]*|[a-zA-Z0-9]*)$/
+      );
+      if (passwordPattern.test(password)) 
+      {
+      newErrors.password = "Formato de contraseña inválido.";
+      }
       if(fecha>=hoy)
       {
         newErrors.fecha = "Fecha inválida.";
@@ -108,7 +108,7 @@ function CREARUSUARIO() {
             setErrors(newErrors);
         } else {
             //LLAMEN A LA API
-            alert("gugugaga");
+            alert("FUNCIONA");
         }
     }
 
