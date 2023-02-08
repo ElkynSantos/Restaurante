@@ -20,9 +20,9 @@ function App() {
     return (
         <BrowserRouter>
             <Routes>
-                <Route index element={<LOGIN />} />
+                <Route index element={<CREARUSUARIO />} />
                 <Route path="/Home" element={<INICIO />} />
-                <Route path="/Pedidos" element={<PEDIDOS />} />
+                <Route path="/Pedidos" element={<CREARUSUARIO />} />
                 <Route path="/mesas" element={<MESAS />} />
                 <Route path="/facturacion" element={<FACTURACION />} />
                 <Route path="/Users" element={<USERS />} />
