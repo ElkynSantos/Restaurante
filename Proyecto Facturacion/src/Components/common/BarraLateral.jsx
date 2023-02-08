@@ -26,12 +26,20 @@ function Example() {
 
     return (
         <>
-            <Navbar bg="light" expand="lg">
+            <Navbar className='bg-blue' expand="lg">
                 <Container>
+<<<<<<< HEAD
                     <Button className="bg-blue" size="xxl" onClick={handleShow}>
+=======
+                    <Button className='btn-navbar' size="xxl" onClick={handleShow}>
+>>>>>>> origin/Alan
                         <List></List>
                     </Button>
-                    <p>Garifunas Food</p>
+                    <a href="/home">
+                        <img id="nav-brand" src="/assets/images/logo.png" className="imagen"></img>
+                    </a>
+                    
+                    {/* <p>Garifunas Food</p> */}
                 </Container>
             </Navbar>
 
@@ -51,34 +59,36 @@ function Example() {
                 <Offcanvas.Body>
                     <Container>
                         <div className="d-grid gap-2">
-                            <Button href="/home" variant="primary" size="lg">
-                                <BsHouseFill></BsHouseFill>
-                                <p>Inicio</p>
+                            <Button href="/home" className="bg-blue" size="lg">
+                                <BsHouseFill></BsHouseFill> Inicio
                             </Button>
-                            <Button href="Pedidos" variant="primary" size="lg">
-                                <IoRestaurantSharp></IoRestaurantSharp>
-                                <p>Pedidos</p>
+                            <Button href="Pedidos" className="bg-blue" size="lg">
+                                <IoRestaurantSharp></IoRestaurantSharp> Pedidos
                             </Button>
-                            <Button href="Roles" variant="primary" size="lg">
-                                <BsFillBookmarkFill></BsFillBookmarkFill>
-                                <p>Roles</p>
+                            <Button href="Roles" className="bg-blue" size="lg">
+                                <BsFillBookmarkFill></BsFillBookmarkFill> Roles
                             </Button>
+<<<<<<< HEAD
                             <Button href="Users" variant="primary" size="lg">
                                 <BsFillPersonPlusFill></BsFillPersonPlusFill>
                                 <p> Usuarios</p>
+=======
+                            <Button href="/users" className="bg-blue" size="lg">
+                                <BsFillPersonPlusFill></BsFillPersonPlusFill> Usuarios
+>>>>>>> origin/Alan
                             </Button>
-                            <Button
-                                href="/Reportes "
-                                variant="primary"
-                                size="lg"
-                            >
-                                <BsFillFileEarmarkBarGraphFill></BsFillFileEarmarkBarGraphFill>
-                                <p>Reportes</p>
+                            <Button href="/Reportes " className="bg-blue" size="lg" >
+                                <BsFillFileEarmarkBarGraphFill></BsFillFileEarmarkBarGraphFill> Reportes
                             </Button>
+<<<<<<< HEAD
                             <Button href="/" variant="primary" size="lg">
                                 <IoIosExit></IoIosExit>
                                 <p>Salir</p>
                                 <Borrar />
+=======
+                            <Button href="/" className="bg-blue" size="lg">
+                                <IoIosExit></IoIosExit> Salir
+>>>>>>> origin/Alan
                             </Button>
                         </div>
                     </Container>
