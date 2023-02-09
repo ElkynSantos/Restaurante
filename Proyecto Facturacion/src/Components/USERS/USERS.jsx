@@ -6,13 +6,30 @@ import { PersonPlusFill, Search, PencilFill, Trash3Fill, Display } from 'react-b
 import Swal from 'sweetalert2'
 
 import { initUsers ,addUser, changeUserStatus } from '../../features/usersSlice';
+import { showModal ,closeModal } from '../../features/createUserSlice';
 
 import BarraLateral from '../common/index';
+import CREARUSUARIO from "../CREARUSUARIO";
+
+const paginationComponentOptions = {
+    rowsPerPageText: 'Filas por página',
+    rangeSeparatorText: 'de',
+    selectAllRowsItem: true,
+    selectAllRowsItemText: 'Todos',
+};
 
 function USUARIOS() {
     const dispatch = useDispatch();
     const [data, setData] = useState([]);
     const users = useSelector(state => state.users);
+
+    const handleClose = () => {
+        dispatch(closeModal())
+    };
+
+    const handleShow = () => {
+        dispatch(showModal())
+    };
 
     const handleAdd = () => {
         dispatch(addUser({Birthday : "1995-01-28", DNI : "458378", Email :  "juadn@gmil.com", FullName :  "Daniel Ponce", Gender :  "H", Phone :  "9393", PlaceofBirth :  "Choloma", Rol :  "Administrador", UsernName :  "JUAR453"}));
@@ -21,7 +38,7 @@ function USUARIOS() {
     const handleDelete = (DNI, status) => {
         Swal.fire({
             icon: "info",
-            text: `¿Desea eliminar al usuario con el DNI ${DNI}?`,
+            text: `¿Desea ${status == 1? "activar": "desactivar"} al usuario con el DNI ${DNI}?`,
             showCancelButton: true,
             cancelButtonColor: '#DC3545',
             confirmButtonColor: 'var(--blue)',
@@ -41,14 +58,17 @@ function USUARIOS() {
                   .then((response) => response.json())
                   .then(data => {
                     if(data.status != "Ok") {
-                        Swal.fire("No se pudo");
+                        Swal.fire({
+                            text: `¡No se pudo ${status == 1? "desactivar" : "activar"} el usuario!`,
+                            icon: "error"
+                        });
                         return;
                     }
 
                     dispatch(changeUserStatus(DNI));
                     Swal.fire({
-                        text: '¡Usuario eliminado!', 
-                        type: 'success'
+                        text: `¡Usuario ${status == 1? "activado" : "desactivado"}!`, 
+                        icon: 'success'
                     });
                 })
                   .catch(error => {console.error(error)})
@@ -73,9 +93,10 @@ function USUARIOS() {
     }, []);
 
     const columns = [
+        
         {
-            name: 'DNI',
-            selector: row => row.DNI,
+            name: 'Nombre de usuario',
+            selector: row => row.UsernName,
         },
         {
             name: 'Nombre Completo',
@@ -143,11 +164,9 @@ function USUARIOS() {
         },
     }
 
-    // useEffect()
-    console.log(data);
-    // console.log("USUARIOS", users);
     return (
         <div>
+            <CREARUSUARIO/>
             <BarraLateral />
             <Container className="mt-5 rounded bg-white pt-5 pb-5">
                 <Row>
@@ -155,7 +174,7 @@ function USUARIOS() {
                         <h2 className="text-start">Usuarios</h2>
                     </Col>
                     <Col md="auto">
-                        <button className='btn-transparent h3 text-dark'><PersonPlusFill title='Agregar usuario' onClick={() => handleAdd({ id: 4, name: "Daniel Eduardo Ponce", rol: "Administrador", gender: "M"})}/></button>
+                        <button className='btn-transparent h3 text-dark'><PersonPlusFill title='Agregar usuario' onClick={() => handleShow()}/></button>
                     </Col>
                     <Col sm={4}>
                         <InputGroup>
@@ -164,7 +183,7 @@ function USUARIOS() {
                         </InputGroup>
                     </Col>
                 </Row>
-                <DataTable className='mt-3' columns={columns} data={users} customStyles={customStyles} noDataComponent={<div className='p-4'>No se encontraron usuarios</div>}/>
+                <DataTable className='mt-3' columns={columns} data={users} customStyles={customStyles} noDataComponent={<div className='p-4'>No se encontraron usuarios</div>} pagination paginationComponentOptions={paginationComponentOptions}/>
             </Container>
         </div>
     );

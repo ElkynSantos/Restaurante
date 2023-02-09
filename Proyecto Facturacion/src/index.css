@@ -16,12 +16,17 @@
   --yellow-light: #fef691;
   --yellow-lighter: #fbf7c0;
   --blue: #2d2f94;
+  --blue-light: #4042a3;
 }
 
 
 /** BACKGROUNDS */
 .bg-blue {
   background-color: var(--blue) !important;
+}
+
+button.bg-blue:hover {
+  background-color: var(--blue-light) !important;
 }
 
 .bg-yellow {
@@ -41,10 +46,36 @@
   color: var(--blue) !important;
 }
 
+.text-yellow {
+  color: var(--yellow) !important;
+}
+
 .btn-transparent {
   background-color: transparent !important;
   border: none;
   padding: 0;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: .5rem;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px grey; 
+  border-radius: 10px;
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: var(--blue-light); 
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: var(--blue); 
 }
 
 a {
@@ -101,4 +132,8 @@ button:focus-visible {
   button {
     background-color: #0011ff;
   }
+}
+
+select.sc-cwSeag option {
+  color: black !important;
 }
