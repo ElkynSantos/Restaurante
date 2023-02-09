@@ -97,31 +97,31 @@ function CREARUSUARIO() {
             setErrors(newErrors);
         } else {
             //LLAMEN A LA API
-            let rol = parseInt(form.rol);
-            let dni = parseInt(form.DNI);
-            let numero = parseInt(form.numero);
-            console.log(form.rol);
-            const data = await Register(
-                form.nombre,
-                form.apellido,
-                form.rol,
-                form.DNI,
-                form.genero,
-                form.fecha,
-                form.lugar,
-                form.numero,
-                form.email,
-                form.password
-            );
-            Swal.fire({
-                position: 'top-center',
-                icon: 'success',
-                title: 'Usuario Creado',
-                showConfirmButton: false,
-                timer: 1500,
-            });
 
             try {
+                let rol = parseInt(form.rol);
+                let dni = parseInt(form.DNI);
+                let numero = parseInt(form.numero);
+                console.log(form.rol);
+                const data = await Register(
+                    form.nombre,
+                    form.apellido,
+                    form.rol,
+                    form.DNI,
+                    form.genero,
+                    form.fecha,
+                    form.lugar,
+                    form.numero,
+                    form.email,
+                    form.password
+                );
+                Swal.fire({
+                    position: 'top-center',
+                    icon: 'success',
+                    title: 'Usuario Creado',
+                    showConfirmButton: false,
+                    timer: 1500,
+                });
             } catch (error) {
                 Swal.fire({
                     icon: 'error',
