@@ -5,23 +5,30 @@ export const usersSlice = createSlice({
    initialState: [],
    reducers: {
       initUsers: (state, action) => {
-         return [...state, action.payload];
+         console.log(state, action);
+         return action.payload;
       },
       addUser: (state, action) => {
          state.push(action.payload);
       },
       editUser: (state, action) => {
       },
-      deleteUser: (state, action) => {
-         state.forEach((user) => {
-            if(user.id === action.payload) {
-               state.splice(state.indexOf(user), 1);
-               return;
-            }
-         });
+      changeUserStatus: (state, action) => {
+         const {DNI, status} = action.payload;
+         const foundUser = state.find((task) => task.DNI === action.payload.DNI);
+
+         if(foundUser) {
+            foundUser.status = status == 1? 0 : 1;
+         }
+         // state.forEach(async (user) => {
+         //    if(user.DNI === action.payload) {
+
+         //       return;
+         //    }
+         // });
       },
    }
 })
 
-export const { initUsers, addUser, editUser, deleteUser } = usersSlice.actions;
+export const { initUsers, addUser, editUser, changeUserStatus } = usersSlice.actions;
 export default usersSlice.reducer;

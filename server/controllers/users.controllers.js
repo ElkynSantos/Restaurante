@@ -38,6 +38,19 @@ const createUser = async (req, res, next) => {
             password,
         } = req.body;
 
+        console.log(
+            name,
+            lastName,
+            rol,
+            dni,
+            gender,
+            birthday,
+            placeofBirth,
+            phone,
+            email,
+            password
+        );
+
         const emptyParams = Object.values({
             name,
             lastName,

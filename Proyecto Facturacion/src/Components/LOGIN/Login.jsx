@@ -51,6 +51,7 @@ function LOGIN(props) {
                     showConfirmButton: false,
                     timer: 1500,
                 });
+                localStorage.setItem('USERNAME', JSON.stringify(form.user));
                 navigate('/home');
             } catch (error) {
                 Swal.fire({
