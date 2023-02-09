@@ -1,9 +1,6 @@
 import React, { useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
-import {
-    Button,
-    Form
-} from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
 function Example() {
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
@@ -15,25 +12,22 @@ function Example() {
                 show={true}
                 onHide={handleClose}
                 class="modal-dialog modal-dialog-scrollable"
-               //onSubmit={handleSubmit}
+                //onSubmit={handleSubmit}
             >
                 <Modal.Header>
-                    <Modal.Title>Creación de Usuario</Modal.Title>
+                    <Modal.Title>Edición de Usuario</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                 
-                        <CREARUSUARIO></CREARUSUARIO>
-                    
+                    <CREARUSUARIO></CREARUSUARIO>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" href="/home">
+                    <Button variant="secondary" href="/users">
                         Salir
                     </Button>
- 
-                    <Button variant="primary" form= "test" type ="submit" >
+
+                    <Button variant="primary" form="test" type="submit">
                         Guardar cambios
                     </Button>
-
                 </Modal.Footer>
             </Modal>
         </>
@@ -43,52 +37,45 @@ function Example() {
 function CREARUSUARIO() {
     const [form, setForm] = useState({});
     const [errors, setErrors] = useState({});
-    
+
     const setField = (field, value) => {
         setForm({
             ...form,
             [field]: value,
         });
     };
-    console.log("entro")
-    function findErrors() 
-    {
+    console.log('entro');
+    function findErrors() {
         const newErrors = {};
         let { email, password, fecha } = form;
-        const hoy = new Date().toISOString().split("T")[0];
+        const hoy = new Date().toISOString().split('T')[0];
         console.log(email);
-        if (!email && email !== "" || email == '') 
-        {
+        if ((!email && email !== '') || email == '') {
             //En realidad es username
             newErrors.email = 'Espacio de correo electrónico vacío !';
             //email = "";
         }
         const pattern = new RegExp(
-          /^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i
-      );
-      if (!pattern.test(email)) {
-        newErrors.email = "Formato de correo electrónico inválido.";
-      }
-      if(!password && password !== "" || password == '')
-      {
-        newErrors.password = 'Espacio de contraseña vacío !';
-      } 
-      const passwordPattern = new RegExp(
-        /^(.{0,7}|[^0-9]*|[^A-Z]*|[^a-z]*|[a-zA-Z0-9]*)$/
-      );
-      if (passwordPattern.test(password)) 
-      {
-      newErrors.password = "Formato de contraseña inválido.";
-      }
-      if(fecha>=hoy)
-      {
-        newErrors.fecha = "Fecha inválida.";
-      }
+            /^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i
+        );
+        if (!pattern.test(email)) {
+            newErrors.email = 'Formato de correo electrónico inválido.';
+        }
+        if ((!password && password !== '') || password == '') {
+            newErrors.password = 'Espacio de contraseña vacío !';
+        }
+        const passwordPattern = new RegExp(
+            /^(.{0,7}|[^0-9]*|[^A-Z]*|[^a-z]*|[a-zA-Z0-9]*)$/
+        );
+        if (passwordPattern.test(password)) {
+            newErrors.password = 'Formato de contraseña inválido.';
+        }
+        if (fecha >= hoy) {
+            newErrors.fecha = 'Fecha inválida.';
+        }
         console.log(newErrors.email);
         return newErrors;
     }
-
-
 
     async function handleSubmit(e) {
         e.preventDefault();
@@ -99,42 +86,45 @@ function CREARUSUARIO() {
             setErrors(newErrors);
         } else {
             //LLAMEN A LA API
-            alert("FUNCIONA");
+            alert('FUNCIONA');
         }
     }
 
     return (
         <div className="mb-3 mt-md-4">
             <p>
-                Por favor ingrese todos los nuevos datos que asignará al
-                usuario actual.
+                Por favor ingrese todos los nuevos datos que asignará al usuario
+                actual.
             </p>
             <h5 className="text-center">Usuario actual: ------</h5>
             <div className="mb-3">
                 <Form onSubmit={handleSubmit} name="test" id="test">
-                    <Form.Group className="mb-3" >
-                        <Form.Label className="text-center">Nuevo nombre</Form.Label>
+                    <Form.Group className="mb-3">
+                        <Form.Label className="text-center">
+                            Nuevo nombre
+                        </Form.Label>
                         <Form.Control
                             type="text"
                             placeholder="Ingrese el nuevo nombre"
                             onChange={(e) => setField('nombre', e.target.value)}
                             required
-                           // isInvalid={!!errors.nombre}
+                            // isInvalid={!!errors.nombre}
                         />
                     </Form.Group>
                     <br></br>
 
-
-                    <Form.Group className="mb-3" >
+                    <Form.Group className="mb-3">
                         <Form.Label className="text-center">
                             Apellido
                         </Form.Label>
                         <Form.Control
                             type="text"
                             placeholder="Ingrese el nuevo apellido"
-                            onChange={(e) => setField('apellido', e.target.value)}
+                            onChange={(e) =>
+                                setField('apellido', e.target.value)
+                            }
                             required
-                           // isInvalid={!!errors.apellido}
+                            // isInvalid={!!errors.apellido}
                         />
                     </Form.Group>
                     <br></br>
@@ -142,13 +132,14 @@ function CREARUSUARIO() {
                     <Form.Label className="text-center">Género</Form.Label>
                     <Form.Group>
                         <Form.Select aria-label="Género">
-                            <option disabled selected value>No definido</option>
+                            <option disabled selected value>
+                                No definido
+                            </option>
                             <option value="2">Masculino</option>
                             <option value="3">Femenino</option>
                         </Form.Select>
                     </Form.Group>
                     <br></br>
-
 
                     <Form.Group>
                         <Form.Label>Fecha de nacimiento</Form.Label>
@@ -159,9 +150,9 @@ function CREARUSUARIO() {
                             onChange={(e) => setField('fecha', e.target.value)}
                             isInvalid={!!errors.fecha}
                         ></Form.Control>
-                          <Form.Control.Feedback type="invalid">
-                        {errors.fecha}
-                    </Form.Control.Feedback>
+                        <Form.Control.Feedback type="invalid">
+                            {errors.fecha}
+                        </Form.Control.Feedback>
                     </Form.Group>
                     <br></br>
 
@@ -190,9 +181,9 @@ function CREARUSUARIO() {
                             maxLength="8"
                             minLength="8"
                             onKeyPress={(event) => {
-                              if (!/[0-9]/.test(event.key)) {
-                                event.preventDefault();
-                              }
+                                if (!/[0-9]/.test(event.key)) {
+                                    event.preventDefault();
+                                }
                             }}
                         />
                     </Form.Group>
@@ -213,7 +204,6 @@ function CREARUSUARIO() {
                     ></Form.Group>
                     <br></br>
 
-
                     <Form.Group className="mb-3" controlId="formBasicEmail">
                         <Form.Label className="text-center">
                             Nueva dirección de correo electrónico
@@ -225,9 +215,9 @@ function CREARUSUARIO() {
                             isInvalid={!!errors.email}
                             required
                         />
-                          <Form.Control.Feedback type="invalid">
-                        {errors.email}
-                    </Form.Control.Feedback>
+                        <Form.Control.Feedback type="invalid">
+                            {errors.email}
+                        </Form.Control.Feedback>
                     </Form.Group>
                 </Form>
             </div>
