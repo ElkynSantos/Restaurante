@@ -32,7 +32,7 @@ function MENU() {
     // Similar to componentDidMount and componentDidUpdate:
     useEffect(() => {
         // Update the document title using the browser API
-        alert(`You clicked ${count} times`);
+        // alert(`You clicked ${count} times`);
     });
 
     //INICIAR MESAS HARCODEADO
@@ -65,6 +65,8 @@ function MENU() {
     return (
         <Container>
             <BarraLateral />
+            <p></p>
+            <p></p>
             <Row className="add-space">
                 {array1.map((mesa) => (
                     <Col lg>
@@ -74,12 +76,6 @@ function MENU() {
                                 <Card.Body>
                                     <Card.Title>Mesa {mesa.numero}</Card.Title>
                                     <Card.Text>Disponible</Card.Text>
-                                    <Button
-                                        variant="primary"
-                                        onClick={() => setCount(mesa.numero)}
-                                    >
-                                        Disponible
-                                    </Button>
 
                                     <>
                                         <Button
@@ -111,31 +107,32 @@ function MENU() {
                                                     </Form.Group>
                                                     <Form.Group
                                                         className="mb-3"
-                                                        controlId="exampleForm.ControlTextarea1"
+                                                        controlId="exampleForm.ControlInput1"
                                                     >
                                                         <Form.Label>
-                                                            Example textarea
+                                                            Numero de RTN
+                                                            (Opcional)
                                                         </Form.Label>
                                                         <Form.Control
-                                                            as="textarea"
-                                                            rows={3}
+                                                            placeholder="(rtn)"
+                                                            autoFocus
                                                         />
                                                     </Form.Group>
                                                 </Form>
                                             </Modal.Body>
                                             <Modal.Footer>
                                                 <Button
-                                                    variant="secondary"
+                                                    variant="danger"
                                                     onClick={handleClose}
                                                 >
-                                                    Close
+                                                    Cancelar
                                                 </Button>
                                                 <Button
                                                     href="\facturacion"
-                                                    variant="primary"
+                                                    variant="success"
                                                     onClick={handleSelect}
                                                 >
-                                                    Save Changes
+                                                    Facturar
                                                 </Button>
                                             </Modal.Footer>
                                         </Modal>
@@ -153,6 +150,30 @@ function MENU() {
 }
 
 export default MENU;
+
+/*
+  <Form.Group
+                                                        className="mb-3"
+                                                        controlId="exampleForm.ControlTextarea1"
+                                                    >
+                                                        <Form.Label>
+                                                            Example textarea
+                                                        </Form.Label>
+                                                        <Form.Control
+                                                            as="textarea"
+                                                            rows={3}
+                                                        />
+                                                    </Form.Group>s
+
+*/
+
+/*    <Button
+                                        variant="primary"
+                                        onClick={() => setCount(mesa.numero)}
+                                    >
+                                        Disponible
+                                    </Button>*/
+
 //<Order numMesa={mesa.numero} estadoMesa={mesa.estado} />
 /*{button}
  <Container>

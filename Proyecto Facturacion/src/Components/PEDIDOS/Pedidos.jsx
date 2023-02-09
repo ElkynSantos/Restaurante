@@ -173,8 +173,10 @@ function PEDIDOS() {
     const [resetPaginationToggle, setResetPaginationToggle] = useState(false);
     const filteredItems = DATO.filter(
         (item) =>
-            item.name &&
-            item.name.toLowerCase().includes(filterText.toLowerCase())
+            item.nombre_producto &&
+            item.nombre_producto
+                .toLowerCase()
+                .includes(filterText.toLowerCase())
     );
 
     const subHeaderComponentMemo = useMemo(() => {
@@ -194,14 +196,13 @@ function PEDIDOS() {
             />
 */
 
-            <Form inline onSubmit={(e) => setFilterText(e.target.value)}>
+            <Form inline>
                 <FormControl
                     type="text"
-                    placeholder="Filter..."
+                    placeholder="Buscar Producto"
                     value={filterText}
                     onChange={(e) => setFilterText(e.target.value)}
                 />
-                <Button type="submit">Filter</Button>
             </Form>
         );
     }, [filterText, resetPaginationToggle]);
@@ -227,7 +228,6 @@ function PEDIDOS() {
                         paginationResetDefaultPage={resetPaginationToggle} // optionally, a hook to reset pagination to page 1
                         subHeader
                         subHeaderComponent={subHeaderComponentMemo}
-                        selectableRows
                         persistTableHead
                     />
                 </Col>
@@ -235,6 +235,7 @@ function PEDIDOS() {
                 <Col>
                     {' '}
                     <DataTable
+                        title="Orden"
                         columns={columns2}
                         data={AllSelectedRows}
                         onRowClicked={handleChange2}
