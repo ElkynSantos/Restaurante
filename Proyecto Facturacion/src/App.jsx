@@ -23,7 +23,7 @@ function App() {
             <Routes>
                 <Route index element={<LOGIN />} />
                 <Route path="/Home" element={<INICIO />} />
-                <Route path="/Pedidos" element={<CREARUSUARIO />} />
+                <Route path="/Pedidos" element={<PEDIDOS />} />
                 <Route path="/mesas" element={<MESAS />} />
                 <Route path="/facturacion" element={<FACTURACION />} />
                 <Route path="/Users" element={<USERS />} />

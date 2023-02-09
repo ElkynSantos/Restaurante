@@ -5,7 +5,7 @@ import db from '../db.js';
 
 const getAllPedidos = async (req, res, next) => {
     try {
-        const allPedidos = await db.query(`SELECT * FROM bd_res.pedidos;`);
+        const allPedidos = await db.query(`SELECT * FROM db_rest.pedidos;`);
 
         console.log(allPedidos[1]);
 
