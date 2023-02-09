@@ -1,12 +1,12 @@
 import AppError from '../utilities/app.error.js';
-import { integerSanitizer } from '../utilities/data.sanitizer.js';
 
 import db from '../db.js';
 
 const getAllRoles = async (req, res, next) => {
-    try 
-    {
-        const allRoles = await db.query('SELECT Desc_Permiso FROM bd_restaurante.permisos;');
+    try {
+        const allRoles = await db.query(
+            'SELECT Desc_Permiso FROM bd_restaurante.permisos;'
+        );
 
         console.log(allRoles);
 
@@ -14,8 +14,7 @@ const getAllRoles = async (req, res, next) => {
             status: 'Ok',
             allRoles,
         });
-    } catch (error)
-    {
+    } catch (error) {
         return next(new AppError('Ups! Error en la base de datos', 500));
     }
-}
+};

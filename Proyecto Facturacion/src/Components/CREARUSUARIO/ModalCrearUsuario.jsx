@@ -9,26 +9,26 @@ import {
     Form,
     FormControl,
     FormLabel,
-    CloseButton
+    CloseButton,
 } from 'react-bootstrap';
 import Swal from 'sweetalert2';
 
 import { Register } from '../../services/REGISTER';
-import { showModal , closeModal } from '../../features/createUserSlice';
+import { showModal, closeModal } from '../../features/createUserSlice';
 import { useDispatch, useSelector } from 'react-redux';
 
 function Example() {
     const dispatch = useDispatch();
     // const [show, setShow] = useState(false);
     const handleClose = () => {
-        dispatch(closeModal())
+        dispatch(closeModal());
     };
 
     const handleShow = () => {
-        dispatch(showModal())
+        dispatch(showModal());
     };
-    
-    const show2 = useSelector(state => state.modalAddUserState)
+
+    const show2 = useSelector((state) => state.modalAddUserState);
 
     return (
         <>
@@ -41,7 +41,7 @@ function Example() {
             >
                 <Modal.Header className="bg-blue text-white">
                     <Modal.Title>Creación de Usuario</Modal.Title>
-                    <CloseButton variant="white" onClick={handleClose}/>
+                    <CloseButton variant="white" onClick={handleClose} />
                 </Modal.Header>
                 <Modal.Body>
                     <CREARUSUARIO></CREARUSUARIO>
@@ -51,7 +51,7 @@ function Example() {
                         Salir
                     </Button>
 
-                    <Button className='bg-blue' form="test" type="submit">
+                    <Button className="bg-blue" form="test" type="submit">
                         Guardar usuarios
                     </Button>
                 </Modal.Footer>
@@ -148,20 +148,27 @@ function CREARUSUARIO() {
 
     return (
         <div className="mb-3 mt-md-3">
-            <h5 className='mb-3 text-blue fw-bold'>Por favor ingrese todos los datos correspondientes del nuevo usuario. </h5>
+            <h5 className="mb-3 text-blue fw-bold">
+                Por favor ingrese todos los datos correspondientes del nuevo
+                usuario.{' '}
+            </h5>
             <div className="mb-3">
                 <Form onSubmit={handleSubmit} name="test" id="test">
                     <Row>
                         <Col>
                             <Form.Group className="mb-3">
-                                <Form.Label className="fw-bold">Nombre</Form.Label>
+                                <Form.Label className="fw-bold">
+                                    Nombre
+                                </Form.Label>
                                 <Form.Control
                                     type="text"
                                     placeholder="Ingrese el nombre"
-                                    onChange={(e) => setField('nombre', e.target.value)}
+                                    onChange={(e) =>
+                                        setField('nombre', e.target.value)
+                                    }
                                     required
                                     // isInvalid={!!errors.nombre}
-                                    />
+                                />
                             </Form.Group>
                         </Col>
                         <Col>
@@ -176,7 +183,7 @@ function CREARUSUARIO() {
                                         setField('apellido', e.target.value)
                                     }
                                     required
-                                    />
+                                />
                             </Form.Group>
                         </Col>
                     </Row>
@@ -190,17 +197,23 @@ function CREARUSUARIO() {
                                     type="text"
                                     placeholder="Ingrese el lugar"
                                     required
-                                    onChange={(e) => setField('lugar', e.target.value)}
+                                    onChange={(e) =>
+                                        setField('lugar', e.target.value)
+                                    }
                                     //isInvalid={!!errors.email}
-                                    />
+                                />
                             </Form.Group>
                         </Col>
                         <Col>
-                            <Form.Label className="text-center fw-bold">Género</Form.Label>
+                            <Form.Label className="text-center fw-bold">
+                                Género
+                            </Form.Label>
                             <Form.Group>
                                 <Form.Select
                                     aria-label="Género"
-                                    onChange={(e) => setField('genero', e.target.value)}
+                                    onChange={(e) =>
+                                        setField('genero', e.target.value)
+                                    }
                                 >
                                     <option disabled selected value>
                                         Escoger género
@@ -212,12 +225,16 @@ function CREARUSUARIO() {
                         </Col>
                         <Col>
                             <Form.Group>
-                                <Form.Label className='fw-bold'>Fecha de nacimiento</Form.Label>
+                                <Form.Label className="fw-bold">
+                                    Fecha de nacimiento
+                                </Form.Label>
                                 <Form.Control
                                     type="date"
                                     placeholder="Ingresar fecha de nacimiento"
                                     required
-                                    onChange={(e) => setField('fecha', e.target.value)}
+                                    onChange={(e) =>
+                                        setField('fecha', e.target.value)
+                                    }
                                     isInvalid={!!errors.fecha}
                                 ></Form.Control>
                                 <Form.Control.Feedback type="invalid">
@@ -243,22 +260,29 @@ function CREARUSUARIO() {
                                             event.preventDefault();
                                         }
                                     }}
-                                    onChange={(e) => setField('numero', e.target.value)}
+                                    onChange={(e) =>
+                                        setField('numero', e.target.value)
+                                    }
                                 />
                             </Form.Group>
                         </Col>
                         <Col>
-                            <Form.Group className="mb-3" controlId="formBasicEmail">
+                            <Form.Group
+                                className="mb-3"
+                                controlId="formBasicEmail"
+                            >
                                 <Form.Label className="text-center fw-bold">
                                     Dirección de correo electrónico
                                 </Form.Label>
                                 <Form.Control
                                     type="email"
                                     placeholder="Ingrese correo personal"
-                                    onChange={(e) => setField('email', e.target.value)}
+                                    onChange={(e) =>
+                                        setField('email', e.target.value)
+                                    }
                                     isInvalid={!!errors.email}
                                     required
-                                    />
+                                />
                                 <Form.Control.Feedback type="invalid">
                                     {errors.email}
                                 </Form.Control.Feedback>
@@ -273,12 +297,16 @@ function CREARUSUARIO() {
                             <Form.Group>
                                 <Form.Select
                                     aria-label="Asignar impuesto"
-                                    onChange={(e) => setField('rol', e.target.value)}
+                                    onChange={(e) =>
+                                        setField('rol', e.target.value)
+                                    }
                                 >
                                     <option disabled selected value>
                                         Escoger Rol
                                     </option>
-                                    <option value="1">Administrador de sistema</option>
+                                    <option value="1">
+                                        Administrador de sistema
+                                    </option>
                                     <option value="2">Gerente</option>
                                     <option value="3">Facturador</option>
                                 </Form.Select>
@@ -286,14 +314,18 @@ function CREARUSUARIO() {
                         </Col>
                         <Col>
                             <Form.Group className="mb-3">
-                                <Form.Label className="text-center fw-bold">DNI</Form.Label>
+                                <Form.Label className="text-center fw-bold">
+                                    DNI
+                                </Form.Label>
                                 <Form.Control
                                     type="text"
                                     placeholder="Número de identidad"
-                                    onChange={(e) => setField('DNI', e.target.value)}
+                                    onChange={(e) =>
+                                        setField('DNI', e.target.value)
+                                    }
                                     required
                                     // isInvalid={!!errors.nombre}
-                                    />
+                                />
                             </Form.Group>
                         </Col>
                         <Col>
@@ -309,7 +341,7 @@ function CREARUSUARIO() {
                                     }
                                     isInvalid={!!errors.password}
                                     required
-                                    />
+                                />
                                 <Form.Control.Feedback type="invalid">
                                     {errors.password}
                                 </Form.Control.Feedback>

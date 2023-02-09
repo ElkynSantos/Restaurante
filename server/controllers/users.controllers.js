@@ -18,6 +18,7 @@ const allUsers = async (req, res, next) => {
             allUsers,
         });
     } catch (error) {
+        console.log(error);
         return next(new AppError(`Ups! Error en la base de datos`, 500));
     }
 };
@@ -109,15 +110,14 @@ const createUser = async (req, res, next) => {
         );
 
         if (newUser.response === 0) {
-            return next(new AppError(newUser.msg, 401));
+            return next(new AppError(newUser.msg, 400));
         }
 
-        return res.status(200).json({
+        return res.status(201).json({
             status: 'Ok',
             msg: newUser.msg,
         });
     } catch (error) {
-        console.log(error);
         return next(new AppError(`Ha ocurrido un error en el servidor`, 500));
     }
 };
@@ -142,6 +142,25 @@ const updateUser = async (req, res, next) => {
             phone,
             email,
         } = req.body;
+
+        const emptyParams = Object.values({
+            name,
+            lastName,
+            rol,
+            dni,
+            gender,
+            birthday,
+            placeofBirth,
+            phone,
+            email,
+            password,
+        }).some((val) => !val);
+
+        if (emptyParams) {
+            return next(
+                new AppError(`Por favor complete todos los campos`, 400)
+            );
+        }
 
         const [updatedUser] = await db.query(
             'CALL edit_user(:id ,:userStatus ,:userName, :userLastName, :userId, :rol, :userDni, :userGender, :userBirthday, :placeOfBirth, :userPhone, :userEmail)',
@@ -180,6 +199,10 @@ const editUserStaus = async (req, res, next) => {
     try {
         const { opt, userDni } = req.body;
 
+        if (!opt || !userDni) {
+            return next(new AppError(`No se permiten campos vacios`, 400));
+        }
+
         const [changeUserStatus] = await db.query(
             `CALL edit_user_status(:opt, :userDni)`,
             {
@@ -191,7 +214,7 @@ const editUserStaus = async (req, res, next) => {
         );
 
         if (changeUserStatus.response === 0) {
-            return next(new AppError(changeUserStatus.msg, 401));
+            return next(new AppError(changeUserStatus.msg, 404));
         }
 
         return res.status(200).json({

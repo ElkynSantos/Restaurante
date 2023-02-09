@@ -36,7 +36,7 @@ const login = async (req, res, next) => {
         );
         
         if (userExists.response === 0) {
-            return next(new AppError(userExists.msg, 401));
+            return next(new AppError(userExists.msg, 404));
         }
 
         const rightPassword = await comparePassword(

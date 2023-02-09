@@ -26,7 +26,7 @@ function App() {
                 <Route path="/Pedidos" element={<CREARUSUARIO />} />
                 <Route path="/mesas" element={<MESAS />} />
                 <Route path="/facturacion" element={<FACTURACION />} />
-                <Route path="/Users" element={<USERS/>}/>
+                <Route path="/Users" element={<USERS />} />
                 <Route path="/Recuperar" element={<FormPassword />} />
             </Routes>
         </BrowserRouter>

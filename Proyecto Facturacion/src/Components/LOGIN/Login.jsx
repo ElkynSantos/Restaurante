@@ -69,10 +69,14 @@ function LOGIN(props) {
                 <Row className="vh-100 d-flex justify-content-center align-items-center">
                     <Col md={88} lg={6} xs={15}>
                         <Card className="shadow p-0">
-                            <Card.Header className='bg-blue'>
+                            <Card.Header className="bg-blue">
                                 <Row>
                                     <Col>
-                                        <img class="logo" src="/assets/images/logo.png" alt="" />
+                                        <img
+                                            class="logo"
+                                            src="/assets/images/logo.png"
+                                            alt=""
+                                        />
                                     </Col>
                                 </Row>
                             </Card.Header>
@@ -134,7 +138,7 @@ function LOGIN(props) {
                                             ></Form.Group>
                                             <div className="d-grid">
                                                 <Button
-                                                    className='bg-blue'
+                                                    className="bg-blue"
                                                     type="submit"
                                                 >
                                                     Ingresar
@@ -144,7 +148,12 @@ function LOGIN(props) {
                                         <div className="mt-3">
                                             <p className="mb-0  text-center">
                                                 ¿Desea recuperar contraseña?{' '}
-                                                <a href="/Recuperar" className="text-blue fw-bold" >Click aquí</a>
+                                                <a
+                                                    href="/Recuperar"
+                                                    className="text-blue fw-bold"
+                                                >
+                                                    Click aquí
+                                                </a>
                                             </p>
                                         </div>
                                     </div>

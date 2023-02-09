@@ -1,15 +1,15 @@
 import express from 'express';
 
 import {
-    getProductoCodigoORDescripcion,
-    getProductos,
-    crearProducto,
-    editarProducto,
+    getProductbyCodeDesc,
+    getAllProducts,
+    newProduct,
+    editProduct,
 } from '../controllers/products.controllers.js';
 
 const productsRoutes = express.Router();
 
-productsRoutes.route('/').get(getProductos).post(crearProducto);
-productsRoutes.route('/:id').get(getProductoCodigoORDescripcion).patch(editarProducto);
+productsRoutes.route('/').get(getAllProducts).post(newProduct);
+productsRoutes.route('/:id').get(getProductbyCodeDesc).patch(editProduct);
 
 export default productsRoutes;
