@@ -9,34 +9,49 @@ import {
     Form,
     FormControl,
     FormLabel,
+    CloseButton
 } from 'react-bootstrap';
 import Swal from 'sweetalert2';
+
 import { Register } from '../../services/REGISTER';
+import { showModal , closeModal } from '../../features/createUserSlice';
+import { useDispatch, useSelector } from 'react-redux';
 
 function Example() {
-    const [show, setShow] = useState(false);
-    const handleClose = () => setShow(false);
+    const dispatch = useDispatch();
+    // const [show, setShow] = useState(false);
+    const handleClose = () => {
+        dispatch(closeModal())
+    };
+
+    const handleShow = () => {
+        dispatch(showModal())
+    };
+    
+    const show2 = useSelector(state => state.modalAddUserState)
 
     return (
         <>
             <Modal
-                show={true}
+                show={show2}
+                size="lg"
                 onHide={handleClose}
                 class="modal-dialog modal-dialog-scrollable"
-                //onSubmit={handleSubmit}
+                backdrop="static"
             >
-                <Modal.Header>
+                <Modal.Header className="bg-blue text-white">
                     <Modal.Title>Creación de Usuario</Modal.Title>
+                    <CloseButton variant="white" onClick={handleClose}/>
                 </Modal.Header>
                 <Modal.Body>
                     <CREARUSUARIO></CREARUSUARIO>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" href="/home">
+                    <Button variant="danger" onClick={handleClose}>
                         Salir
                     </Button>
 
-                    <Button variant="primary" form="test" type="submit">
+                    <Button className='bg-blue' form="test" type="submit">
                         Guardar usuarios
                     </Button>
                 </Modal.Footer>
@@ -55,12 +70,11 @@ function CREARUSUARIO() {
             [field]: value,
         });
     };
-    console.log('entro');
     function findErrors() {
         const newErrors = {};
         let { email, password, fecha } = form;
         const hoy = new Date().toISOString().split('T')[0];
-        console.log(email);
+        // console.log(email);
         if ((!email && email !== '') || email == '') {
             //En realidad es username
             newErrors.email = 'Espacio de correo electrónico vacío !';
@@ -84,14 +98,14 @@ function CREARUSUARIO() {
         if (fecha >= hoy) {
             newErrors.fecha = 'Fecha inválida.';
         }
-        console.log(newErrors.email);
+        // console.log(newErrors.email);
         return newErrors;
     }
 
     async function handleSubmit(e) {
         e.preventDefault();
         let newErrors = findErrors();
-        console.log(newErrors);
+        // console.log(newErrors);
 
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors);
@@ -102,7 +116,7 @@ function CREARUSUARIO() {
                 let rol = parseInt(form.rol);
                 let dni = parseInt(form.DNI);
                 let numero = parseInt(form.numero);
-                console.log(form.rol);
+                // console.log(form.rol);
                 const data = await Register(
                     form.nombre,
                     form.apellido,
@@ -133,167 +147,175 @@ function CREARUSUARIO() {
     }
 
     return (
-        <div className="mb-3 mt-md-4">
-            <p>
-                Por favor ingrese todos los datos correspondientes del nuevo
-                usuario.
-            </p>
+        <div className="mb-3 mt-md-3">
+            <h5 className='mb-3 text-blue fw-bold'>Por favor ingrese todos los datos correspondientes del nuevo usuario. </h5>
             <div className="mb-3">
                 <Form onSubmit={handleSubmit} name="test" id="test">
-                    <Form.Group className="mb-3">
-                        <Form.Label className="text-center">Nombre</Form.Label>
-                        <Form.Control
-                            type="text"
-                            placeholder="Ingrese el nombre"
-                            onChange={(e) => setField('nombre', e.target.value)}
-                            required
-                            // isInvalid={!!errors.nombre}
-                        />
-                    </Form.Group>
-                    <Form.Group className="mb-3">
-                        <Form.Label className="text-center">
-                            Apellido
-                        </Form.Label>
-                        <Form.Control
-                            type="text"
-                            placeholder="Ingrese el apellido"
-                            onChange={(e) =>
-                                setField('apellido', e.target.value)
-                            }
-                            required
-                        />
-                    </Form.Group>
-                    <Form.Group className="mb-3">
-                        <Form.Label className="text-center">DNI</Form.Label>
-                        <Form.Control
-                            type="text"
-                            placeholder="Ingrese el nombre"
-                            onChange={(e) => setField('DNI', e.target.value)}
-                            required
-                            // isInvalid={!!errors.nombre}
-                        />
-                    </Form.Group>
-
-                    <Form.Label className="text-center">Género</Form.Label>
-                    <Form.Group>
-                        <Form.Select
-                            aria-label="Género"
-                            onChange={(e) => setField('genero', e.target.value)}
-                        >
-                            <option disabled selected value>
-                                Escoger género
-                            </option>
-                            <option value="H">Masculino</option>
-                            <option value="F">Femenino</option>
-                        </Form.Select>
-                    </Form.Group>
-                    <Form.Group>
-                        <Form.Label>Fecha de nacimiento</Form.Label>
-                        <Form.Control
-                            type="date"
-                            placeholder="Ingresar fecha de nacimiento"
-                            required
-                            onChange={(e) => setField('fecha', e.target.value)}
-                            isInvalid={!!errors.fecha}
-                        ></Form.Control>
-                        <Form.Control.Feedback type="invalid">
-                            {errors.fecha}
-                        </Form.Control.Feedback>
-                    </Form.Group>
-                    <br></br>
-
-                    <Form.Group className="mb-3">
-                        <Form.Label className="text-center">
-                            Lugar de nacimiento
-                        </Form.Label>
-                        <Form.Control
-                            type="text"
-                            placeholder="Ingrese el lugar"
-                            required
-                            onChange={(e) => setField('lugar', e.target.value)}
-                            //isInvalid={!!errors.email}
-                        />
-                    </Form.Group>
-                    <br></br>
-
-                    <Form.Group className="mb-3">
-                        <Form.Label className="text-center">
-                            Número de teléfono
-                        </Form.Label>
-                        <Form.Control
-                            type="text"
-                            placeholder="Ingrese Numero"
-                            required
-                            maxLength="8"
-                            minLength="8"
-                            onKeyPress={(event) => {
-                                if (!/[0-9]/.test(event.key)) {
-                                    event.preventDefault();
-                                }
-                            }}
-                            onChange={(e) => setField('numero', e.target.value)}
-                        />
-                    </Form.Group>
-                    <br></br>
-
-                    <Form.Label className="text-center">
-                        Rol que asignará al usuario
-                    </Form.Label>
-                    <Form.Group>
-                        <Form.Select
-                            aria-label="Asignar impuesto"
-                            onChange={(e) => setField('rol', e.target.value)}
-                        >
-                            <option disabled selected value>
-                                Escoger Rol
-                            </option>
-                            <option value="1">Administrador de sistema</option>
-                            <option value="2">Gerente</option>
-                            <option value="3">Facturador</option>
-                        </Form.Select>
-                    </Form.Group>
-                    <Form.Group
-                        className="mb-3"
-                        controlId="formBasicCheckbox"
-                        required
-                    ></Form.Group>
-
-                    <Form.Group className="mb-3" controlId="formBasicEmail">
-                        <Form.Label className="text-center">
-                            Dirección de correo electrónico
-                        </Form.Label>
-                        <Form.Control
-                            type="email"
-                            placeholder="Ingrese correo personal"
-                            onChange={(e) => setField('email', e.target.value)}
-                            isInvalid={!!errors.email}
-                            required
-                        />
-                        <Form.Control.Feedback type="invalid">
-                            {errors.email}
-                        </Form.Control.Feedback>
-                    </Form.Group>
-
-                    <Form.Group className="mb-3">
-                        <Form.Label className="text-center">
-                            Contraseña
-                        </Form.Label>
-                        <Form.Control
-                            type="text"
-                            placeholder="Ingrese contraseña del usuario"
-                            onChange={(e) =>
-                                setField('password', e.target.value)
-                            }
-                            isInvalid={!!errors.password}
-                            required
-                        />
-                        <Form.Control.Feedback type="invalid">
-                            {errors.password}
-                        </Form.Control.Feedback>
-                    </Form.Group>
-
-                    <br></br>
-                    <br></br>
+                    <Row>
+                        <Col>
+                            <Form.Group className="mb-3">
+                                <Form.Label className="fw-bold">Nombre</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    placeholder="Ingrese el nombre"
+                                    onChange={(e) => setField('nombre', e.target.value)}
+                                    required
+                                    // isInvalid={!!errors.nombre}
+                                    />
+                            </Form.Group>
+                        </Col>
+                        <Col>
+                            <Form.Group className="mb-3">
+                                <Form.Label className="text-center fw-bold">
+                                    Apellido
+                                </Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    placeholder="Ingrese el apellido"
+                                    onChange={(e) =>
+                                        setField('apellido', e.target.value)
+                                    }
+                                    required
+                                    />
+                            </Form.Group>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col>
+                            <Form.Group className="mb-3">
+                                <Form.Label className="text-center fw-bold">
+                                    Lugar de nacimiento
+                                </Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    placeholder="Ingrese el lugar"
+                                    required
+                                    onChange={(e) => setField('lugar', e.target.value)}
+                                    //isInvalid={!!errors.email}
+                                    />
+                            </Form.Group>
+                        </Col>
+                        <Col>
+                            <Form.Label className="text-center fw-bold">Género</Form.Label>
+                            <Form.Group>
+                                <Form.Select
+                                    aria-label="Género"
+                                    onChange={(e) => setField('genero', e.target.value)}
+                                >
+                                    <option disabled selected value>
+                                        Escoger género
+                                    </option>
+                                    <option value="H">Masculino</option>
+                                    <option value="F">Femenino</option>
+                                </Form.Select>
+                            </Form.Group>
+                        </Col>
+                        <Col>
+                            <Form.Group>
+                                <Form.Label className='fw-bold'>Fecha de nacimiento</Form.Label>
+                                <Form.Control
+                                    type="date"
+                                    placeholder="Ingresar fecha de nacimiento"
+                                    required
+                                    onChange={(e) => setField('fecha', e.target.value)}
+                                    isInvalid={!!errors.fecha}
+                                ></Form.Control>
+                                <Form.Control.Feedback type="invalid">
+                                    {errors.fecha}
+                                </Form.Control.Feedback>
+                            </Form.Group>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col>
+                            <Form.Group className="mb-3">
+                                <Form.Label className="text-center fw-bold">
+                                    Número de teléfono
+                                </Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    placeholder="Ingrese Numero"
+                                    required
+                                    maxLength="8"
+                                    minLength="8"
+                                    onKeyPress={(event) => {
+                                        if (!/[0-9]/.test(event.key)) {
+                                            event.preventDefault();
+                                        }
+                                    }}
+                                    onChange={(e) => setField('numero', e.target.value)}
+                                />
+                            </Form.Group>
+                        </Col>
+                        <Col>
+                            <Form.Group className="mb-3" controlId="formBasicEmail">
+                                <Form.Label className="text-center fw-bold">
+                                    Dirección de correo electrónico
+                                </Form.Label>
+                                <Form.Control
+                                    type="email"
+                                    placeholder="Ingrese correo personal"
+                                    onChange={(e) => setField('email', e.target.value)}
+                                    isInvalid={!!errors.email}
+                                    required
+                                    />
+                                <Form.Control.Feedback type="invalid">
+                                    {errors.email}
+                                </Form.Control.Feedback>
+                            </Form.Group>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col>
+                            <Form.Label className="text-center fw-bold">
+                                Rol que asignará al usuario
+                            </Form.Label>
+                            <Form.Group>
+                                <Form.Select
+                                    aria-label="Asignar impuesto"
+                                    onChange={(e) => setField('rol', e.target.value)}
+                                >
+                                    <option disabled selected value>
+                                        Escoger Rol
+                                    </option>
+                                    <option value="1">Administrador de sistema</option>
+                                    <option value="2">Gerente</option>
+                                    <option value="3">Facturador</option>
+                                </Form.Select>
+                            </Form.Group>
+                        </Col>
+                        <Col>
+                            <Form.Group className="mb-3">
+                                <Form.Label className="text-center fw-bold">DNI</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    placeholder="Número de identidad"
+                                    onChange={(e) => setField('DNI', e.target.value)}
+                                    required
+                                    // isInvalid={!!errors.nombre}
+                                    />
+                            </Form.Group>
+                        </Col>
+                        <Col>
+                            <Form.Group className="mb-3">
+                                <Form.Label className="text-center fw-bold">
+                                    Contraseña
+                                </Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    placeholder="Contraseña del usuario"
+                                    onChange={(e) =>
+                                        setField('password', e.target.value)
+                                    }
+                                    isInvalid={!!errors.password}
+                                    required
+                                    />
+                                <Form.Control.Feedback type="invalid">
+                                    {errors.password}
+                                </Form.Control.Feedback>
+                            </Form.Group>
+                        </Col>
+                    </Row>
                 </Form>
             </div>
         </div>

@@ -5,7 +5,6 @@ export const usersSlice = createSlice({
    initialState: [],
    reducers: {
       initUsers: (state, action) => {
-         console.log(state, action);
          return action.payload;
       },
       addUser: (state, action) => {
@@ -15,17 +14,10 @@ export const usersSlice = createSlice({
       },
       changeUserStatus: (state, action) => {
          const {DNI, status} = action.payload;
-         const foundUser = state.find((task) => task.DNI === action.payload.DNI);
-
-         if(foundUser) {
+         const foundUser = state.find((user) => user.DNI === DNI);
+         if (foundUser) {
             foundUser.status = status == 1? 0 : 1;
          }
-         // state.forEach(async (user) => {
-         //    if(user.DNI === action.payload) {
-
-         //       return;
-         //    }
-         // });
       },
    }
 })

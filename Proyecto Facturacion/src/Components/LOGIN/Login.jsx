@@ -68,17 +68,23 @@ function LOGIN(props) {
             <Container>
                 <Row className="vh-100 d-flex justify-content-center align-items-center">
                     <Col md={88} lg={6} xs={15}>
-                        <div className="border border-3 border-primary"></div>
-                        <Card className="shadow">
+                        <Card className="shadow p-0">
+                            <Card.Header className='bg-blue'>
+                                <Row>
+                                    <Col>
+                                        <img class="logo" src="/assets/images/logo.png" alt="" />
+                                    </Col>
+                                </Row>
+                            </Card.Header>
                             <Card.Body>
-                                <div className="mb-3 mt-md-4">
+                                <div className="">
                                     <h2 className="fw-bold mb-2 text-uppercase ">
                                         Iniciar Sesion
                                     </h2>
-                                    <p>
+                                    {/* <p>
                                         Por favor ingrese correo electronico y
                                         Contrasena
-                                    </p>
+                                    </p> */}
                                     <div className="mb-3">
                                         <Form onSubmit={handleSubmit}>
                                             <Form.Group
@@ -86,11 +92,11 @@ function LOGIN(props) {
                                                 controlId="formBasicEmail"
                                             >
                                                 <Form.Label className="text-center">
-                                                    Direccion de correo
+                                                    Nombre de usuario
                                                 </Form.Label>
                                                 <Form.Control
                                                     type="text"
-                                                    placeholder="Ingrese Usuario"
+                                                    placeholder="Ingrese usuario"
                                                     onChange={(e) =>
                                                         setField(
                                                             'user',
@@ -106,11 +112,11 @@ function LOGIN(props) {
                                                 controlId="formBasicPassword"
                                             >
                                                 <Form.Label>
-                                                    Contrasena
+                                                    Contraseña
                                                 </Form.Label>
                                                 <Form.Control
                                                     type="password"
-                                                    placeholder="Contrasena"
+                                                    placeholder="Ingrese contraseña"
                                                     onChange={(e) =>
                                                         setField(
                                                             'userpassword',
@@ -128,7 +134,7 @@ function LOGIN(props) {
                                             ></Form.Group>
                                             <div className="d-grid">
                                                 <Button
-                                                    variant="primary"
+                                                    className='bg-blue'
                                                     type="submit"
                                                 >
                                                     Ingresar
@@ -137,13 +143,8 @@ function LOGIN(props) {
                                         </Form>
                                         <div className="mt-3">
                                             <p className="mb-0  text-center">
-                                                Desea recuperar contrasena?{' '}
-                                                <a
-                                                    href="/Recuperar"
-                                                    className="text-primary fw-bold"
-                                                >
-                                                    Click aqui
-                                                </a>
+                                                ¿Desea recuperar contraseña?{' '}
+                                                <a href="/Recuperar" className="text-blue fw-bold" >Click aquí</a>
                                             </p>
                                         </div>
                                     </div>
