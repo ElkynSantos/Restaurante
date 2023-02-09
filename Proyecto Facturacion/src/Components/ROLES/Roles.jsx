@@ -52,9 +52,9 @@ function ROLES() {
               <Card.Body>
                 <div className="mb-3 mt-md-4">
                   <h2 className="fw-bold mb-2 text-uppercase ">
-                    Asignación de roles
+                    Edición de roles
                   </h2>
-                  <p>Por favor ingrese El ID del usuario y el rol que asignará</p>
+                  <p>Por favor ingrese El ID del usuario y el rol que editará</p>
                   <div className="mb-3">
                     <Form onSubmit={handleSubmit}>
                       <Form.Group className="mb-3" controlId="formBasicEmail">
