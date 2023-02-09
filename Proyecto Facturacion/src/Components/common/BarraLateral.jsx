@@ -90,7 +90,6 @@ function Example() {
                             </Button>
                             <Button href="/" className="bg-blue" size="lg">
                                 <IoIosExit></IoIosExit> Salir
-                                <Borrar />
                             </Button>
                         </div>
                     </Container>

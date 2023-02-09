@@ -100,7 +100,7 @@ function CREARUSUARIO() {
             let rol = parseInt(form.rol);
             let dni = parseInt(form.DNI);
             let numero = parseInt(form.numero);
-
+            console.log(form.rol);
             const data = await Register(
                 form.nombre,
                 form.apellido,

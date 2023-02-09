@@ -26,7 +26,7 @@ function INICIO() {
     useEffect(() => {
         setFecha(ahora);
         setUser(getData());
-    }, [fecha]);
+    }, [fecha, user]);
     //
 
     setInterval(updateTime, 1000);
