@@ -32,7 +32,7 @@ const getProductbyCodeDesc = async (req, res, next) => {
 
         return res.status(200).json({
             status: 'Ok',
-            msg: 'Productos encontradosd en el menú',
+            msg: 'Productos encontrados en el menú',
             products,
         });
     } catch (error) {
@@ -83,32 +83,30 @@ const newProduct = async (req, res, next) => {
     }
 };
 
-const editarProducto = async (req, res, next) => {
+const editProduct = async (req, res, next) => {
     try {
-        const { productCode, productDescription, producPrice } = req.body;
-
-        var idGuia = await db.query(
-            'SELECT id FROM bd_restaurante.productos WHERE codigo_producto = ? OR nombre_producto = ?',
-            [productCode, productDescription]
+        const { productCode, productName, productPrice } = req.body;
+        const updatedProduct = await db.query(
+            'CALL edit_product(:productCode, :productName, :productPrice)',
+            {
+                replacements: {
+                    productCode: productCode,
+                    productName: productName,
+                    productPrice: productPrice,
+                },
+            }
         );
 
-        const emptyParams = Object.values({
-            productCode,
-            productDescription,
-            producPrice,
-        }).some((val) => !val);
-
-        if (emptyParams) {
-            return next(new AppError('Favor completar todos los campos', 401));
+        if (updatedProduct[0].response === 0) {
+            return res.status(400).json({
+                status: 'fail',
+                msg: updatedProduct[0].msg,
+            });
         }
-
-        const [editProduct] = await db.query(
-            'UPDATE bd_restaurante.productos SET codigo_producto = ?, nombre_producto = ?, precio_producto = ? WHERE id = ?',
-            [productCode, productDescription, producPrice, idGuia]
-        );
 
         return res.status(200).json({
             status: 'Ok',
+            msg: updatedProduct[0].msg,
         });
     } catch (error) {
         console.log(error);
@@ -116,4 +114,4 @@ const editarProducto = async (req, res, next) => {
     }
 };
 
-export { getProductbyCodeDesc, getAllProducts, newProduct, editarProducto };
+export { getProductbyCodeDesc, getAllProducts, newProduct, editProduct };
