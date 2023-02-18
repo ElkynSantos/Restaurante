@@ -319,11 +319,13 @@ function CREARUSUARIO() {
                                 </Form.Label>
                                 <Form.Control
                                     type="text"
-                                    placeholder="Número de identidad"
+                                    placeholder="Número de identidad "
+                                    required
+                                    maxlength="13"
                                     onChange={(e) =>
                                         setField('DNI', e.target.value)
                                     }
-                                    required
+
                                     // isInvalid={!!errors.nombre}
                                 />
                             </Form.Group>

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import EDITARUSUARIOS from '../editarUsuario/index';
 import {
     Button,
     Col,
@@ -37,6 +38,18 @@ const paginationComponentOptions = {
 };
 
 function USUARIOS() {
+    let formRICARDIO;
+
+    const [buttonPressed, setbuttonPressed] = useState(false);
+
+    if (buttonPressed) {
+        formRICARDIO = <EDITARUSUARIOS />;
+    }
+
+    useEffect(() => {
+        console.log('Count ' + buttonPressed);
+    }, buttonPressed);
+
     const dispatch = useDispatch();
     const [data, setData] = useState([]);
     const users = useSelector((state) => state.users);
@@ -177,7 +190,7 @@ function USUARIOS() {
                             <button
                                 className="btn-transparent text-blue p-0"
                                 title="Editar"
-                                onClick={() => console.log('Editar', row.DNI)}
+                                onClick={() => setbuttonPressed(true)}
                             >
                                 <PencilFill />
                             </button>
@@ -223,6 +236,8 @@ function USUARIOS() {
     return (
         <div>
             <CREARUSUARIO />
+            {formRICARDIO}
+
             <BarraLateral />
             <Container className="mt-5 rounded bg-white pt-5 pb-5">
                 <Row>
