@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import EDITARPRODUCTO from '../EditarProducto/index';
 import {
     Button,
@@ -20,17 +20,14 @@ import {
 } from 'react-bootstrap-icons';
 import Swal from 'sweetalert2';
 
-import {
-    initUsers,
-    addUser,
-    changeUserStatus,
-} from '../../features/usersSlice';
 import { showModalEP, closeModalEP } from '../../features/EditarProducto';
 import { showModalCP, closeModalCP } from '../../features/CreateProduct';
+import { guardar } from '../../features/sendeditableproduct';
 
 import BarraLateral from '../common/index';
 import CREARPRODUCTO from '../CREARPRODUCTOS/index';
-import { initproducts } from '../../features/Productos';
+
+import { fetchProducts } from '../../features/Productos';
 
 const paginationComponentOptions = {
     rowsPerPageText: 'Filas por página',
@@ -39,25 +36,26 @@ const paginationComponentOptions = {
     selectAllRowsItemText: 'Todos',
 };
 
-function USUARIOS() {
-    let formRICARDIO;
-
-    const [buttonPressed, setbuttonPressed] = useState(false);
-
-    if (buttonPressed) {
-        formRICARDIO = <EDITARUSUARIOS />;
-    }
-
-    useEffect(() => {
-        console.log('Count ' + buttonPressed);
-    }, buttonPressed);
-
+function PRODUCTOT() {
     const dispatch = useDispatch();
-    const [data, setData] = useState([]);
     const products = useSelector((state) => state.products);
+    const [count, setCount] = useState();
+    const [DATA, setData] = useState([]);
+    const [selectedRow, setSelectedRow] = useState(null);
+    const [filterText, setFilterText] = useState('');
 
-    const handleClose = () => {
-        dispatch(closeModalEP());
+    const handleRowClicked = (row) => {
+        setSelectedRow(row);
+    };
+    useEffect(() => {
+        // Do something with the selected row data each time it changes
+
+        console.log(selectedRow);
+        dispatch(guardar(selectedRow));
+    }, [selectedRow]);
+
+    const handleNewProduct = () => {
+        setCount(count + 1);
     };
 
     const handleShowEP = () => {
@@ -71,40 +69,25 @@ function USUARIOS() {
         dispatch(showModalCP());
     };
 
-    const handleAdd = () => {
-        dispatch(
-            addUser({
-                Birthday: '1995-01-28',
-                DNI: '458378',
-                Email: 'juadn@gmil.com',
-                FullName: 'Daniel Ponce',
-                Gender: 'H',
-                Phone: '9393',
-                PlaceofBirth: 'Choloma',
-                Rol: 'Administrador',
-                UsernName: 'JUAR453',
-            })
+    useEffect(() => {
+        dispatch(fetchProducts()).then((data) =>
+            setData(data.payload.allProducts)
         );
-    };
-
-    const handleInitUsers = (data) => {
-        dispatch(initproducts(data));
-    };
+    }, [dispatch, count]);
 
     useEffect(() => {
-        const getAllUsers = async () => {
-            await fetch('http://localhost:3000/products/')
-                .then((response) => response.json())
-                .then((data) => {
-                    handleInitUsers(data.allProducts);
-                })
-                .catch((error) => {
-                    console.error(error);
-                });
-        };
+        if (products.allProducts && products.allProducts[0]) {
+            const DATOS = products.allProducts.filter(
+                (item) =>
+                    item.nombre_producto &&
+                    item.nombre_producto
+                        .toLowerCase()
+                        .includes(filterText.toLowerCase())
+            );
 
-        getAllUsers();
-    }, []);
+            setData(DATOS);
+        }
+    }, [filterText]);
 
     const columns = [
         {
@@ -129,7 +112,10 @@ function USUARIOS() {
                             <button
                                 className="btn-transparent text-blue p-0"
                                 title="Editar"
-                                onClick={handleShowEP}
+                                onClick={() => {
+                                    handleRowClicked(row);
+                                    handleShowEP();
+                                }}
                             >
                                 <PencilFill />
                             </button>
@@ -175,7 +161,7 @@ function USUARIOS() {
     return (
         <div>
             <CREARPRODUCTO />
-            {formRICARDIO}
+            <EDITARPRODUCTO />
 
             <BarraLateral />
             <Container className="mt-5 rounded bg-white pt-5 pb-5">
@@ -193,7 +179,12 @@ function USUARIOS() {
                     </Col>
                     <Col sm={4}>
                         <InputGroup>
-                            <Form.Control aria-label="Dollar amount (with dot and two decimal places)" />
+                            <Form.Control
+                                aria-label="Dollar amount (with dot and two decimal places)"
+                                placeholder="BUSCAR"
+                                value={filterText}
+                                onChange={(e) => setFilterText(e.target.value)}
+                            />
                             <InputGroup.Text>
                                 <Search />
                             </InputGroup.Text>
@@ -203,17 +194,19 @@ function USUARIOS() {
                 <DataTable
                     className="mt-3"
                     columns={columns}
-                    data={products}
+                    data={DATA}
                     customStyles={customStyles}
                     noDataComponent={
                         <div className="p-4">No se encontraron usuarios</div>
                     }
                     pagination
                     paginationComponentOptions={paginationComponentOptions}
+                    selectableRowsSingle
+                    //onSelectedRowsChange={handleRowSelected}
                 />
             </Container>
         </div>
     );
 }
 
-export default USUARIOS;
+export default PRODUCTOT;

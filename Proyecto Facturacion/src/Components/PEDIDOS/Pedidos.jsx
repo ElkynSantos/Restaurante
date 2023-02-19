@@ -51,6 +51,7 @@ function PEDIDOS() {
         }
 
         setSelectedRows(outerArray);
+        console.log(AllSelectedRows);
 
         console.log('ALL SELECTED ROWS: ', AllSelectedRows);
     };

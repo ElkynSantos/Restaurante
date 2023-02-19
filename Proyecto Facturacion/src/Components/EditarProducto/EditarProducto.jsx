@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import {
     Col,
@@ -16,6 +16,7 @@ import { showModalEP, closeModalEP } from '../../features/EditarProducto';
 import { useDispatch, useSelector } from 'react-redux';
 
 function EditarProducto(props) {
+    const valores = useSelector((state) => state.sendeditableproduct);
     const dispatch = useDispatch();
 
     const handleClose = () => {
@@ -33,7 +34,7 @@ function EditarProducto(props) {
                 show={show2}
                 size="lg"
                 onHide={handleClose}
-                class="modal-dialog modal-dialog-scrollable"
+                className="modal-dialog-scrollable"
                 backdrop="static"
             >
                 <Modal.Header className="bg-blue text-white">
@@ -58,6 +59,9 @@ function EditarProducto(props) {
 }
 
 function Edit() {
+    const valores = useSelector((state) => state.sendeditableproduct).value;
+
+    const [data, setDATA] = useState([]);
     const [form, setForm] = useState({});
     const [errors, setErrors] = useState({});
 
@@ -67,15 +71,54 @@ function Edit() {
             [field]: value,
         });
     };
+    useEffect(() => {
+        setDATA(valores);
+    }, [valores]);
 
+    useEffect(() => {
+        setForm(data);
+    }, [data]);
+
+    function findErrors() {
+        const newErrors = {};
+        let { nombre_producto, precio_producto } = form;
+
+        if (
+            (!nombre_producto && nombre_producto !== '') ||
+            nombre_producto == ''
+        ) {
+            newErrors.nombre = 'ingrese nombre del producto!';
+        }
+        if (
+            (!precio_producto && precio_producto !== '') ||
+            nombre_producto == ''
+        ) {
+            newErrors.price = 'Ingrese precio del producto!';
+        }
+
+        return newErrors;
+    }
+    console.log(form);
+    async function handleSubmit(e) {
+        e.preventDefault();
+        let newErrors = findErrors();
+        console.log(newErrors);
+
+        console.log(form);
+
+        if (Object.keys(newErrors).length > 0) {
+            setErrors(newErrors);
+        } else {
+            //LLAMEN A LA API
+        }
+    }
     return (
         <div className="mb-3 mt-md-3">
             <h5 className="mb-3 text-blue fw-bold">
-                Por favor ingrese todos los datos correspondientes del nuevo
-                usuario.{' '}
+                Por favor ingrese todos los datos.{' '}
             </h5>
             <div className="mb-3">
-                <Form name="test" id="test">
+                <Form onSubmit={handleSubmit} name="test" id="test">
                     <Row>
                         <Col>
                             <Form.Group className="mb-3">
@@ -83,10 +126,14 @@ function Edit() {
                                     Codigo
                                 </Form.Label>
                                 <Form.Control
+                                    value={data.codigo_producto || ''}
                                     type="text"
-                                    placeholder="Ingrese el nombre"
+                                    placeholder="Ingrese el codigo"
                                     onChange={(e) =>
-                                        setField('code', e.target.value)
+                                        setField(
+                                            'codigo_producto',
+                                            e.target.value
+                                        )
                                     }
                                     required
                                     // isInvalid={!!errors.nombre}
@@ -100,10 +147,14 @@ function Edit() {
                                 </Form.Label>
                                 <Form.Control
                                     type="text"
-                                    placeholder="Ingrese el apellido"
-                                    onChange={(e) =>
-                                        setField('Namepro', e.target.value)
-                                    }
+                                    defaultValue={data.nombre_producto || ''}
+                                    placeholder="Ingrese Nombre del producto"
+                                    onChange={(e) => {
+                                        setField(
+                                            'nombre_producto',
+                                            e.target.value
+                                        );
+                                    }}
                                     required
                                 />
                             </Form.Group>
@@ -115,9 +166,13 @@ function Edit() {
                                 </Form.Label>
                                 <Form.Control
                                     type="text"
-                                    placeholder="Ingrese el apellido"
+                                    placeholder="Ingrese precio del producto"
+                                    defaultValue={data.precio_producto || ''}
                                     onChange={(e) =>
-                                        setField('price', e.target.value)
+                                        setField(
+                                            'precio_producto',
+                                            e.target.value
+                                        )
                                     }
                                     required
                                     onKeyPress={(event) => {
