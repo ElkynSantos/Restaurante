@@ -4,18 +4,15 @@ import {
     Col,
     Button,
     Row,
-    Container,
-    Card,
     Form,
-    FormControl,
-    FormLabel,
     CloseButton,
 } from 'react-bootstrap';
 import Swal from 'sweetalert2';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { Register } from '../../services/REGISTER';
+import { addUser } from '../../features/usersSlice';
 import { showModal, closeModal } from '../../features/createUserSlice';
-import { useDispatch, useSelector } from 'react-redux';
 
 function Example() {
     const dispatch = useDispatch();
@@ -28,6 +25,12 @@ function Example() {
         dispatch(showModal());
     };
 
+    // const handleAddUser = (user) => {
+    //     dispatch(
+    //         addUser(user)
+    //     );
+    // };
+
     const show2 = useSelector((state) => state.modalAddUserState);
 
     return (
@@ -36,7 +39,7 @@ function Example() {
                 show={show2}
                 size="lg"
                 onHide={handleClose}
-                class="modal-dialog modal-dialog-scrollable"
+                // class="modal-dialog modal-dialog-scrollable"
                 backdrop="static"
             >
                 <Modal.Header className="bg-blue text-white">
@@ -61,6 +64,12 @@ function Example() {
 }
 
 function CREARUSUARIO() {
+    const dispatch = useDispatch();
+    const handleAddUser = (user) => {
+        dispatch(
+            addUser(user)
+        );
+    };
     const [form, setForm] = useState({});
     const [errors, setErrors] = useState({});
 
@@ -129,14 +138,30 @@ function CREARUSUARIO() {
                     form.email,
                     form.password
                 );
-                Swal.fire({
-                    position: 'top-center',
-                    icon: 'success',
-                    title: 'Usuario Creado',
-                    showConfirmButton: false,
-                    timer: 1500,
-                });
+                
+                if(data.status == "Ok") {
+                    // handleAddUser({
+                    //     FullName: `${form.nombre} ${form.apellido}`,
+                    //     UserName: form.,
+                    //     Rol: form.rol,
+                    //     DNI: form.DNI,
+                    //     Gender: form.,
+                    //     Birthday: form.,
+                    //     PlaceofBirth: form.,
+                    //     Phone: form.,
+                    //     Email: form.,
+                    //     status: form.,
+                    // });
+                    Swal.fire({
+                        position: 'top-center',
+                        icon: 'success',
+                        title: 'Usuario Creado',
+                        showConfirmButton: false,
+                        timer: 1500,
+                    });
+                }
             } catch (error) {
+                console.error(error);
                 Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
@@ -325,8 +350,6 @@ function CREARUSUARIO() {
                                     onChange={(e) =>
                                         setField('DNI', e.target.value)
                                     }
-
-                                    // isInvalid={!!errors.nombre}
                                 />
                             </Form.Group>
                         </Col>

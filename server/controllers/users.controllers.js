@@ -218,7 +218,9 @@ const editUserStaus = async (req, res, next) => {
     try {
         const { opt, userDni } = req.body;
 
-        if (!opt || !userDni) {
+        console.log("status-type", typeof opt, "userDni-type", typeof userDni);
+        console.log("status", opt, "userDni", userDni);
+        if (opt == null || opt == undefined || userDni == null || userDni == undefined) {
             return next(new AppError(`No se permiten campos vacios`, 400));
         }
 
