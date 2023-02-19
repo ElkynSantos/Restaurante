@@ -115,9 +115,11 @@ const createUser = async (req, res, next) => {
 
         return res.status(201).json({
             status: 'Ok',
-            msg: newUser.msg,
+            msg: 'Se ha creado el nuevo usuario exitosamente',
+            newUser,
         });
     } catch (error) {
+        console.log(error);
         return next(new AppError(`Ha ocurrido un error en el servidor`, 500));
     }
 };
