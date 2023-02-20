@@ -3,7 +3,6 @@ import { productIdGenerator } from '../utilities/random.users.js';
 import db from '../db.js';
 
 const getAllProducts = async (req, res, next) => {
-    console.log('entro');
     try {
         const allProducts = await db.query('CALL get_all_products()');
         return res.status(200).json({

@@ -39,19 +39,25 @@ const paginationComponentOptions = {
 function PRODUCTOT() {
     const dispatch = useDispatch();
     const products = useSelector((state) => state.products);
+    const show2 = useSelector((state) => state.EditarProducto).value;
     const [count, setCount] = useState();
     const [DATA, setData] = useState([]);
     const [selectedRow, setSelectedRow] = useState(null);
     const [filterText, setFilterText] = useState('');
 
     const handleRowClicked = (row) => {
-        setSelectedRow(row);
+        if (products == null) {
+            setSelectedRow(row);
+        } else {
+            setSelectedRow(row);
+        }
     };
     useEffect(() => {
         // Do something with the selected row data each time it changes
 
         console.log(selectedRow);
         dispatch(guardar(selectedRow));
+        //setSelectedRow(null);
     }, [selectedRow]);
 
     const handleNewProduct = () => {
@@ -59,6 +65,7 @@ function PRODUCTOT() {
     };
 
     const handleShowEP = () => {
+        dispatch(guardar(selectedRow));
         dispatch(showModalEP());
     };
     const handleCloseCP = () => {
