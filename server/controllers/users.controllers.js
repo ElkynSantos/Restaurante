@@ -105,6 +105,8 @@ const createUser = async (req, res, next) => {
                     userEmail: email,
                     userPass: hashedPass,
                     userToken: token,
+
+                    s,
                 },
             }
         );
