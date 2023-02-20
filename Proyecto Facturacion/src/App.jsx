@@ -8,6 +8,7 @@ import FormPass from "./Components/FormPassword/index";
 import ChangePass from "./Components/ChangePassword/index";
 import Email from "./Components/EmailVerification/index";
 import IMPUESTO from "./Components/IMPUESTOS";
+import ECBMPUESTO from "./Components/EDITAR,CREAR,BORRAR IMPUESTOS";
 
 function App() {
   //return <LOGIN />;
@@ -15,7 +16,7 @@ function App() {
   //return <FormPass/>;
   //return <ChangePass/>;
  //return  <Email/>;
-  return  <IMPUESTO/>;
+  return <ECBMPUESTO/>;
 }
 
 export default App;
