@@ -80,7 +80,8 @@ function MENU() {
                                     <>
                                         <Button
                                             variant="primary"
-                                            onClick={handleShow}
+                                            //    onClick={handleShow}
+                                            href="/Pedidos"
                                         >
                                             Seleccionar
                                         </Button>

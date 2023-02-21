@@ -12,248 +12,208 @@ import { useState, useEffect, useMemo } from 'react';
 import DataTable from 'react-data-table-component';
 import Modal from 'react-bootstrap/Modal';
 
+function OrdenarPedido(arrayPedido) {
+    let Formato = '';
+    for (let i = 0; i < arrayPedido.Pedido.length(); i++) {
+        Formato +=
+            arrayPedido[0].Pedido[i].Producto +
+            ' ' +
+            arrayPedido[0].Pedido[i].Cantidad +
+            '\n';
+    }
+    return Formato;
+}
+
 function LISTAPEDIDOS() {
-    let selectedRows;
-    const [AllSelectedRows, setSelectedRows] = useState([]);
-    const [DATO, setData] = useState([]);
+    const [facturador, setFacturador] = useState(true);
 
-    const handleChange = (props) => {
-        // reale.stopPropagation();
-
-        let valueToPush = new Array();
-        valueToPush[props.id - 1] = props;
-
-        let outerArray = [];
-        if (AllSelectedRows.length > 0) {
-            outerArray = [...AllSelectedRows];
+    //HANDLERS
+    const handleChangeFact = () => {
+        if (facturador) {
+            setFacturador(false);
+        } else {
+            setFacturador(true);
         }
-        let ProductoEnLista = false;
-        for (let i = 0; i < AllSelectedRows.length; i++) {
-            //  if(){
-            if (AllSelectedRows[i].codigo_producto == props.codigo_producto) {
-                ProductoEnLista = true;
-                console.log();
-                AllSelectedRows[i].cant_producto += 1;
-                setSelectedRows(AllSelectedRows);
-                break;
-            }
-
-            //break;
-            //}
-        }
-        if (!ProductoEnLista) {
-            outerArray.push({
-                codigo_producto: props.codigo_producto,
-                nombre_producto: props.nombre_producto,
-                precio_producto: props.precio_producto,
-                cant_producto: 1,
-            });
-        }
-
-        setSelectedRows(outerArray);
-
-        console.log('ALL SELECTED ROWS: ', AllSelectedRows);
-    };
-
-    const handleChange2 = (props) => {
-        let valueToPush = new Array();
-        valueToPush[props.id - 1] = props;
-
-        let outerArray = [];
-        if (AllSelectedRows.length > 0) {
-            outerArray = [...AllSelectedRows];
-        }
-        let InidiceEliminar;
-        for (let i = 0; i < AllSelectedRows.length; i++) {
-            //  if(){
-            if (AllSelectedRows[i].codigo_producto == props.codigo_producto) {
-                if (AllSelectedRows[i].cant_producto > 1) {
-                    AllSelectedRows[i].cant_producto -= 1;
-                    setSelectedRows(AllSelectedRows);
-                } else if (AllSelectedRows[i].cant_producto == 1) {
-                    InidiceEliminar = i;
-                }
-            }
-        }
-        if (InidiceEliminar != null) {
-            outerArray.splice(InidiceEliminar, 1);
-        }
-
-        //break;
-        setSelectedRows(outerArray);
-        console.log('ALL SELECTED ROWS 2: ', AllSelectedRows);
     };
 
     useEffect(() => {
-        console.log(`You clicked ${AllSelectedRows} times`);
+        console.log(`Facturado ` + facturador);
     });
 
-    const columns = [
-        {
-            name: 'Codigo',
-            selector: (row) => row.codigo_producto,
-        },
-        {
-            name: 'Nombre',
-            selector: (row) => row.nombre_producto,
-        },
-        {
-            name: 'Precio',
-            selector: (row) => row.precio_producto,
-        },
-        {
-            name: 'Añadir',
+    //IFS
 
-            cell: (props) => (
-                <Button onClick={() => handleChange(props)} id={props.ID}>
-                    +
-                </Button>
-            ),
-        },
-    ];
+    let FormtatoTabla;
+    let TablaFacturador;
+    let TablaCocinaDerecha;
+    let TablaCocinaIzquierda;
+    if (facturador) {
+        const data = [
+            {
+                NPedido: 1,
+                Cliente: 'Josue',
+                Fecha: 'Hoy',
+                Pedido: [
+                    { Producto: 'Pollo', Cantidad: 1 },
+                    { Producto: 'Pepsi', Cantidad: 2 },
+                ],
+            },
+            {
+                NPedido: 2,
+                Cliente: 'Juan',
+                Fecha: 'Hoy se fia',
+                Pedido: [
+                    { Producto: 'Pollo', Cantidad: 1 },
+                    { Producto: 'Pepsi', Cantidad: 2 },
+                ],
+            },
+        ];
 
-    const columns2 = [
-        {
-            name: 'Codigo',
-            selector: (row) => row.codigo_producto,
-        },
-        {
-            name: 'Nombre',
-            selector: (row) => row.nombre_producto,
-        },
-        {
-            name: 'Precio',
-            selector: (row) => row.precio_producto,
-        },
-        {
-            name: 'Cantidad',
-            selector: (row) => row.cant_producto,
-        },
+        //INFO COLUMNAS
+        const columns = [
+            {
+                name: 'NPedido',
+                selector: (row) => row.NPedido,
+            },
+            {
+                name: 'Cliente',
+                selector: (row) => row.Cliente,
+            },
+            {
+                name: 'Fecha',
+                selector: (row) => row.Fecha,
+            },
 
-        {
-            name: 'Eliminar',
-            cell: (props) => (
-                <Button
-                    variant="danger"
-                    onClick={() => handleChange2(props)}
-                    id={props.ID}
-                >
-                    -
-                </Button>
-            ),
-        },
-    ];
+            {
+                name: 'Eliminar',
+                cell: (props) => (
+                    <Button
+                        variant="danger"
+                        //    onClick={() => handleChange2(props)}
+                        id={props.ID}
+                    >
+                        Eliminar
+                    </Button>
+                ),
+            },
 
-    /* const data = [
-        {
-            id: 1,
-            title: 'Beetlejuice',
-            year: '1988',
-        },
-        {
-            id: 2,
-            title: 'Ghostbusters',
-            year: '1984',
-        },
-    ];*/
-
-    useEffect(() => {
-        const getAllProducts = async () => {
-            await fetch('http://localhost:3000/productos')
-                .then((response) => response.json())
-                .then((data) => {
-                    console.log(data), setData(data);
-                });
-        };
-
-        getAllProducts();
-    }, []);
-
-    const [filterText, setFilterText] = useState('');
-    const [resetPaginationToggle, setResetPaginationToggle] = useState(false);
-    const filteredItems = DATO.filter(
-        (item) =>
-            item.nombre_producto &&
-            item.nombre_producto
-                .toLowerCase()
-                .includes(filterText.toLowerCase())
-    );
-
-    const subHeaderComponentMemo = useMemo(() => {
-        const handleClear = () => {
-            if (filterText) {
-                setResetPaginationToggle(!resetPaginationToggle);
-                setFilterText('');
-            }
-        };
-
-        return (
-            /*
-            <FilterComponent
-                onFilter={(e) => setFilterText(e.target.value)}
-                onClear={handleClear}
-                filterText={filterText}
-            />
-*/
-
-            <Form inline>
-                <FormControl
-                    type="text"
-                    placeholder="Buscar Producto"
-                    value={filterText}
-                    onChange={(e) => setFilterText(e.target.value)}
-                />
-            </Form>
+            {
+                name: 'Facturar',
+                cell: (props) => (
+                    <Button
+                        variant="outline-success"
+                        //    onClick={() => handleChange2(props)}
+                        id={props.ID}
+                    >
+                        Facturar
+                    </Button>
+                ),
+            },
+        ];
+        FormtatoTabla = (
+            <Button
+                variant="outline-secondary"
+                onClick={() => handleChangeFact()}
+            >
+                Ver como Cocina
+            </Button>
         );
-    }, [filterText, resetPaginationToggle]);
+        const ExpandedComponent = ({ data }) => (
+            <pre>{JSON.stringify(data.Pedido, null, 2)}</pre>
+        );
+        // const ExpandedComponent = OrdenarPedido(data);
+        console.log(data[0].Pedido[0].Producto);
+        TablaFacturador = (
+            <DataTable
+                columns={columns}
+                data={data}
+                expandableRows
+                expandableRowsComponent={ExpandedComponent}
+            />
+        );
+    } else {
+        FormtatoTabla = (
+            <Button
+                variant="outline-secondary"
+                onClick={() => handleChangeFact()}
+            >
+                Ver como Facturador
+            </Button>
+        );
+
+        const data = [
+            {
+                NPedido: 1,
+                Cliente: 'Josue',
+                Fecha: 'Hoy',
+                Pedido: ['Pollo', 'Papas', 'Coca'],
+            },
+            {
+                NPedido: 2,
+                Cliente: 'Juan',
+                Fecha: 'Hoy se fia',
+                Pedido: ['Pollo', 'Papas', 'Coca (En litros)'],
+            },
+        ];
+
+        //INFO COLUMNAS
+        const columns = [
+            {
+                name: 'NPedido',
+                selector: (row) => row.NPedido,
+            },
+            {
+                name: 'Cliente',
+                selector: (row) => row.Cliente,
+            },
+            {
+                name: 'Fecha',
+                selector: (row) => row.Fecha,
+            },
+
+            {
+                name: 'Añadir',
+
+                cell: (props) => (
+                    <Button onClick={() => handleChange(props)} id={props.ID}>
+                        +
+                    </Button>
+                ),
+            },
+        ];
+
+        const ExpandedComponent = ({ data }) => (
+            <pre>{JSON.stringify(data.Pedido, null, 2)}</pre>
+        );
+
+        TablaCocinaIzquierda = (
+            <DataTable
+                columns={columns}
+                data={data}
+                expandableRows
+                expandableRowsComponent={ExpandedComponent}
+            />
+        );
+
+        TablaCocinaDerecha = (
+            <DataTable
+                columns={columns}
+                data={data}
+                expandableRows
+                expandableRowsComponent={ExpandedComponent}
+            />
+        );
+    }
 
     return (
         <Container>
             <BarraLateral />
-            <h1>PEDIDOS</h1>
+            <h1>Lista PEDIDOS</h1>
 
+            {FormtatoTabla}
+            {TablaFacturador}
             <Row>
-                <Col>
-                    {' '}
-                    <DataTable
-                        title="Lista de Productos"
-                        columns={columns}
-                        // selectableRows
-
-                        onRowClicked={handleChange}
-                        //   data={DATO}
-
-                        data={filteredItems}
-                        pagination
-                        paginationResetDefaultPage={resetPaginationToggle} // optionally, a hook to reset pagination to page 1
-                        subHeader
-                        subHeaderComponent={subHeaderComponentMemo}
-                        persistTableHead
-                    />
-                </Col>
-
-                <Col>
-                    {' '}
-                    <DataTable
-                        title="Orden"
-                        columns={columns2}
-                        data={AllSelectedRows}
-                        onRowClicked={handleChange2}
-                    />
-                    <div class="p-3 mb-2 bg-light text-dark">
-                        {' '}
-                        <Button href="/home" variant="outline-danger" size="lg">
-                            Cancelar
-                        </Button>{' '}
-                        <Button
-                            href="/mesas"
-                            variant="outline-success"
-                            size="lg"
-                        >
-                            Facturar
-                        </Button>{' '}
-                    </div>
-                </Col>
+                <Col>{TablaCocinaIzquierda}</Col>;
+                <Col>{TablaCocinaDerecha}</Col>
             </Row>
         </Container>
     );
