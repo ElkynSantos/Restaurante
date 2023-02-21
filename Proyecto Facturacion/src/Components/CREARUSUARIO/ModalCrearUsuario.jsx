@@ -144,6 +144,7 @@ function CREARUSUARIO() {
                 });
             }
         }
+        e.target.reset();
     }
 
     return (
