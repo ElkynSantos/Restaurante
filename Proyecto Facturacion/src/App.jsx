@@ -10,6 +10,7 @@ import PEDIDOS from './Components/PEDIDOS/index';
 import FACTURACION from './Components/FACTURACION/index';
 import USERS from './Components/USERS/index';
 import FormPassword from './Components/FormPassword/index';
+import Productos from './Components/CREARPRODUCTOS/index';
 
 import './App.css';
 import { useDispatch, useSelector } from 'react-redux';
@@ -17,6 +18,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import RecuperarContraseña from './Components/RecoveryPassword/index';
 import FormPass from './Components/FormPassword/index';
 import ChangePass from './Components/ChangePassword/index';
+import PRODUCTOS from './Components/Productos/Index';
 
 function App() {
     return (
@@ -29,6 +31,7 @@ function App() {
                 <Route path="/mesas" element={<MESAS />} />
                 <Route path="/facturacion" element={<FACTURACION />} />
                 <Route path="/Users" element={<USERS />} />
+                <Route path={'/Productos'} element={<PRODUCTOS />} />
                 <Route path="/Recuperar" element={<FormPassword />} />
             </Routes>
         </BrowserRouter>

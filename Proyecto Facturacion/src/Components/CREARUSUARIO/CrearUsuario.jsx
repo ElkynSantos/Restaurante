@@ -65,11 +65,6 @@ function CREARUSUARIO() {
             newErrors.email = 'Espacio de ID Vacio !';
             //email = "";
         }
-        // validate with regex
-        /*if ((!password && password !== "") || password == "") {
-    newErrors.password = "Espacio de contrasena vacio !";
-    //password = "";
-  }*/
 
         console.log(newErrors.password);
         return newErrors;

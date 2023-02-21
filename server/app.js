@@ -6,7 +6,7 @@ import authRoutes from './routes/auth.routes.js';
 import usersRoutes from './routes/users.routes.js';
 import orderRoutes from './routes/orders.routes.js';
 import pedidosRoutes from './routes/pedidos.routes.js';
-import productosRoutes from './routes/productos.routes.js';
+import productosRoutes from './routes/products.routes.js';
 import AppError from './utilities/app.error.js';
 import cors from 'cors';
 import db from './db.js';
@@ -35,7 +35,7 @@ app.use('/auth', authRoutes);
 app.use('/users', usersRoutes);
 app.use('/orders', orderRoutes);
 app.use('/pedidos', pedidosRoutes);
-app.use('/productos', productosRoutes);
+app.use('/products', productosRoutes);
 
 app.all('*', (req, res, next) => {
     next(new AppError(`La ruta ${req.originalUrl} no existe`, 404));

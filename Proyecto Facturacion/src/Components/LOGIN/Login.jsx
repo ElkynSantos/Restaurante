@@ -39,11 +39,11 @@ function LOGIN(props) {
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors);
         } else {
-            console.log(form.user);
-            console.log(form.userpassword);
+            //console.log(form.user);
+            //console.log(form.userpassword);
             try {
                 const data = await login(form.user, form.userpassword);
-
+                //console.log(data);
                 Swal.fire({
                     position: 'top-center',
                     icon: 'success',
