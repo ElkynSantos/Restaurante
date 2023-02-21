@@ -12,7 +12,7 @@ import { useState, useEffect, useMemo } from 'react';
 import DataTable from 'react-data-table-component';
 import Modal from 'react-bootstrap/Modal';
 
-function PEDIDOS() {
+function LISTAPEDIDOS() {
     let selectedRows;
     const [AllSelectedRows, setSelectedRows] = useState([]);
     const [DATO, setData] = useState([]);
@@ -210,25 +210,6 @@ function PEDIDOS() {
     return (
         <Container>
             <BarraLateral />
-
-            <Form>
-                <Row>
-                    <Col>
-                        <Button variant="secondary" size="lg">
-                            Atras
-                        </Button>
-                    </Col>
-                    <Col>
-                        <Button
-                            href="/ListaPedidos"
-                            variant="secondary"
-                            size="lg"
-                        >
-                            Mostrar Pedidos
-                        </Button>
-                    </Col>
-                </Row>
-            </Form>
             <h1>PEDIDOS</h1>
 
             <Row>
@@ -265,13 +246,12 @@ function PEDIDOS() {
                             Cancelar
                         </Button>{' '}
                         <Button
-                            //       href="/ListaPedidos"
-                            variant="outline-primary"
+                            href="/mesas"
+                            variant="outline-success"
                             size="lg"
                         >
                             Facturar
-                        </Button>
-                        {handleChange2}
+                        </Button>{' '}
                     </div>
                 </Col>
             </Row>
@@ -279,44 +259,4 @@ function PEDIDOS() {
     );
 }
 
-export default PEDIDOS;
-
-/*
-  const [DATO, setData] = useState([]);
-
-    useEffect(() => {
-        const getAllProducts = async () => {
-            const url = 'http://localhost:3000/api/v1/orders';
-
-            const result = await axios.get(url);
-
-            console.log(result.data);
-            setData(result.data);
-        };
-
-        getAllProducts();
-    }, []);
-
-    console.log('DATOOOS: ' + DATO[0]);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  return (
-            <ul>
-                {data.map((item) => (
-                    <li key={item.id}>{item.name}</li>
-                ))}
-            </ul>
-        );
-*/
+export default LISTAPEDIDOS;
