@@ -14,8 +14,10 @@
     -webkit-text-size-adjust: 100%;
     --yellow: #fff000;
     --yellow-light: #fef691;
+    --yellow-lighter: #fdfad3;
     --blue: #2d2f94;
     --blue-light: #4042a3;
+    --blue-lighter: #e6e7ff;
 }
 
 /** BACKGROUNDS */
@@ -86,8 +88,7 @@ body {
     display: flex;
     place-items: center;
     min-width: 320px;
-
-    background-color: var(--blue) !important;
+    background-color: var(--yellow-lighter) !important;
 }
 
 h1 {
