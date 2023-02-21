@@ -126,7 +126,7 @@ const createUser = async (req, res, next) => {
 
 const getUser = async (req, res) => {
     const { userID } = req.body;
-
+    
     const [user] = await db.query('CALL get_user(:userID, :opt)', {
         replacements: {
             userID: userID,
@@ -149,6 +149,7 @@ const getUser = async (req, res) => {
 
 const updateUser = async (req, res, next) => {
     try {
+        console.log(req.body);
         const {
             userIdDb,
             userStatus,
@@ -175,7 +176,7 @@ const updateUser = async (req, res, next) => {
             phone,
             email,
         }).some((val) => !val);
-
+        
         if (emptyParams) {
             return next(
                 new AppError(`Por favor complete todos los campos`, 400)
@@ -187,7 +188,7 @@ const updateUser = async (req, res, next) => {
             {
                 replacements: {
                     id: userIdDb,
-                    userStatus: userStatus,
+                    userStatus,
                     userName: name,
                     userLastName: lastName,
                     userId: userName,

@@ -29,8 +29,8 @@ import {
     changeUserStatus,
 } from '../../features/usersSlice';
 import { showModal, closeModal } from '../../features/createUserSlice';
-import { showModal as showEditModal, closeModal as closeEditModal } from '../../features/editUserSlice';
-import { getAllUsers, editUserStatus } from '../../services/users';
+import { setCurrentEditUser, showModal as showEditModal, closeModal as closeEditModal } from '../../features/editUserSlice';
+import { getAllUsers, getUser, editUserStatus } from '../../services/users';
 import BarraLateral from '../common/index';
 import CREARUSUARIO from '../CREARUSUARIO';
 
@@ -46,8 +46,12 @@ function USUARIOS() {
     const users = useSelector((state) => state.users);
     const modalState = useSelector((state) => state.modalAddUserState);
 
-    const handleShowEditModal = () => {
-        dispatch(showEditModal());
+    const handleShowEditModal = async (DNI) => {
+        await getUser(DNI).then((dataUser) => {
+            // console.log("userRespModal", dataUser)
+            dispatch(setCurrentEditUser(dataUser.user));
+            dispatch(showEditModal());
+        })
     };
 
     const handleClose = () => {
@@ -98,13 +102,15 @@ function USUARIOS() {
     };
 
     useEffect(() => {
+        // const userResp = await getUser(10332).then(() => )
         const response = Promise.all([
             getAllUsers()
         ])
             .then((data) => {
                 handleInitUsers(data[0].allUsers);
             })
-            .catch(() => {
+            .catch((error) => {
+                console.log(error);
                 Swal.fire({
                     text: "No se pudieron cargar los usuarios",
                     icon: 'error',
@@ -162,7 +168,7 @@ function USUARIOS() {
                             <button
                                 className="btn-transparent text-blue p-0"
                                 title="Editar"
-                                onClick={() => handleShowEditModal()}
+                                onClick={() => handleShowEditModal(row.DNI)}
                             >
                                 <PencilFill />
                             </button>
@@ -249,12 +255,9 @@ function USUARIOS() {
                     noDataComponent={
                         <div className="p-4">No se encontraron usuarios</div>
                     }
-                    subHeader
-                    // subHeaderComponent={subHeaderComponentMemo}
-                    // selectableRows
                     persistTableHead
                     pagination
-                    paginationResetDefaultPage={resetPaginationToggle} // optionally, a hook to reset pagination to page 1
+                    paginationResetDefaultPage={resetPaginationToggle}
                     paginationComponentOptions={paginationComponentOptions}
                 />
             </Container>

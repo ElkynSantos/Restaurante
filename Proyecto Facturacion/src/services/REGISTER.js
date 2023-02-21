@@ -12,7 +12,7 @@ export async function Register(
     email,
     password
 ) {
-    console.log(placeofBirth);
+    // console.log(placeofBirth);
     const options = {
         method: 'POST',
         url: 'http://localhost:3000/users/',
@@ -32,7 +32,7 @@ export async function Register(
 
     //console.log(options.data);
     const response = await axios.request(options);
-    console.log(response);
+    // console.log(response);
 
     return response.data;
 }

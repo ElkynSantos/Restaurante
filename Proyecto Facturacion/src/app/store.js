@@ -8,6 +8,6 @@ export const store = configureStore({
     reducer: {
         users: usersSlice,
         modalAddUserState: createUserSlice,
-        modalEditUserState: editUserSlice
+        modalEditUser: editUserSlice
     },
 });

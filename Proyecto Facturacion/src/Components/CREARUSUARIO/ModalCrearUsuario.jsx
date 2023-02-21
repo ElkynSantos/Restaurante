@@ -55,7 +55,7 @@ function Example() {
                     </Button>
 
                     <Button className="bg-blue" form="test" type="submit">
-                        Guardar usuarios
+                        Guardar usuario
                     </Button>
                 </Modal.Footer>
             </Modal>
@@ -70,6 +70,7 @@ function CREARUSUARIO() {
             addUser(user)
         );
     };
+
     const [form, setForm] = useState({});
     const [errors, setErrors] = useState({});
 
@@ -79,6 +80,7 @@ function CREARUSUARIO() {
             [field]: value,
         });
     };
+
     function findErrors() {
         const newErrors = {};
         let { email, password, fecha } = form;
@@ -122,9 +124,9 @@ function CREARUSUARIO() {
             //LLAMEN A LA API
 
             try {
-                let rol = parseInt(form.rol);
-                let dni = parseInt(form.DNI);
-                let numero = parseInt(form.numero);
+                // let rol = parseInt(form.rol);
+                // let dni = parseInt(form.DNI);
+                // let numero = parseInt(form.numero);
                 // console.log(form.rol);
                 const data = await Register(
                     form.nombre,
@@ -139,19 +141,21 @@ function CREARUSUARIO() {
                     form.password
                 );
                 
-                if(data.status == "Ok") {
-                    // handleAddUser({
-                    //     FullName: `${form.nombre} ${form.apellido}`,
-                    //     UserName: form.,
-                    //     Rol: form.rol,
-                    //     DNI: form.DNI,
-                    //     Gender: form.,
-                    //     Birthday: form.,
-                    //     PlaceofBirth: form.,
-                    //     Phone: form.,
-                    //     Email: form.,
-                    //     status: form.,
-                    // });
+                const {status, newUser} = data;
+                if(status == "Ok") {
+                    handleAddUser({
+                        FullName: `${newUser.Nombre} ${newUser.Apellido}`,
+                        UserName: newUser.Nom_Usuario,
+                        Rol: newUser.id_rol,
+                        DNI: newUser.N_Identidad,
+                        Gender: newUser.Genero,
+                        Birthday: newUser.Fecha_Nacimiento,
+                        PlaceofBirth: newUser.Lugar_Nacimiento,
+                        Phone: newUser.N_Celular,
+                        Email: newUser.Correo,
+                        status: newUser.status,
+                    });
+                    
                     Swal.fire({
                         position: 'top-center',
                         icon: 'success',
@@ -182,7 +186,7 @@ function CREARUSUARIO() {
                     <Row>
                         <Col>
                             <Form.Group className="mb-3">
-                                <Form.Label className="fw-bold">
+                                <Form.Label className="fw-semibold">
                                     Nombre
                                 </Form.Label>
                                 <Form.Control
@@ -198,7 +202,7 @@ function CREARUSUARIO() {
                         </Col>
                         <Col>
                             <Form.Group className="mb-3">
-                                <Form.Label className="text-center fw-bold">
+                                <Form.Label className="text-center fw-semibold">
                                     Apellido
                                 </Form.Label>
                                 <Form.Control
@@ -215,7 +219,7 @@ function CREARUSUARIO() {
                     <Row>
                         <Col>
                             <Form.Group className="mb-3">
-                                <Form.Label className="text-center fw-bold">
+                                <Form.Label className="text-center fw-semibold">
                                     Lugar de nacimiento
                                 </Form.Label>
                                 <Form.Control
@@ -230,7 +234,7 @@ function CREARUSUARIO() {
                             </Form.Group>
                         </Col>
                         <Col>
-                            <Form.Label className="text-center fw-bold">
+                            <Form.Label className="text-center fw-semibold">
                                 Género
                             </Form.Label>
                             <Form.Group>
@@ -240,17 +244,17 @@ function CREARUSUARIO() {
                                         setField('genero', e.target.value)
                                     }
                                 >
-                                    <option disabled selected value>
+                                    <option disabled selected value="X">
                                         Escoger género
                                     </option>
-                                    <option value="H">Masculino</option>
+                                    <option value="M">Masculino</option>
                                     <option value="F">Femenino</option>
                                 </Form.Select>
                             </Form.Group>
                         </Col>
                         <Col>
                             <Form.Group>
-                                <Form.Label className="fw-bold">
+                                <Form.Label className="fw-semibold">
                                     Fecha de nacimiento
                                 </Form.Label>
                                 <Form.Control
@@ -271,7 +275,7 @@ function CREARUSUARIO() {
                     <Row>
                         <Col>
                             <Form.Group className="mb-3">
-                                <Form.Label className="text-center fw-bold">
+                                <Form.Label className="text-center fw-semibold">
                                     Número de teléfono
                                 </Form.Label>
                                 <Form.Control
@@ -296,7 +300,7 @@ function CREARUSUARIO() {
                                 className="mb-3"
                                 controlId="formBasicEmail"
                             >
-                                <Form.Label className="text-center fw-bold">
+                                <Form.Label className="text-center fw-semibold">
                                     Dirección de correo electrónico
                                 </Form.Label>
                                 <Form.Control
@@ -316,7 +320,7 @@ function CREARUSUARIO() {
                     </Row>
                     <Row>
                         <Col>
-                            <Form.Label className="text-center fw-bold">
+                            <Form.Label className="text-center fw-semibold">
                                 Rol que asignará al usuario
                             </Form.Label>
                             <Form.Group>
@@ -339,7 +343,7 @@ function CREARUSUARIO() {
                         </Col>
                         <Col>
                             <Form.Group className="mb-3">
-                                <Form.Label className="text-center fw-bold">
+                                <Form.Label className="text-center fw-semibold">
                                     DNI
                                 </Form.Label>
                                 <Form.Control
@@ -355,7 +359,7 @@ function CREARUSUARIO() {
                         </Col>
                         <Col>
                             <Form.Group className="mb-3">
-                                <Form.Label className="text-center fw-bold">
+                                <Form.Label className="text-center fw-semibold">
                                     Contraseña
                                 </Form.Label>
                                 <Form.Control

@@ -24,6 +24,25 @@ function Example() {
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
+    const optionsSidebar = [
+        "BsHouseFill",
+        {
+            name: "Configuración del sistema",
+            permissions: [
+                {
+
+                },
+                {
+
+                }
+            ]
+        },
+        {
+            name: "Configuración del negocio"
+            
+        }
+    ];
+
     return (
         <>
             <Navbar className="bg-blue" expand="lg">
