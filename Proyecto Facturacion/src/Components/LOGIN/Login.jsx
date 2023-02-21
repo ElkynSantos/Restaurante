@@ -51,6 +51,7 @@ function LOGIN(props) {
                     showConfirmButton: false,
                     timer: 1500,
                 });
+                //console.log(data.jwtToken.userExists.name);
                 localStorage.setItem('USERNAME', JSON.stringify(form.user));
                 navigate('/home');
             } catch (error) {

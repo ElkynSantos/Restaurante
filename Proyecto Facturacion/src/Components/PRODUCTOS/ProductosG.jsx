@@ -18,6 +18,8 @@ import {
     Trash3Fill,
     Display,
 } from 'react-bootstrap-icons';
+
+import { MdOutlinePlaylistAdd } from 'react-icons/md';
 import Swal from 'sweetalert2';
 
 import { showModalEP, closeModalEP } from '../../features/EditarProducto';
@@ -38,9 +40,10 @@ const paginationComponentOptions = {
 
 function PRODUCTOT() {
     const dispatch = useDispatch();
+
     const products = useSelector((state) => state.products);
-    const show2 = useSelector((state) => state.EditarProducto).value;
-    const [count, setCount] = useState();
+    const show2 = useSelector((state) => state.EditarProducto);
+    const show = useSelector((state) => state.CreateProduct);
     const [DATA, setData] = useState([]);
     const [selectedRow, setSelectedRow] = useState(null);
     const [filterText, setFilterText] = useState('');
@@ -60,10 +63,6 @@ function PRODUCTOT() {
         //setSelectedRow(null);
     }, [selectedRow]);
 
-    const handleNewProduct = () => {
-        setCount(count + 1);
-    };
-
     const handleShowEP = () => {
         dispatch(guardar(selectedRow));
         dispatch(showModalEP());
@@ -80,7 +79,7 @@ function PRODUCTOT() {
         dispatch(fetchProducts()).then((data) =>
             setData(data.payload.allProducts)
         );
-    }, [dispatch, count]);
+    }, [dispatch, show2, show]);
 
     useEffect(() => {
         if (products.allProducts && products.allProducts[0]) {
@@ -181,7 +180,7 @@ function PRODUCTOT() {
                             className="btn-transparent h3 text-dark"
                             onClick={handleShowCP}
                         >
-                            <PersonPlusFill title="Agregar Producto" />
+                            <MdOutlinePlaylistAdd title="Agregar Producto" />
                         </button>
                     </Col>
                     <Col sm={4}>
@@ -204,7 +203,7 @@ function PRODUCTOT() {
                     data={DATA}
                     customStyles={customStyles}
                     noDataComponent={
-                        <div className="p-4">No se encontraron usuarios</div>
+                        <div className="p-4">No se encontraron productos</div>
                     }
                     pagination
                     paginationComponentOptions={paginationComponentOptions}
