@@ -225,14 +225,62 @@ function PEDIDOS() {
         },
     ];*/
 
-    const newOrder = async () => {
-        await fetch('http://localhost:3000/orders/', {
+    const getProductId = async (productName) => {
+        const response = await fetch(`http://localhost:3000/products/GG`, {
             method: 'POST',
-
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(AllSelectedRows),
+
+            body: JSON.stringify({ product: productName }),
+        });
+        const data = await response.json();
+
+        console.log('==================DATA===============');
+        console.log(data);
+
+        return data.products[0].id;
+    };
+
+    const newOrder = async () => {
+        console.log(AllSelectedRows);
+        let listaprod = [];
+        for (let i = 0; i < AllSelectedRows.length; i++) {
+            const ProdID = await getProductId(
+                AllSelectedRows[i].nombre_producto
+            ).catch((error) => {
+                console.error(error);
+            });
+
+            console.log(ProdID);
+            console.log(AllSelectedRows[i].cant_producto);
+            listaprod.push({
+                idProducto: ProdID,
+                cantidad: AllSelectedRows[i].cant_producto,
+            });
+        }
+
+        console.log(
+            JSON.stringify({
+                tableId: value,
+                waiterId: 21,
+                products: listaprod,
+                delivery: 0,
+            })
+        );
+        console.log(listaprod);
+
+        await fetch('http://localhost:3000/orders/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                tableId: value,
+                waiterId: 37,
+                products: listaprod,
+                delivery: 0,
+            }),
         })
             .then((response) => response.json())
             .then((data) => {
@@ -240,6 +288,8 @@ function PEDIDOS() {
             });
 
         console.log('New Order: \n' + value + ' ' + AllSelectedRows);
+
+        AllSelectedRows.length = 0;
     };
 
     useEffect(() => {
@@ -377,6 +427,7 @@ function PEDIDOS() {
                             variant="primary"
                             size="lg"
                             onClick={() => newOrder()}
+                            // href="\listaPedidos"
                         >
                             Facturar
                         </Button>
