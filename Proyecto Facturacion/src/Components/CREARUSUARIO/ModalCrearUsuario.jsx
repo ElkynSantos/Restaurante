@@ -351,7 +351,7 @@ function CREARUSUARIO() {
                                     onChange={(e) =>
                                         setField('DNI', e.target.value)
                                     }
-                                />
+                                 />
                             </Form.Group>
                         </Col>
                         <Col>
