@@ -25,6 +25,7 @@ function OrdenarPedido(arrayPedido) {
 }
 
 function LISTAPEDIDOS() {
+    const [smShow, setSmShow] = useState(false);
     const [facturador, setFacturador] = useState(true);
 
     //HANDLERS
@@ -63,7 +64,7 @@ function LISTAPEDIDOS() {
                 Fecha: 'Hoy se fia',
                 Pedido: [
                     { Producto: 'Pollo', Cantidad: 1 },
-                    { Producto: 'Pepsi', Cantidad: 2 },
+                    { Producto: 'Coca', Cantidad: 14 },
                 ],
             },
         ];
@@ -95,6 +96,18 @@ function LISTAPEDIDOS() {
                     </Button>
                 ),
             },
+            {
+                name: 'Editar',
+                cell: (props) => (
+                    <Button
+                        variant="primary"
+                        //    onClick={() => handleChange2(props)}
+                        id={props.ID}
+                    >
+                        Editar
+                    </Button>
+                ),
+            },
 
             {
                 name: 'Facturar',
@@ -102,6 +115,7 @@ function LISTAPEDIDOS() {
                     <Button
                         variant="outline-success"
                         //    onClick={() => handleChange2(props)}
+                        href="/ListaFacturacion"
                         id={props.ID}
                     >
                         Facturar
@@ -121,7 +135,7 @@ function LISTAPEDIDOS() {
             <pre>{JSON.stringify(data.Pedido, null, 2)}</pre>
         );
         // const ExpandedComponent = OrdenarPedido(data);
-        console.log(data[0].Pedido[0].Producto);
+        console.log(data[[0]].Pedido.Producto);
         TablaFacturador = (
             <DataTable
                 columns={columns}
@@ -211,6 +225,7 @@ function LISTAPEDIDOS() {
 
             {FormtatoTabla}
             {TablaFacturador}
+
             <Row>
                 <Col>{TablaCocinaIzquierda}</Col>;
                 <Col>{TablaCocinaDerecha}</Col>

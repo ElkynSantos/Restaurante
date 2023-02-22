@@ -80,7 +80,11 @@ function Example() {
                             <Button href="/home" className="bg-blue" size="lg">
                                 <BsHouseFill></BsHouseFill> Inicio
                             </Button>
-                            <Button href="mesas" className="bg-blue" size="lg">
+                            <Button
+                                href="/Pedidos"
+                                className="bg-blue"
+                                size="lg"
+                            >
                                 <IoRestaurantSharp></IoRestaurantSharp> Pedidos
                             </Button>
                             <Button

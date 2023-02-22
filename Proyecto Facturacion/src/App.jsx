@@ -12,6 +12,8 @@ import USERS from './Components/USERS/index';
 import FormPassword from './Components/FormPassword/index';
 import editarProductos from './Components/FormPassword/index';
 
+import LISTAFACTURACION from './Components/LISTAFACTURACION/index';
+
 import './App.css';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -34,6 +36,10 @@ function App() {
                 <Route path={'/Productos'} element={<PRODUCTOS />} />
                 <Route path="/Recuperar" element={<FormPassword />} />
                 <Route path="/editUser" element={<FormPassword />} />
+                <Route
+                    path="/ListaFacturacion"
+                    element={<LISTAFACTURACION />}
+                />
             </Routes>
         </BrowserRouter>
     );
