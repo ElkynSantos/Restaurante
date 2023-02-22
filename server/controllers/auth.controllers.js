@@ -68,11 +68,12 @@ const login = async (req, res, next) => {
 };
 
 const resetPassword = async (req, res) => {
+    console.log('entro1');
     const { token } = req.params;
     const { newPassword } = req.body;
 
     const hashedPass = await encrypt(newPassword);
-
+    console.log('entro');
     const [updatedPass] = await db.query(
         'CALL update_password(:userToken, :updatedPassword)',
         {

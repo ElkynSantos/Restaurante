@@ -58,7 +58,7 @@ function LOGIN(props) {
                 Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
-                    text: 'Usuario o contrasena no valido',
+                    text: error.response.data.message,
                 });
             }
         }

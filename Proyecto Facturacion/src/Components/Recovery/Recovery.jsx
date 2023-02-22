@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Col, Button, Row, Container, Card, Form } from 'react-bootstrap';
 import Swal from 'sweetalert2';
-import { useNavigate } from 'react-router-dom';
-
+import { useNavigate, useParams } from 'react-router-dom';
+import { reset } from '../../services/Recovery';
 function Recovery() {
+    const { token } = useParams();
     const [form, setForm] = useState({});
-
     const [errors, setErrors] = useState({});
     const navigate = useNavigate();
     const setField = (field, value) => {
@@ -53,8 +53,26 @@ function Recovery() {
             setErrors(newErrors);
             console.log(newErrors);
         } else {
-            //console.log(form.user);
-            //console.log(form.userpassword);
+            try {
+                console.log(form.userPassword);
+                const data = await reset(token, form.userPassword);
+                console.log(data);
+                if (data.status == 'ok') {
+                    Swal.fire({
+                        position: 'top-center',
+                        icon: 'success',
+                        title: 'Se ha actualizado la contraseña exitosamente',
+                        timer: 2000,
+                    });
+                    navigate('/');
+                }
+            } catch (error) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Error 404',
+                });
+            }
         }
     }
 

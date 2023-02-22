@@ -27,21 +27,14 @@ function FormPassword() {
                     icon: 'success',
                     title: 'Se envió correo',
                     showConfirmButton: true,
-
                     text: 'Revisa tu correo electrónico',
-                });
-            } else {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: 'No existe el email',
                 });
             }
         } catch (error) {
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
-                text: 'Hubo un problema en el servidor',
+                text: error.response.data.message,
             });
         }
     }
