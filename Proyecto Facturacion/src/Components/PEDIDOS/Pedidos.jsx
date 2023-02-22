@@ -51,6 +51,7 @@ function PEDIDOS() {
         }
 
         setSelectedRows(outerArray);
+        console.log(AllSelectedRows);
 
         console.log('ALL SELECTED ROWS: ', AllSelectedRows);
     };
@@ -159,10 +160,10 @@ function PEDIDOS() {
 
     useEffect(() => {
         const getAllProducts = async () => {
-            await fetch('http://localhost:3000/productos')
+            await fetch('http://localhost:3000/products/')
                 .then((response) => response.json())
                 .then((data) => {
-                    console.log(data), setData(data);
+                    console.log(data), setData(data.allProducts);
                 });
         };
 
@@ -210,6 +211,25 @@ function PEDIDOS() {
     return (
         <Container>
             <BarraLateral />
+
+            <Form>
+                <Row>
+                    <Col>
+                        <Button variant="secondary" size="lg">
+                            Atras
+                        </Button>
+                    </Col>
+                    <Col>
+                        <Button
+                            href="/ListaPedidos"
+                            variant="secondary"
+                            size="lg"
+                        >
+                            Mostrar Pedidos
+                        </Button>
+                    </Col>
+                </Row>
+            </Form>
             <h1>PEDIDOS</h1>
 
             <Row>
@@ -246,12 +266,13 @@ function PEDIDOS() {
                             Cancelar
                         </Button>{' '}
                         <Button
-                            href="/mesas"
-                            variant="outline-success"
+                            //       href="/ListaPedidos"
+                            variant="outline-primary"
                             size="lg"
                         >
                             Facturar
-                        </Button>{' '}
+                        </Button>
+                        {handleChange2}
                     </div>
                 </Col>
             </Row>

@@ -12,10 +12,11 @@ export const usersSlice = createSlice({
         },
         editUser: (state, action) => {},
         changeUserStatus: (state, action) => {
-            const { DNI, status } = action.payload;
+            const DNI = action.payload;
+
             const foundUser = state.find((user) => user.DNI === DNI);
             if (foundUser) {
-                foundUser.status = status == 1 ? 0 : 1;
+                foundUser.status = foundUser.status == 1? 0 : 1;
             }
         },
     },

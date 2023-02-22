@@ -11,21 +11,35 @@ import {
     BsFillBookmarkFill,
 } from 'react-icons/bs';
 
-import { IoIosExit } from 'react-icons/io';
+import { IoIosExit, IoIosJournal } from 'react-icons/io';
 import { IoRestaurantSharp } from 'react-icons/io5';
 import CREARUSUARIO from '../CREARUSUARIO/index';
+
+import EditarProducto from '../EditarProducto/index';
 import './BarraLateral.css';
 
 import MESA from '../MESAS/Mesa';
-
+import { useDispatch, useSelector } from 'react-redux';
 function Example() {
+    const dispatch = useDispatch();
     const [show, setShow] = useState(false);
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+    /*
+    const handleCloseM = () => {
+        dispatch(closeModalEP());
+    };
+
+    const handleShowM = () => {
+        dispatch(showModalEP());
+    };
+*/
+    const borrar = () => localStorage.removeItem('USERNAME');
 
     return (
         <>
+            <EditarProducto></EditarProducto>
             <Navbar className="bg-blue" expand="lg">
                 <Container>
                     <Button
@@ -66,14 +80,17 @@ function Example() {
                             <Button href="/home" className="bg-blue" size="lg">
                                 <BsHouseFill></BsHouseFill> Inicio
                             </Button>
+                            <Button href="mesas" className="bg-blue" size="lg">
+                                <IoRestaurantSharp></IoRestaurantSharp> Pedidos
+                            </Button>
                             <Button
-                                href="Pedidos"
+                                href="/Productos"
                                 className="bg-blue"
                                 size="lg"
                             >
-                                <IoRestaurantSharp></IoRestaurantSharp> Pedidos
+                                <IoIosJournal></IoIosJournal>Menu
                             </Button>
-                            <Button href="Roles" className="bg-blue" size="lg">
+                            <Button href="/Roles" className="bg-blue" size="lg">
                                 <BsFillBookmarkFill></BsFillBookmarkFill> Roles
                             </Button>
                             <Button href="/users" className="bg-blue" size="lg">
@@ -88,7 +105,13 @@ function Example() {
                                 <BsFillFileEarmarkBarGraphFill></BsFillFileEarmarkBarGraphFill>{' '}
                                 Reportes
                             </Button>
-                            <Button href="/" className="bg-blue" size="lg">
+
+                            <Button
+                                href="/"
+                                className="bg-blue"
+                                size="lg"
+                                onClick={borrar}
+                            >
                                 <IoIosExit></IoIosExit> Salir
                             </Button>
                         </div>
@@ -103,3 +126,4 @@ function Borrar() {
     localStorage.removeItem('USERNAME');
 }
 export default Example;
+//<BsFillBookmarkFill></BsFillBookmarkFill> Roles

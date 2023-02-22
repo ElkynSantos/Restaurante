@@ -122,8 +122,27 @@ const createUser = async (req, res, next) => {
     }
 };
 
-const getUser = (req, res) => {
-    return next(new AppError(`Esta ruta aún no está implementada`, 500));
+const getUser = async (req, res) => {
+    const { userID } = req.body;
+
+    const [user] = await db.query('CALL get_user(:userID, :opt)', {
+        replacements: {
+            userID: userID,
+            opt: 1,
+        },
+    });
+
+    if (user.response === 0) {
+        return res.status(404).json({
+            status: 'fail',
+            msg: user.msg,
+        });
+    }
+
+    return res.status(200).json({
+        status: 'Ok',
+        user,
+    });
 };
 
 const updateUser = async (req, res, next) => {
@@ -153,7 +172,6 @@ const updateUser = async (req, res, next) => {
             placeofBirth,
             phone,
             email,
-            password,
         }).some((val) => !val);
 
         if (emptyParams) {
@@ -191,6 +209,7 @@ const updateUser = async (req, res, next) => {
             msg: updatedUser.msg,
         });
     } catch (error) {
+        console.log(error);
         return next(new AppError(`Error en la base de datos ${error}`, 500));
     }
 };
@@ -199,7 +218,9 @@ const editUserStaus = async (req, res, next) => {
     try {
         const { opt, userDni } = req.body;
 
-        if (!opt || !userDni) {
+        console.log("status-type", typeof opt, "userDni-type", typeof userDni);
+        console.log("status", opt, "userDni", userDni);
+        if (opt == null || opt == undefined || userDni == null || userDni == undefined) {
             return next(new AppError(`No se permiten campos vacios`, 400));
         }
 
