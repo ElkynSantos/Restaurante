@@ -25,6 +25,7 @@ import Swal from 'sweetalert2';
 import {
     initRoles,
     addRoles,
+    editRoles
 } from '../../features/rolesSlice';
 import { showModal, closeModal } from '../../features/createUserSlice';
 
@@ -38,7 +39,7 @@ const paginationComponentOptions = {
     selectAllRowsItemText: 'Todos',
 };
 
-function USUARIOS() {
+function ROLES() {
     let formRICARDIO;
 
     const [buttonPressed, setbuttonPressed] = useState(false);
@@ -53,7 +54,7 @@ function USUARIOS() {
 
     const dispatch = useDispatch();
     const [data, setData] = useState([]);
-    const users = useSelector((state) => state.users);
+   // const users = useSelector((state) => state.users);
     const roles = useSelector((state) => state.roles);
     const handleClose = () => {
         dispatch(closeModal());
@@ -66,7 +67,7 @@ function USUARIOS() {
 
     const handleInitRoles = (data) => {
         dispatch(initRoles(data));
-        console.log(initRoles(data));
+       
     };
 
     useEffect(() => {
@@ -74,7 +75,8 @@ function USUARIOS() {
             await fetch('http://localhost:3000/roles')
                 .then((response) => response.json())
                 .then((data) => {
-                    handleInitRoles(data.allRoles);
+                    handleInitRoles(data.allRoles[0]);
+                   setData(data.allRoles[0]);
                 })
                 .catch((error) => {
                     console.error(error);
@@ -91,7 +93,7 @@ function USUARIOS() {
         },
         {
             name: 'Nombre de Rol',
-            selector: (row) => row.Nombre_Rol,
+            selector: (row) => row.Nomb_Rol,
         },
         {
             name: 'Fecha de creación',
@@ -181,7 +183,7 @@ function USUARIOS() {
                 <DataTable
                     className="mt-3"
                     columns={columns}
-                    data={roles}
+                    data={data}
                     customStyles={customStyles}
                     noDataComponent={
                         <div className="p-4">No se encontraron roles</div>
@@ -194,4 +196,4 @@ function USUARIOS() {
     );
 }
 
-export default USUARIOS;
+export default ROLES;
