@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import EDITARUSUARIOS from '../editarUsuario/index';
+
+import CREARROL from '../CREARROL/index';
+import EDITARROLES from '../EDITARROLES/index';
 import {
     Button,
     Col,
@@ -27,7 +29,7 @@ import {
 import { showModal, closeModal } from '../../features/createUserSlice';
 
 import BarraLateral from '../common/index';
-import CREARUSUARIO from '../CREARUSUARIO';
+
 
 const paginationComponentOptions = {
     rowsPerPageText: 'Filas por página',
@@ -42,7 +44,7 @@ function USUARIOS() {
     const [buttonPressed, setbuttonPressed] = useState(false);
 
     if (buttonPressed) {
-        formRICARDIO = <EDITARUSUARIOS />;
+        formRICARDIO = <EDITARROLES />;
     }
 
     useEffect(() => {
@@ -150,7 +152,7 @@ function USUARIOS() {
 
     return (
         <div>
-            <CREARUSUARIO />
+            <CREARROL />
             {formRICARDIO}
 
             <BarraLateral />
