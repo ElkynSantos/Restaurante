@@ -52,13 +52,12 @@ function INICIO() {
                                         ></img>
                                     </Container>
                                     <h2 className="fw-bold mb-2 text-uppercase ">
-                                        <br></br>Bienvenido al Sistema de
-                                        facturación
+                                        <br></br>
+                                        {user}
                                     </h2>
 
                                     <div className="mb-3">
                                         <div className="mt-3">
-                                            <h4>USUARIO : {user}</h4>
                                             <h4>Fecha : {fecha}</h4>
                                             <h4>Hora : {hour}</h4>
                                         </div>

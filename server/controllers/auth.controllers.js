@@ -59,6 +59,7 @@ const login = async (req, res, next) => {
         return res.status(200).json({
             status: 'Ok',
             jwtToken,
+
             msg: `¡Bienvenido al sistema, ${userExists.name}!`,
         });
     } catch (error) {
@@ -117,7 +118,7 @@ const sendResetPassEmail = async (req, res) => {
         });
     }
 
-    await forgotPassordEmail({
+    forgotPassordEmail({
         email: userID.email,
         name: userID.name,
         token: token,

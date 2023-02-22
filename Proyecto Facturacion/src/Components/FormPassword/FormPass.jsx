@@ -1,7 +1,50 @@
 import React from 'react';
 import { Col, Button, Row, Container, Card, Form } from 'react-bootstrap';
-
+import { useState } from 'react';
+import Swal from 'sweetalert2';
+import { resetPassword } from '../../services/Recovery';
 function FormPassword() {
+    const [form, setForm] = useState({});
+
+    const setField = (field, value) => {
+        setForm({
+            ...form,
+            [field]: value,
+        });
+    };
+
+    async function handleSubmit(e) {
+        e.preventDefault();
+
+        try {
+            //console.log('entro');
+            const data = await resetPassword(form.email);
+            console.log(data);
+            if (data.status == 'ok') {
+                console.log('entro');
+                Swal.fire({
+                    position: 'top-center',
+                    icon: 'success',
+                    title: 'Se envió correo',
+                    showConfirmButton: true,
+
+                    text: 'Revisa tu correo electrónico',
+                });
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'No existe el email',
+                });
+            }
+        } catch (error) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Hubo un problema en el servidor',
+            });
+        }
+    }
     return (
         <div>
             <Container>
@@ -20,7 +63,11 @@ function FormPassword() {
                             <Card.Body>
                                 <div className="mb-3 mt-md-4">
                                     <div className="mb-3">
-                                        <Form>
+                                        <Form
+                                            onSubmit={handleSubmit}
+                                            name="test"
+                                            id="test"
+                                        >
                                             <Form.Group
                                                 className="mb-3"
                                                 controlId="formBasicEmail"
@@ -37,6 +84,7 @@ function FormPassword() {
                                                             e.target.value
                                                         )
                                                     }
+                                                    required
                                                 />
                                             </Form.Group>
 

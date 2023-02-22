@@ -92,7 +92,7 @@ function EditarProducto() {
                 );
 
                 Swal.fire({
-                    position: 'center-start',
+                    position: 'top-center',
                     icon: 'success',
                     title: 'Producto editado',
                     showConfirmButton: false,
