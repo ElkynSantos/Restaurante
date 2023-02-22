@@ -117,7 +117,7 @@ const sendResetPassEmail = async (req, res) => {
         });
     }
 
-    await forgotPassordEmail({
+    forgotPassordEmail({
         email: userID.email,
         name: userID.name,
         token: token,

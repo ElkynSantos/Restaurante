@@ -16,6 +16,57 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table `categoria_permisos`
+--
+
+DROP TABLE IF EXISTS `categoria_permisos`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `categoria_permisos` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `id_categoria` int NOT NULL,
+  `id_permisos` int NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_idcategoria_idx` (`id_categoria`),
+  KEY `fk_idpermisos_idx` (`id_permisos`),
+  CONSTRAINT `fk_idcategoria` FOREIGN KEY (`id_categoria`) REFERENCES `categorias` (`id`),
+  CONSTRAINT `fk_idpermisos` FOREIGN KEY (`id_permisos`) REFERENCES `permisos` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `categoria_permisos`
+--
+
+LOCK TABLES `categoria_permisos` WRITE;
+/*!40000 ALTER TABLE `categoria_permisos` DISABLE KEYS */;
+/*!40000 ALTER TABLE `categoria_permisos` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `categorias`
+--
+
+DROP TABLE IF EXISTS `categorias`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `categorias` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `categorias`
+--
+
+LOCK TABLES `categorias` WRITE;
+/*!40000 ALTER TABLE `categorias` DISABLE KEYS */;
+/*!40000 ALTER TABLE `categorias` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `clientes_rtn`
 --
 
@@ -81,6 +132,28 @@ LOCK TABLES `facturas` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `mesas`
+--
+
+DROP TABLE IF EXISTS `mesas`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `mesas` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `mesas`
+--
+
+LOCK TABLES `mesas` WRITE;
+/*!40000 ALTER TABLE `mesas` DISABLE KEYS */;
+/*!40000 ALTER TABLE `mesas` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `pedidos`
 --
 
@@ -90,8 +163,14 @@ DROP TABLE IF EXISTS `pedidos`;
 CREATE TABLE `pedidos` (
   `id` int NOT NULL AUTO_INCREMENT,
   `numeroMesa` int NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `estadoCocina` tinyint(1) NOT NULL,
+  `idMeseros` int NOT NULL,
+  `estadoFactura` tinyint(1) NOT NULL,
+  `delivery` tinyint(1) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idMesereos` (`idMeseros`),
+  CONSTRAINT `pedidos_ibfk_1` FOREIGN KEY (`idMeseros`) REFERENCES `usuarios` (`id_Usuarios`)
+) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -100,30 +179,38 @@ CREATE TABLE `pedidos` (
 
 LOCK TABLES `pedidos` WRITE;
 /*!40000 ALTER TABLE `pedidos` DISABLE KEYS */;
+INSERT INTO `pedidos` VALUES (14,1,0,36,0,0),(15,1,0,36,0,0),(16,1,0,36,0,0),(17,1,0,36,0,0),(18,1,0,36,0,0),(19,1,0,36,0,0),(20,1,0,36,0,0),(21,1,0,36,0,0),(22,1,0,36,0,0),(24,1,0,37,0,0),(25,1,0,37,0,0),(26,1,0,37,0,0),(27,1,0,37,0,0),(28,1,0,37,0,0),(29,1,0,37,0,0),(30,1,0,37,0,0),(31,2,0,37,0,0),(32,2,0,37,0,0),(33,2,0,37,0,0);
 /*!40000 ALTER TABLE `pedidos` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `pedidosProducto`
+-- Table structure for table `pedidosproducto`
 --
 
-DROP TABLE IF EXISTS `pedidosProducto`;
+DROP TABLE IF EXISTS `pedidosproducto`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `pedidosProducto` (
+CREATE TABLE `pedidosproducto` (
   `id` int NOT NULL AUTO_INCREMENT,
   `idPedido` int NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `idproducto` int NOT NULL,
+  `cantidad` int NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_idProducto_idx` (`idproducto`),
+  KEY `fk_idPedido_idx` (`idPedido`),
+  CONSTRAINT `fk_idPedido` FOREIGN KEY (`idPedido`) REFERENCES `pedidos` (`id`),
+  CONSTRAINT `fk_idProducto` FOREIGN KEY (`idproducto`) REFERENCES `productos` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `pedidosProducto`
+-- Dumping data for table `pedidosproducto`
 --
 
-LOCK TABLES `pedidosProducto` WRITE;
-/*!40000 ALTER TABLE `pedidosProducto` DISABLE KEYS */;
-/*!40000 ALTER TABLE `pedidosProducto` ENABLE KEYS */;
+LOCK TABLES `pedidosproducto` WRITE;
+/*!40000 ALTER TABLE `pedidosproducto` DISABLE KEYS */;
+INSERT INTO `pedidosproducto` VALUES (1,25,1,2),(2,25,2,1),(3,25,4,3),(4,26,1,2),(5,26,2,1),(6,26,4,3),(7,27,1,2),(8,27,2,1),(9,27,4,3),(10,28,1,2),(11,28,2,1),(12,28,4,3),(13,29,1,2),(14,29,2,1),(15,29,4,3),(16,30,1,2),(17,30,2,1),(18,30,4,3),(19,31,1,2),(20,31,2,2),(21,31,3,4),(22,32,1,2),(23,32,2,2),(24,32,3,4),(25,33,1,2),(26,33,2,2),(27,33,3,4);
+/*!40000 ALTER TABLE `pedidosproducto` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -137,6 +224,7 @@ CREATE TABLE `permisos` (
   `id` int NOT NULL AUTO_INCREMENT,
   `N_Permiso` varchar(80) NOT NULL,
   `Desc_Permiso` varchar(200) NOT NULL,
+  `link` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -201,6 +289,34 @@ LOCK TABLES `reportes` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `rol_categoria`
+--
+
+DROP TABLE IF EXISTS `rol_categoria`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `rol_categoria` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `id_rol` int NOT NULL,
+  `id_categoria` int DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_idrol_idx` (`id_rol`),
+  KEY `fk_categoria_idx` (`id_categoria`),
+  CONSTRAINT `fk_categoria` FOREIGN KEY (`id_categoria`) REFERENCES `categorias` (`id`),
+  CONSTRAINT `fk_idrol` FOREIGN KEY (`id_rol`) REFERENCES `roles` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `rol_categoria`
+--
+
+LOCK TABLES `rol_categoria` WRITE;
+/*!40000 ALTER TABLE `rol_categoria` DISABLE KEYS */;
+/*!40000 ALTER TABLE `rol_categoria` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `roles`
 --
 
@@ -211,6 +327,7 @@ CREATE TABLE `roles` (
   `id` int NOT NULL AUTO_INCREMENT,
   `Nomb_Rol` varchar(45) NOT NULL,
   `Fecha_Creacion` date NOT NULL,
+  `id_categoria` int DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -221,7 +338,7 @@ CREATE TABLE `roles` (
 
 LOCK TABLES `roles` WRITE;
 /*!40000 ALTER TABLE `roles` DISABLE KEYS */;
-INSERT INTO `roles` VALUES (1,'Administrador','2023-02-02');
+INSERT INTO `roles` VALUES (1,'Administrador','2023-02-02',NULL);
 /*!40000 ALTER TABLE `roles` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -252,7 +369,7 @@ CREATE TABLE `usuarios` (
   UNIQUE KEY `N_Identidad_UNIQUE` (`N_Identidad`),
   KEY `fk_idroles_idx` (`id_Rol`),
   CONSTRAINT `fk_idroles` FOREIGN KEY (`id_Rol`) REFERENCES `roles` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=54 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -261,7 +378,7 @@ CREATE TABLE `usuarios` (
 
 LOCK TABLES `usuarios` WRITE;
 /*!40000 ALTER TABLE `usuarios` DISABLE KEYS */;
-INSERT INTO `usuarios` VALUES (36,'Juan','Arias','csssc',1,'10332','M','1995-01-28','La Lima','9393','pruxc@gmsail.com','$2b$10$o/Dxae4oUwjmlxBNCC9oN.TinQkPV28RqH6Fkya7PBZQsi4/IDkke','qtX2HKHr7pvw',1),(37,'Juan','Arias','cc',1,'1032','H','1995-01-28','La Lima','9393','pruxcssx@gmsail.com','$2b$10$AWvqkhWBWLMGn1O5tiiyVekoipGHwL44tvV/SUB/91Srkj3P5aPv.',NULL,1),(38,'Juan','Arias','JUAR5219',1,'01','H','1995-01-28','Choloma','9393','t@gmil.com','$2b$10$q8qZ8RusbxGiOw4msrFRnuNLdUKUONAUyH8yFAnC81XckbmH25ECG','kn2o6ZUqOlHC',1),(39,'John','Doe','jdoe',1,'12345678A','M','1990-01-01','New York','123456789','jdoe@example.com','password123','token123',1),(40,'Juan','Arias','JUAR4819',1,'03','H','1995-01-28','Choloma','9393','te@gmil.com','$2b$10$bs/jImrxYHHazjqmReZzVO.BuCDv4RJEKUjx9YrCiZAO7XGr6IqTO','Dxxj2i67TZiP',1),(41,'Juan','Arias','JUAR0719',1,'99090','H','1995-01-28','Choloma','9393','tessss@gmil.com','$2b$10$puS9YfYe3YLNkoW3XvUFFuh15/rMLSB.HQgEAoOrCBwDMP3bjNS4m','4jthUvz19575',1),(42,'Juan','Arias','JUAR2119',1,'990490','H','1995-01-28','Choloma','9393','tess5ss@gmil.com','$2b$10$dZQq5Ccr/TArFRzjxrDpB.XuXtlx7b4YETQXX4lPlYZ3EvBaFKgFi','QhiZ126o31tQ',1),(43,'Juan','Arias','JUAR3319',1,'9990','H','1995-01-28','Choloma','9393','tesss5ss@gmil.com','$2b$10$3kW7Q9UECIneBFVgcMHs4urWQeeBPRgubNIOo1e7HERnA.bY6WfAu','KAbqIjDHRHFu',1),(44,'Juan','Arias','JUAR7819',1,'9908980','H','1995-01-28','Choloma','9393','tessssdd@gmil.com','$2b$10$okCnrhSHC60rEkGi5nO.k.S4x0wXImP4CCK10SYeYIJpXvh6A76oi','1dFrgoEyNL6J',1),(52,'Juan','Arias','JUAR1619',1,'982939','H','1995-01-28','Choloma','9393','2sa@gmail.com','$2b$10$qjS/H8MDfYDHFxa4.MGkq.mluOiWjj826Q6sztF0Dcu40FrFLGMvC','WxIpoRKUNdBZ',1),(53,'Juan','Arias','JUAR9219',1,'9822939','H','1995-01-28','Choloma','9393','2ssa@gmail.com','$2b$10$p4/yJr4Kl/YbZ0tsjHj7veuE/kJppQcUWyop36RsL7suz4eUFc1WG','o34r5N4Gc0ST',1);
+INSERT INTO `usuarios` VALUES (36,'Juan','Arias','csssc',1,'10332','M','1995-01-28','La Lima','9393','pruxc@gmsail.com','$2b$10$o/Dxae4oUwjmlxBNCC9oN.TinQkPV28RqH6Fkya7PBZQsi4/IDkke','YavanerGewcS',1),(37,'Juan','Arias','cc',1,'1032','H','1995-01-28','La Lima','9393','pruxcssx@gmsail.com','$2b$10$AWvqkhWBWLMGn1O5tiiyVekoipGHwL44tvV/SUB/91Srkj3P5aPv.',NULL,1),(38,'Juan','Arias','JUAR5219',1,'01','H','1995-01-28','Choloma','9393','t@gmil.com','$2b$10$q8qZ8RusbxGiOw4msrFRnuNLdUKUONAUyH8yFAnC81XckbmH25ECG','kn2o6ZUqOlHC',1);
 /*!40000 ALTER TABLE `usuarios` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -491,11 +608,64 @@ BEGIN
     ELSEIF opt = 0 THEN
     	SELECT status FROM usuarios WHERE Nom_Usuario = userID;
     ELSE
-        SELECT CONCAT(Nombre, ' ', Apellido) AS FullName, Nom_Usuario AS UsernName, Nomb_Rol AS Rol, N_Identidad AS DNI, Genero AS		 Gender, Fecha_Nacimiento AS Birthday, Lugar_Nacimiento AS PlaceofBirth, N_Celular AS Phone, Correo AS Email 
+        SELECT id_Usuarios as useridDb, CONCAT(Nombre, ' ', Apellido) AS FullName, Nom_Usuario AS UserName, Nomb_Rol AS Rol, N_Identidad AS DNI, Genero AS		 Gender, Fecha_Nacimiento AS Birthday, Lugar_Nacimiento AS PlaceofBirth, N_Celular AS Phone, Correo AS Email, status as userStatus
         FROM usuarios
         INNER JOIN roles ON usuarios.id_Rol = roles.id
         WHERE (Nom_Usuario = userID OR N_Identidad = userID);
     END IF;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `new_order` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `new_order`(
+    IN p_numeroMesa INT,
+    IN p_idMesero INT,
+    IN p_productos JSON,
+    IN p_delivery TINYINT
+)
+BEGIN
+    DECLARE v_idPedido INT;
+    DECLARE v_idProducto INT;
+    DECLARE v_cantidad INT;
+    
+    START TRANSACTION;
+    
+    -- Insertar un nuevo registro en la tabla `pedidos`
+    INSERT INTO pedidos(numeroMesa, estadoCocina, idMeseros, estadoFactura, delivery)
+    VALUES(p_numeroMesa, 0, p_idMesero, 0, p_delivery);
+    
+    -- Obtener el ID generado para el nuevo pedido
+    SET v_idPedido = LAST_INSERT_ID();
+    
+    -- Recorrer la lista de productos y cantidades
+    WHILE JSON_VALID(p_productos) AND JSON_LENGTH(p_productos) > 0 DO
+        -- Obtener el primer elemento de la lista
+        SET v_idProducto = JSON_EXTRACT(p_productos, '$[0].idProducto');
+        SET v_cantidad = JSON_EXTRACT(p_productos, '$[0].cantidad');
+        
+        -- Insertar un nuevo registro en la tabla `pedidosproducto`
+        INSERT INTO pedidosproducto(idPedido, idProducto, cantidad)
+        VALUES(v_idPedido, v_idProducto, v_cantidad);
+        
+        -- Eliminar el primer elemento de la lista
+        SET p_productos = JSON_REMOVE(p_productos, '$[0]');
+
+    END WHILE;
+    
+    COMMIT;
+	SELECT 'Se ha creado la orden exitosamente' as msg, 1 as response;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -719,4 +889,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-02-19 16:45:26
+-- Dump completed on 2023-02-22  1:45:57
