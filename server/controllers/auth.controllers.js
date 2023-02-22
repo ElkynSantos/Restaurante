@@ -67,32 +67,36 @@ const login = async (req, res, next) => {
 };
 
 const resetPassword = async (req, res) => {
-    const { token } = req.params;
-    const { newPassword } = req.body;
+    try {
+        const { token } = req.params;
+        const { newPassword } = req.body;
 
-    const hashedPass = await encrypt(newPassword);
+        const hashedPass = await encrypt(newPassword);
 
-    const [updatedPass] = await db.query(
-        'CALL update_password(:userToken, :updatedPassword)',
-        {
-            replacements: {
-                userToken: token,
-                updatedPassword: hashedPass,
-            },
+        const [updatedPass] = await db.query(
+            'CALL update_password(:userToken, :updatedPassword)',
+            {
+                replacements: {
+                    userToken: token,
+                    updatedPassword: hashedPass,
+                },
+            }
+        );
+
+        if (updatedPass.response === 0) {
+            return res.status(404).json({
+                status: 'fail',
+                msg: updatedPass.msg,
+            });
         }
-    );
 
-    if (updatedPass.response === 0) {
-        return res.status(404).json({
-            status: 'fail',
+        res.status(201).json({
+            status: 'ok',
             msg: updatedPass.msg,
         });
+    } catch (error) {
+        return next(new AppError(`Error en la base de datos ${error}`, 500));
     }
-
-    res.status(201).json({
-        status: 'ok',
-        msg: updatedPass.msg,
-    });
 };
 
 const sendResetPassEmail = async (req, res) => {
