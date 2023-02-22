@@ -179,7 +179,7 @@ CREATE TABLE `pedidos` (
 
 LOCK TABLES `pedidos` WRITE;
 /*!40000 ALTER TABLE `pedidos` DISABLE KEYS */;
-INSERT INTO `pedidos` VALUES (14,1,0,36,0,0),(15,1,0,36,0,0),(16,1,0,36,0,0),(17,1,0,36,0,0),(18,1,0,36,0,0),(19,1,0,36,0,0),(20,1,0,36,0,0),(21,1,0,36,0,0),(22,1,0,36,0,0),(24,1,0,37,0,0),(25,1,0,37,0,0),(26,1,0,37,0,0),(27,1,0,37,0,0),(28,1,0,37,0,0),(29,1,0,37,0,0),(30,1,0,37,0,0),(31,2,0,37,0,0),(32,2,0,37,0,0),(33,2,0,37,0,0);
+INSERT INTO `pedidos` VALUES (14,1,1,36,1,0),(15,1,1,36,1,0),(16,1,1,36,1,0),(17,1,1,36,1,0),(18,1,1,36,1,0),(19,1,1,36,1,0),(20,1,1,36,1,0),(21,1,1,36,1,0),(22,1,1,36,1,0),(24,1,1,37,1,0),(25,1,1,37,1,0),(26,1,1,37,1,0),(27,1,1,37,1,0),(28,1,1,37,1,0),(29,1,1,37,1,0),(30,1,1,37,1,0),(31,2,1,37,1,0),(32,2,1,37,1,0),(33,2,1,37,0,0);
 /*!40000 ALTER TABLE `pedidos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -209,7 +209,7 @@ CREATE TABLE `pedidosproducto` (
 
 LOCK TABLES `pedidosproducto` WRITE;
 /*!40000 ALTER TABLE `pedidosproducto` DISABLE KEYS */;
-INSERT INTO `pedidosproducto` VALUES (1,25,1,2),(2,25,2,1),(3,25,4,3),(4,26,1,2),(5,26,2,1),(6,26,4,3),(7,27,1,2),(8,27,2,1),(9,27,4,3),(10,28,1,2),(11,28,2,1),(12,28,4,3),(13,29,1,2),(14,29,2,1),(15,29,4,3),(16,30,1,2),(17,30,2,1),(18,30,4,3),(19,31,1,2),(20,31,2,2),(21,31,3,4),(22,32,1,2),(23,32,2,2),(24,32,3,4),(25,33,1,2),(26,33,2,2),(27,33,3,4);
+INSERT INTO `pedidosproducto` VALUES (1,25,1,2),(2,25,2,1),(3,25,4,3),(4,26,1,2),(5,26,2,1),(6,26,4,3),(7,27,1,2),(8,27,2,1),(9,27,4,3),(10,28,1,2),(11,28,2,1),(12,28,4,3),(13,29,1,2),(14,29,2,1),(15,29,4,3),(16,30,1,2),(17,30,2,1),(18,30,4,3),(19,31,1,2),(20,31,2,2),(21,31,3,4),(22,32,1,2),(23,32,2,2),(24,32,3,4),(25,33,1,2),(26,33,2,2);
 /*!40000 ALTER TABLE `pedidosproducto` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -378,7 +378,7 @@ CREATE TABLE `usuarios` (
 
 LOCK TABLES `usuarios` WRITE;
 /*!40000 ALTER TABLE `usuarios` DISABLE KEYS */;
-INSERT INTO `usuarios` VALUES (36,'Juan','Arias','csssc',1,'10332','M','1995-01-28','La Lima','9393','pruxc@gmsail.com','$2b$10$o/Dxae4oUwjmlxBNCC9oN.TinQkPV28RqH6Fkya7PBZQsi4/IDkke','YavanerGewcS',1),(37,'Juan','Arias','cc',1,'1032','H','1995-01-28','La Lima','9393','pruxcssx@gmsail.com','$2b$10$AWvqkhWBWLMGn1O5tiiyVekoipGHwL44tvV/SUB/91Srkj3P5aPv.',NULL,1),(38,'Juan','Arias','JUAR5219',1,'01','H','1995-01-28','Choloma','9393','t@gmil.com','$2b$10$q8qZ8RusbxGiOw4msrFRnuNLdUKUONAUyH8yFAnC81XckbmH25ECG','kn2o6ZUqOlHC',1);
+INSERT INTO `usuarios` VALUES (36,'Juan','Arias','csssc',1,'10332','M','1995-01-28','La Lima','9393','pruxc@gmsail.com','$2b$10$do1XmzgK43LXuvBbWCEt4.0HePOwQGvnCyHO/JuZyVzLheO5qhC8W',NULL,1),(37,'Juan','Arias','cc',1,'1032','H','1995-01-28','La Lima','9393','pruxcssx@gmsail.com','$2b$10$AWvqkhWBWLMGn1O5tiiyVekoipGHwL44tvV/SUB/91Srkj3P5aPv.',NULL,1),(38,'Juan','Arias','JUAR5219',1,'01','H','1995-01-28','Choloma','9393','t@gmil.com','$2b$10$q8qZ8RusbxGiOw4msrFRnuNLdUKUONAUyH8yFAnC81XckbmH25ECG','kn2o6ZUqOlHC',1);
 /*!40000 ALTER TABLE `usuarios` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -514,6 +514,74 @@ BEGIN
     ELSE
         SELECT 'Este DNI no existe en nuestros registros' AS msg, 0 as response;
     END IF;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `get_active_orders` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_active_orders`()
+BEGIN
+    CREATE TEMPORARY TABLE IF NOT EXISTS t1 (
+        mesaID INT,
+        numero_pedido INT,
+        nombre_producto VARCHAR(255),
+        cantidad INT
+    );
+
+    INSERT INTO t1 (mesaID, numero_pedido, nombre_producto, cantidad)
+    SELECT 
+        p.numeroMesa AS mesaID,
+        p.id AS numero_pedido,
+        pr.nombre_producto AS nombre_producto,
+        SUM(pp.cantidad) AS cantidad
+    FROM pedidosproducto pp
+    INNER JOIN pedidos p ON p.id = pp.idPedido
+    INNER JOIN productos pr ON pp.idProducto = pr.id
+    WHERE p.estadoCocina = 0
+    GROUP BY p.numeroMesa, p.id, pp.idProducto;
+
+    CREATE TEMPORARY TABLE IF NOT EXISTS t2 (
+        mesaID INT,
+        numero_pedido INT,
+        productos JSON
+    );
+
+    INSERT INTO t2 (mesaID, numero_pedido, productos)
+    SELECT 
+        mesaID,
+        numero_pedido,
+        JSON_ARRAYAGG(
+            JSON_OBJECT(
+                'nombre_producto', nombre_producto,
+                'cantidad', cantidad
+            )
+        )
+    FROM t1
+    GROUP BY mesaID, numero_pedido;
+
+    SELECT 
+        JSON_ARRAYAGG(
+            JSON_OBJECT(
+                'mesaID', mesaID,
+                'numero_pedido', numero_pedido,
+                'productos', productos
+            )
+        ) AS orders
+    FROM t2;
+
+    DROP TEMPORARY TABLE IF EXISTS t1;
+    DROP TEMPORARY TABLE IF EXISTS t2;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -889,4 +957,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-02-22  1:45:57
+-- Dump completed on 2023-02-22 11:23:57

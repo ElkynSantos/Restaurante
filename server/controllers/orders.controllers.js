@@ -1,10 +1,27 @@
 import db from '../db.js';
+import AppError from '../utilities/app.error.js';
 
-const allOrders = (req, res) => {
-    res.status(500).json({
-        status: 'error',
-        message: 'This route is not yet implemented',
-    });
+const allOrders = async (req, res, next) => {
+    try {
+        const [order] = await db.query('CALL get_active_orders()');
+
+        if (order.orders === null) {
+            return next(
+                new AppError(`No hay ordenes activas en este momento`, 404)
+            );
+        }
+
+        return res.json({
+            order,
+        });
+    } catch (error) {
+        return next(
+            new AppError(
+                `No se pueden mostrar las ordenes en este momento`,
+                500
+            )
+        );
+    }
 };
 
 const newOrder = async (req, res) => {
@@ -30,7 +47,7 @@ const newOrder = async (req, res) => {
     } catch (error) {
         return res.status(500).json({
             status: 'fail',
-            message: 'Unable to create new order',
+            message: 'No se pudo crear la nueva orden',
         });
     }
 };
