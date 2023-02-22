@@ -115,15 +115,36 @@ const createUser = async (req, res, next) => {
 
         return res.status(201).json({
             status: 'Ok',
-            msg: newUser.msg,
+            msg: 'Se ha creado el nuevo usuario exitosamente',
+            newUser,
         });
     } catch (error) {
+        console.log(error);
         return next(new AppError(`Ha ocurrido un error en el servidor`, 500));
     }
 };
 
-const getUser = (req, res) => {
-    return next(new AppError(`Esta ruta aún no está implementada`, 500));
+const getUser = async (req, res) => {
+    const { userID } = req.body;
+
+    const [user] = await db.query('CALL get_user(:userID, :opt)', {
+        replacements: {
+            userID: userID,
+            opt: 1,
+        },
+    });
+
+    if (user.response === 0) {
+        return res.status(404).json({
+            status: 'fail',
+            msg: user.msg,
+        });
+    }
+
+    return res.status(200).json({
+        status: 'Ok',
+        user,
+    });
 };
 
 const updateUser = async (req, res, next) => {
@@ -153,7 +174,6 @@ const updateUser = async (req, res, next) => {
             placeofBirth,
             phone,
             email,
-            password,
         }).some((val) => !val);
 
         if (emptyParams) {
@@ -191,6 +211,7 @@ const updateUser = async (req, res, next) => {
             msg: updatedUser.msg,
         });
     } catch (error) {
+        console.log(error);
         return next(new AppError(`Error en la base de datos ${error}`, 500));
     }
 };

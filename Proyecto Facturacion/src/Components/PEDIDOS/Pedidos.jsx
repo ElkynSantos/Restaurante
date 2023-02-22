@@ -160,7 +160,11 @@ function PEDIDOS() {
 
     useEffect(() => {
         const getAllProducts = async () => {
+<<<<<<< HEAD
             await fetch('http://localhost:3000/products/')
+=======
+            await fetch('http://localhost:3000/products')
+>>>>>>> origin/users
                 .then((response) => response.json())
                 .then((data) => {
                     console.log(data), setData(data.allProducts);

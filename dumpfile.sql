@@ -88,12 +88,9 @@ DROP TABLE IF EXISTS `pedidos`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `pedidos` (
-  `producto` int NOT NULL,
-  `N_factura` int NOT NULL,
-  PRIMARY KEY (`producto`,`N_factura`),
-  KEY `fk_idFacturas_idx` (`N_factura`),
-  CONSTRAINT `fk_idFacturas` FOREIGN KEY (`N_factura`) REFERENCES `facturas` (`id`),
-  CONSTRAINT `fk_idProductos` FOREIGN KEY (`producto`) REFERENCES `productos` (`id`)
+  `id` int NOT NULL AUTO_INCREMENT,
+  `numeroMesa` int NOT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -104,6 +101,29 @@ CREATE TABLE `pedidos` (
 LOCK TABLES `pedidos` WRITE;
 /*!40000 ALTER TABLE `pedidos` DISABLE KEYS */;
 /*!40000 ALTER TABLE `pedidos` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `pedidosProducto`
+--
+
+DROP TABLE IF EXISTS `pedidosProducto`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `pedidosProducto` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `idPedido` int NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `pedidosProducto`
+--
+
+LOCK TABLES `pedidosProducto` WRITE;
+/*!40000 ALTER TABLE `pedidosProducto` DISABLE KEYS */;
+/*!40000 ALTER TABLE `pedidosProducto` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -232,7 +252,7 @@ CREATE TABLE `usuarios` (
   UNIQUE KEY `N_Identidad_UNIQUE` (`N_Identidad`),
   KEY `fk_idroles_idx` (`id_Rol`),
   CONSTRAINT `fk_idroles` FOREIGN KEY (`id_Rol`) REFERENCES `roles` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=54 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -241,7 +261,7 @@ CREATE TABLE `usuarios` (
 
 LOCK TABLES `usuarios` WRITE;
 /*!40000 ALTER TABLE `usuarios` DISABLE KEYS */;
-INSERT INTO `usuarios` VALUES (3,'Juan','Arias','ddddd',1,'3','H','1995-01-28','La Lima','9393','pru@gmsail.com','coco','sssss',1),(4,'COCO','LOCO','KAKA2',1,'12345','','1995-09-22','LA lima','9383','j@gmail.com','Admin','hoiaoo',0),(7,'Juan','Arias','JsA',1,'22356780','H','1995-01-28','Choloma','9393','juan@gmail.com','Admin','hoiaoo',NULL),(8,'Juan','Arias','JssA',1,'223156780','H','1995-01-28','Choloma','9393','juan@gmail.com','Admin','hoiaoo',NULL),(9,'Juan','Arias','JssdA',1,'2231563780','H','1995-01-28','Choloma','9393','juan@gmail.com','Admin','hoiaoo',NULL),(11,'Juan','Arias','JsdA',1,'221563780','H','1995-01-28','Choloma','9393','juan@gmail.com','Admin','hoiaoo',NULL),(12,'Juan','Arias','JsdAa',1,'2215663780','H','1995-01-28','Choloma','9393','juan@gmail.com','Admin','hoiaoo',NULL),(13,'Juan','Arias','JsadAa',1,'22156637830','H','1995-01-28','Choloma','9393','juan@gmail.com','Admin','hoiaoo',NULL),(14,'Juan','Arias','JszdAa',1,'2637830','H','1995-01-28','Choloma','9393','juan@gmail.com','$2b$10$mDnJBBMq.d9vLP7H70uGVOwPWOByHIyfkhqVBQT51JXkiOV7rVGHe','hoiaoo',NULL),(17,'Juan','Arias','ssjk',1,'26371830','H','1995-01-28','Choloma','9393','juan@gmail.com','$2b$10$GOm8BP5e1X.Pq624ELtYZeszz.9karM/IHa88DBxp48uzJ9/sbCQO','hoiaoo',NULL),(18,'Juan','Arias','JUAR263',1,'263718130','H','1995-01-28','Choloma','9393','juan@gmail.com','$2b$10$b6cIG8zuiFf4rPArjPFkd.sHiIFjAPbhF3AR0Dt1f/RETdvjg4uzi','hoiaoo',NULL),(20,'Juan','Arias','JUAR633',1,'637128130','H','1995-01-28','Choloma','9393','juan@gmail.com','$2b$10$mvfe/v.kfSaKVyKMwbYMBuQjbjd7yWR5Q01XOBT2DjKK3IfwuOxIK','hoiaoo',1),(21,'Juan','Arias','JUAR993',1,'999','H','1995-01-28','Choloma','9393','juan@gmasil.com','$2b$10$y8TCRRc4P0bc6FcrdsKQ6e/tij23EV73fK/Jbx1lW7/OCSsbRMBqC','hoiaoo',1),(22,'Juan','Arias','JUAR093',1,'09878','H','1995-01-28','Choloma','9393','juan@gmil.com','$2b$10$YbuuRrhwMISnZT6dlBiX4.xkSc6pnbs5xfn3ozZn./SyZwu2ghvd6','hoiaoo',1),(24,'Juan','Arias','JUAR453',1,'458378','H','1995-01-28','Choloma','9393','juadn@gmil.com','$2b$10$wLUCmTDRBxTZqZgMvJF5EucH1Kv7jpD7/J7rBt6/LbxZ1VQ7CtMbe','hoiaoo',1),(25,'Juan','Arias','JUAR233',1,'2333','H','1995-01-28','Choloma','9393','juadddn@gmil.com','$2b$10$KYaIHJbvPEbkiD4BIIXbveNZb55PpK855rYTjyNzNM9SAMhixvjl.','hoiaoo',1),(26,'Juan','Arias','JUAR124',1,'1252','H','1995-01-28','Choloma','9393','juadddn@gmil.com','$2b$10$KMB8y3qbXW1RfEtrovW8tOtVjsBwmsrGInnQ206hzQPieqqdYCSZe','ohN6RiOikZoX',1),(28,'Juan','Arias','JUAR344',1,'344','H','1995-01-28','Choloma','9393','jdn@gmil.com','$2b$10$.ECo2Lqi2olcLYIyX8mVlOw2T80G1pYnGgTztgHKjPD7hXtBnHPA2','dAthJzdtAH1B',1),(30,'Juan','Arias','JUAR294',1,'456','H','1995-01-28','Choloma','9393','jdns@gmil.com','$2b$10$tQxDXydbgdoLhP.ajqDaZeZx2FzevZlqHoIXqIv/cGfuFE0LfSs2q','T2wTqX2jfNS2',1),(31,'Juan','Arias','JUAR264',1,'4566','H','1995-01-28','Choloma','9393','jdnst@gmil.com','$2b$10$9d4wco7t4CGSkYGlGaW6NeNUJ.72/g2DjJ1coF7J4S85O8FYbjwuG','7XLJhaDfZWHI',1),(32,'Juan','Arias','JUAR104',1,'45664','H','1995-01-28','Choloma','9393','jdncst@gmil.com','$2b$10$VKD6V15QPV3BtGq3W7DQwOumwZOKDSUv5Ji4kvrSSAwB1xOnC8qfe',NULL,1),(33,'Juan','Arias','JUAR444',1,'93939','H','1995-01-28','Choloma','9393','jdncst@gmil.com','$2b$10$F3VhIrl1rQBvlQaOfV/2heMOBq/a5m0yX0eZ2K8DpGBxr0.skYsRy','3aRyhETTD5b1',1),(34,'Juan','Arias','JUAR624',1,'3455','H','1995-01-28','Choloma','9393','jdncst@gmil.com','$2b$10$h1v1aXrN92EjyJFEfc4bG.oWMOjrjSUKCh8e2ZE0PsUxOQrriIrq2','XnQmedurEqdY',1),(35,'Juan','Arias','JUAR508',1,'34','H','1995-01-28','Choloma','9393','jdncst@gmil.com','$2b$10$Qmhx6JfuM0oBq8soDwuAFepmH/T7TAagz.V8yR332IyteUgQ0Ld6e','7X9RiYXpkqOu',1);
+INSERT INTO `usuarios` VALUES (36,'Juan','Arias','csssc',1,'10332','M','1995-01-28','La Lima','9393','pruxc@gmsail.com','$2b$10$o/Dxae4oUwjmlxBNCC9oN.TinQkPV28RqH6Fkya7PBZQsi4/IDkke','qtX2HKHr7pvw',1),(37,'Juan','Arias','cc',1,'1032','H','1995-01-28','La Lima','9393','pruxcssx@gmsail.com','$2b$10$AWvqkhWBWLMGn1O5tiiyVekoipGHwL44tvV/SUB/91Srkj3P5aPv.',NULL,1),(38,'Juan','Arias','JUAR5219',1,'01','H','1995-01-28','Choloma','9393','t@gmil.com','$2b$10$q8qZ8RusbxGiOw4msrFRnuNLdUKUONAUyH8yFAnC81XckbmH25ECG','kn2o6ZUqOlHC',1),(39,'John','Doe','jdoe',1,'12345678A','M','1990-01-01','New York','123456789','jdoe@example.com','password123','token123',1),(40,'Juan','Arias','JUAR4819',1,'03','H','1995-01-28','Choloma','9393','te@gmil.com','$2b$10$bs/jImrxYHHazjqmReZzVO.BuCDv4RJEKUjx9YrCiZAO7XGr6IqTO','Dxxj2i67TZiP',1),(41,'Juan','Arias','JUAR0719',1,'99090','H','1995-01-28','Choloma','9393','tessss@gmil.com','$2b$10$puS9YfYe3YLNkoW3XvUFFuh15/rMLSB.HQgEAoOrCBwDMP3bjNS4m','4jthUvz19575',1),(42,'Juan','Arias','JUAR2119',1,'990490','H','1995-01-28','Choloma','9393','tess5ss@gmil.com','$2b$10$dZQq5Ccr/TArFRzjxrDpB.XuXtlx7b4YETQXX4lPlYZ3EvBaFKgFi','QhiZ126o31tQ',1),(43,'Juan','Arias','JUAR3319',1,'9990','H','1995-01-28','Choloma','9393','tesss5ss@gmil.com','$2b$10$3kW7Q9UECIneBFVgcMHs4urWQeeBPRgubNIOo1e7HERnA.bY6WfAu','KAbqIjDHRHFu',1),(44,'Juan','Arias','JUAR7819',1,'9908980','H','1995-01-28','Choloma','9393','tessssdd@gmil.com','$2b$10$okCnrhSHC60rEkGi5nO.k.S4x0wXImP4CCK10SYeYIJpXvh6A76oi','1dFrgoEyNL6J',1),(52,'Juan','Arias','JUAR1619',1,'982939','H','1995-01-28','Choloma','9393','2sa@gmail.com','$2b$10$qjS/H8MDfYDHFxa4.MGkq.mluOiWjj826Q6sztF0Dcu40FrFLGMvC','WxIpoRKUNdBZ',1),(53,'Juan','Arias','JUAR9219',1,'9822939','H','1995-01-28','Choloma','9393','2ssa@gmail.com','$2b$10$p4/yJr4Kl/YbZ0tsjHj7veuE/kJppQcUWyop36RsL7suz4eUFc1WG','o34r5N4Gc0ST',1);
 /*!40000 ALTER TABLE `usuarios` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -294,44 +314,53 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `edit_user`(id INT, userStatus TINYINT, userName VARCHAR(30), userLastName VARCHAR(30), userId VARCHAR(30), rol INT, userDni VARCHAR(14), userGender CHAR(1), userBirthday DATE, placeOfBirth VARCHAR(100), userPhone VARCHAR(9), userEmail VARCHAR(100))
-proc_Exit:BEGIN
-   	DECLARE existeDNI INT;
-	DECLARE existeEmail INT;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `edit_user`(
+    IN `id` INT, 
+    IN `userStatus` TINYINT, 
+    IN `userName` VARCHAR(30), 
+    IN `userLastName` VARCHAR(30), 
+    IN `userId` VARCHAR(30), 
+    IN `rol` INT, 
+    IN `userDni` VARCHAR(14), 
+    IN `userGender` CHAR(1), 
+    IN `userBirthday` DATE, 
+    IN `placeOfBirth` VARCHAR(100), 
+    IN `userPhone` VARCHAR(9), 
+    IN `userEmail` VARCHAR(100)
+)
+BEGIN
+    DECLARE existeDNI INT;
+    DECLARE existeEmail INT;
+    DECLARE existeUserName INT;
 
-	SELECT COUNT(*) INTO existeDNI FROM usuarios WHERE N_Identidad = userDni;
-	SELECT COUNT(*) INTO existeEmail FROM usuarios WHERE Correo = userEmail;
+    SELECT COUNT(*) INTO existeDNI FROM usuarios WHERE N_Identidad = userDni AND id_Usuarios <> id;
+    SELECT COUNT(*) INTO existeEmail FROM usuarios WHERE Correo = userEmail AND id_Usuarios <> id;
+    SELECT COUNT(*) INTO existeUserName FROM usuarios WHERE Nom_Usuario = userId AND id_Usuarios <> id;
 
-	IF existeEmail > 0 && existeDNI > 0 THEN
-		SELECT 'El correo y DNI ya existen en la base de datos' AS msg, 0 as response;
-		LEAVE proc_Exit;
-
-	ELSEIF existeDNI > 0 THEN
-		SELECT 'Este DNI ya existe en la base de datos' AS msg, 0 as response;
-		LEAVE proc_Exit;
-	ELSEIF existeEmail > 0 THEN
-		SELECT 'Este correo ya existe en la base de datos' AS msg, 0 as response;
-		LEAVE proc_Exit;
-	
-	ELSE
-        SET @userName = IFNULL(userName, (SELECT Nombre FROM usuarios WHERE id_Usuarios = id));
-        SET @userLastName = IFNULL(userLastName, (SELECT Apellido FROM usuarios WHERE id_Usuarios = id));
-        SET @userId = IFNULL(userId, (SELECT Nom_Usuario FROM usuarios WHERE id_Usuarios = id));
-        SET @rol = IFNULL(rol, (SELECT id_Rol FROM usuarios WHERE id_Usuarios = id));
-        SET @userDni = IFNULL(userDni, (SELECT N_Identidad FROM usuarios WHERE id_Usuarios = id));
-        SET @userGender = IFNULL(userGender, (SELECT Genero FROM usuarios WHERE id_Usuarios = id));
-        SET @userBirthday = IFNULL(userBirthday, (SELECT Fecha_Nacimiento FROM usuarios WHERE id_Usuarios = id));
-        SET @placeOfBirth = IFNULL(placeOfBirth, (SELECT Lugar_Nacimiento FROM usuarios WHERE id_Usuarios = id));
-        SET @userPhone = IFNULL(userPhone, (SELECT N_Celular FROM usuarios WHERE id_Usuarios = id));
-        SET @userEmail = IFNULL(userEmail, (SELECT Correo FROM usuarios WHERE id_Usuarios = id));
-        SET @userStatus = IFNULL(userStatus, (SELECT status FROM usuarios WHERE id_Usuarios = id));
-        
+    IF existeUserName > 0 THEN
+        SELECT 'Este nombre de usuario ya existe en la base de datos' AS msg, 0 AS response;
+    ELSEIF existeEmail > 0 AND existeDNI > 0 THEN
+        SELECT 'El correo y DNI ya existen en la base de datos' AS msg, 0 AS response;
+    ELSEIF existeDNI > 0 THEN
+        SELECT 'Este DNI ya existe en la base de datos' AS msg, 0 AS response;
+    ELSEIF existeEmail > 0 THEN
+        SELECT 'Este correo ya existe en la base de datos' AS msg, 0 AS response;
+    ELSE
         UPDATE usuarios
-        SET Nombre = @userName, Apellido = @userLastName, Nom_Usuario = @userId, id_Rol = @rol, N_Identidad = @userDni, Genero = @userGender, Fecha_Nacimiento = @userBirthday, Lugar_Nacimiento = @placeOfBirth, N_Celular = @userPhone, Correo = @userEmail, status = @userStatus
+        SET 
+            Nombre = IFNULL(userName, Nombre), 
+            Apellido = IFNULL(userLastName, Apellido), 
+            Nom_Usuario = IFNULL(userId, Nom_Usuario), 
+            id_Rol = IFNULL(rol, id_Rol), 
+            N_Identidad = IFNULL(userDni, N_Identidad), 
+            Genero = IFNULL(userGender, Genero), 
+            Fecha_Nacimiento = IFNULL(userBirthday, Fecha_Nacimiento), 
+            Lugar_Nacimiento = IFNULL(placeOfBirth, Lugar_Nacimiento), 
+            N_Celular = IFNULL(userPhone, N_Celular), 
+            Correo = IFNULL(userEmail, Correo), 
+            status = IFNULL(userStatus, status)
         WHERE id_Usuarios = id;
-	BEGIN
-		SELECT 'Se ha editado la información del usuario correctamente' as msg, 1 as response;
-	END;
+            SELECT 'Se ha editado la información del usuario correctamente' AS msg, 1 AS response;
     END IF;
 END ;;
 DELIMITER ;
@@ -406,7 +435,7 @@ DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_all_users`()
 BEGIN
 	BEGIN
-		SELECT CONCAT(Nombre, ' ', Apellido) as FullName, Nom_Usuario as UsernName, Nomb_Rol as Rol, N_Identidad as DNI, Genero as 	Gender, Fecha_Nacimiento as Birthday, Lugar_Nacimiento as PlaceofBirth, N_Celular as Phone, Correo as Email 
+		SELECT CONCAT(Nombre, ' ', Apellido) as FullName, Nom_Usuario as UserName, Nomb_Rol as Rol, N_Identidad as DNI, Genero as 	Gender, Fecha_Nacimiento as Birthday, Lugar_Nacimiento as PlaceofBirth, N_Celular as Phone, Correo as Email, status 
 		FROM usuarios
 		INNER JOIN roles ON usuarios.id_Rol = roles.id;
 	END;
@@ -455,17 +484,17 @@ DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_user`(IN userID VARCHAR(30), IN opt TINYINT)
 BEGIN
     DECLARE userExists INT DEFAULT 0;
-    SELECT COUNT(*) INTO userExists FROM usuarios WHERE Nom_Usuario = userID;
+    SELECT COUNT(*) INTO userExists FROM usuarios WHERE (Nom_Usuario = userID OR N_Identidad = userID) ;
 
     IF userExists <= 0 THEN
         SELECT 'No existen registros con este usuario' AS msg, 0 AS response;
-    ELSEIF opt = 1 THEN
-    	SELECT status FROM usuarios WHERE Nom_Usuario = userID;	
+    ELSEIF opt = 0 THEN
+    	SELECT status FROM usuarios WHERE Nom_Usuario = userID;
     ELSE
         SELECT CONCAT(Nombre, ' ', Apellido) AS FullName, Nom_Usuario AS UsernName, Nomb_Rol AS Rol, N_Identidad AS DNI, Genero AS		 Gender, Fecha_Nacimiento AS Birthday, Lugar_Nacimiento AS PlaceofBirth, N_Celular AS Phone, Correo AS Email 
         FROM usuarios
         INNER JOIN roles ON usuarios.id_Rol = roles.id
-        WHERE Nom_Usuario = userID;
+        WHERE (Nom_Usuario = userID OR N_Identidad = userID);
     END IF;
 END ;;
 DELIMITER ;
@@ -520,28 +549,106 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `new_user`(userName VARCHAR(30), userLastName VARCHAR(30), userId VARCHAR(30),rol INT, userDni VARCHAR(14), userGender CHAR(1), userBirthday DATE, placeOfBirth VARCHAR(100), userPhone VARCHAR(9), userEmail VARCHAR(100), userPass VARCHAR(200), userToken VARCHAR(200))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `new_user`(
+    userName VARCHAR(30),
+    userLastName VARCHAR(30),
+    userId VARCHAR(30),
+    rol INT,
+    userDni VARCHAR(14),
+    userGender CHAR(1),
+    userBirthday DATE,
+    placeOfBirth VARCHAR(100),
+    userPhone VARCHAR(9),
+    userEmail VARCHAR(100),
+    userPass VARCHAR(200),
+    userToken VARCHAR(200)
+)
 proc_Exit:BEGIN
-	DECLARE existe INT DEFAULT 0;
+    DECLARE existe INT DEFAULT 0;
 
-	SELECT COUNT(*) INTO existe FROM usuarios WHERE (N_Identidad = userDni OR Correo = userEmail);
+    SELECT COUNT(*) INTO existe FROM usuarios WHERE (N_Identidad = userDni OR Correo = userEmail);
 
-	IF existe > 0 THEN
-		SELECT 'El usuario ya existe en la base de datos' AS msg, 0 as response;
-		LEAVE proc_Exit;
-	ELSE
-		BEGIN
-		DECLARE initialStatus TINYINT DEFAULT 1;
+    IF existe > 0 THEN
+        SELECT 'El usuario ya existe en la base de datos' AS msg, 0 as response;
+        LEAVE proc_Exit;
+    ELSE
+        SET @initialStatus = 1;
 
-		INSERT INTO usuarios (Nombre, Apellido, Nom_Usuario, id_Rol, N_Identidad, Genero, Fecha_Nacimiento, Lugar_Nacimiento, N_Celular, Correo, Contraseña, Token, status) 
-		VALUES (userName, userLastName, userId, rol, userDni, userGender, userBirthday, placeOfBirth, userPhone, userEmail, 	userPass, userToken, initialStatus);
-		END;
-
-	END IF;
-
+        INSERT INTO usuarios (
+            Nombre,
+            Apellido,
+            Nom_Usuario,
+            id_Rol,
+            N_Identidad,
+            Genero,
+            Fecha_Nacimiento,
+            Lugar_Nacimiento,
+            N_Celular,
+            Correo,
+            Contraseña,
+            Token,
+            status
+        ) 
+        VALUES (
+            userName,
+            userLastName,
+            userId,
+            rol,
+            userDni,
+            userGender,
+            userBirthday,
+            placeOfBirth,
+            userPhone,
+            userEmail,
+            userPass,
+            userToken,
+            @initialStatus
+        );
+    END IF;
 	BEGIN
-		SELECT 'Se ha creado un nuevo usuario correctamente' as msg, 1 as response;
+
+    	SELECT Nombre,
+            Apellido,
+            Nom_Usuario,
+            id_Rol,
+            N_Identidad,
+            Genero,
+            Fecha_Nacimiento,
+            Lugar_Nacimiento,
+            N_Celular,
+            Correo,
+            status
+             FROM usuarios WHERE id_Usuarios = LAST_INSERT_ID();
 	END;
+
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `reset_password_email` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `reset_password_email`(IN userEmail VARCHAR(255), IN userToken VARCHAR(255))
+BEGIN
+  DECLARE existe INT DEFAULT 0;
+
+  SELECT COUNT(*) INTO existe FROM usuarios WHERE Correo = userEmail;
+
+  IF existe > 0 THEN
+    UPDATE usuarios SET `Token` = userToken WHERE Correo = userEmail;
+    SELECT Correo as email, Nombre as name, 'Se ha enviado un correo para recuperar su contraseña' AS msg, 1 as response FROM usuarios WHERE Correo = userEmail;
+  ELSE
+    SELECT 'Usuario no encontrado' AS msg, 0 as response;
+  END IF;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -612,4 +719,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-02-08 22:39:40
+-- Dump completed on 2023-02-19 16:45:26
