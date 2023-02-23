@@ -169,6 +169,7 @@ function CREARUSUARIO() {
                 });
             }
         }
+        e.target.reset();
     }
 
     return (
@@ -350,7 +351,7 @@ function CREARUSUARIO() {
                                     onChange={(e) =>
                                         setField('DNI', e.target.value)
                                     }
-                                />
+                                 />
                             </Form.Group>
                         </Col>
                         <Col>
