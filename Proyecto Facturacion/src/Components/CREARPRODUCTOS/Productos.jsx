@@ -106,6 +106,8 @@ function BasicExample() {
                 });
             }
         }
+
+        e.target.reset();
     }
     return (
         <Form onSubmit={handleSubmit} name="test" id="test">
