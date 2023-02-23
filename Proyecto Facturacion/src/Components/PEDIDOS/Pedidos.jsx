@@ -294,7 +294,7 @@ function PEDIDOS() {
 
     useEffect(() => {
         const getAllProducts = async () => {
-            await fetch('http://localhost:3000/products/')
+            await fetch('http://localhost:3000/products')
                 .then((response) => response.json())
                 .then((data) => {
                     console.log(data), setData(data.allProducts);

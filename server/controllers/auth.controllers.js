@@ -60,6 +60,7 @@ const login = async (req, res, next) => {
         return res.status(200).json({
             status: 'Ok',
             jwtToken,
+
             msg: `¡Bienvenido al sistema, ${userExists.name}!`,
         });
     } catch (error) {

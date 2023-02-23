@@ -27,9 +27,7 @@ const forgotPassordEmail = async (options) => {
         <p>Se ha solicitado un correo de cambio de contraseña</p>
 
         <p>Para completar el proceso, por favor haz click en el siguiente enlace: 
-        <a href="${process.env.BACKEND_URL}:${
-            process.env.PORT ?? 3000
-        }/auth/reset-password/${token}"> Cambiar Contraseña</a></p>
+        <a href="http://localhost:5173/auth/reset-password/${token}"> Cambiar Contraseña</a></p>
         
         <p>Si no has solicitado un cambio de contraseña, por favor ignora este correo</p>
 

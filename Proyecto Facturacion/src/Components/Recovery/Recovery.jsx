@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Col, Button, Row, Container, Card, Form } from 'react-bootstrap';
-import './LOGIN.css';
 import Swal from 'sweetalert2';
-import { useNavigate } from 'react-router-dom';
-import { login } from '../../services/LOGIN';
-function LOGIN(props) {
+import { useNavigate, useParams } from 'react-router-dom';
+import { reset } from '../../services/Recovery';
+function Recovery() {
+    const { token } = useParams();
     const [form, setForm] = useState({});
-
     const [errors, setErrors] = useState({});
     const navigate = useNavigate();
     const setField = (field, value) => {
@@ -17,17 +16,31 @@ function LOGIN(props) {
     };
     function findErrors() {
         const newErrors = {};
-        let { user, userpassword } = form;
+        let { userPassword, confirmpassword } = form;
 
-        if ((!user && user !== '') || user == '') {
+        if ((!userPassword && userPassword !== '') || userPassword == '') {
             //En realidad es username
-            newErrors.user = 'Espacio de Username Vacio !';
+            newErrors.userPassword = 'Espacio de userPassword Vacio !';
             //email = "";
         }
         // validate with regex
-        if ((!userpassword && userpassword !== '') || userpassword == '') {
-            newErrors.userpassword = 'Espacio de contrasena vacio !';
+        const passwordPattern = new RegExp(
+            /^(.{0,7}|[^0-9]*|[^A-Z]*|[^a-z]*|[a-zA-Z0-9]*)$/
+        );
+
+        if (passwordPattern.test(userPassword)) {
+            newErrors.password = 'Formato de contraseña inválido.';
+        }
+        if (
+            (!confirmpassword && confirmpassword !== '') ||
+            confirmpassword == ''
+        ) {
+            newErrors.confirmpassword = 'Espacio de contrasena vacio !';
             //password = "";
+        }
+
+        if (userPassword != confirmpassword) {
+            newErrors.confirmpassword = 'No coindeden las contrasenas';
         }
 
         return newErrors;
@@ -38,27 +51,26 @@ function LOGIN(props) {
 
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors);
+            console.log(newErrors);
         } else {
-            //console.log(form.user);
-            //console.log(form.userpassword);
             try {
-                const data = await login(form.user, form.userpassword);
-                //console.log(data);
-                Swal.fire({
-                    position: 'top-center',
-                    icon: 'success',
-                    title: 'Bienvenido',
-                    showConfirmButton: false,
-                    timer: 1500,
-                });
-                //console.log(data.jwtToken.userExists.name);
-                localStorage.setItem('USERNAME', JSON.stringify(data.msg));
-                navigate('/home');
+                console.log(form.userPassword);
+                const data = await reset(token, form.userPassword);
+                console.log(data);
+                if (data.status == 'ok') {
+                    Swal.fire({
+                        position: 'top-center',
+                        icon: 'success',
+                        title: 'Se ha actualizado la contraseña exitosamente',
+                        timer: 2000,
+                    });
+                    navigate('/');
+                }
             } catch (error) {
                 Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
-                    text: error.response.data.message,
+                    text: 'Error 404',
                 });
             }
         }
@@ -70,21 +82,11 @@ function LOGIN(props) {
                 <Row className="vh-100 d-flex justify-content-center align-items-center">
                     <Col md={88} lg={6} xs={15}>
                         <Card className="shadow p-0">
-                            <Card.Header className="bg-blue">
-                                <Row>
-                                    <Col>
-                                        <img
-                                            class="logo"
-                                            src="/assets/images/logo.png"
-                                            alt=""
-                                        />
-                                    </Col>
-                                </Row>
-                            </Card.Header>
+                            <Card.Header className="bg-blue"></Card.Header>
                             <Card.Body>
                                 <div className="">
                                     <h2 className="fw-bold mb-2 text-uppercase ">
-                                        Iniciar Sesion
+                                        Recuperacion de contraseña
                                     </h2>
                                     {/* <p>
                                         Por favor ingrese correo electronico y
@@ -97,17 +99,18 @@ function LOGIN(props) {
                                                 controlId="formBasicEmail"
                                             >
                                                 <Form.Label className="text-center">
-                                                    Nombre de usuario
+                                                    contraseña
                                                 </Form.Label>
                                                 <Form.Control
-                                                    type="text"
-                                                    placeholder="Ingrese usuario"
+                                                    type="password"
+                                                    placeholder="Ingrese la nueva contraseña"
                                                     onChange={(e) =>
                                                         setField(
-                                                            'user',
+                                                            'userPassword',
                                                             e.target.value
                                                         )
                                                     }
+                                                    required
                                                     isInvalid={!!errors.user}
                                                 />
                                             </Form.Group>
@@ -117,17 +120,18 @@ function LOGIN(props) {
                                                 controlId="formBasicPassword"
                                             >
                                                 <Form.Label>
-                                                    Contraseña
+                                                    Confirmar contraseña
                                                 </Form.Label>
                                                 <Form.Control
                                                     type="password"
-                                                    placeholder="Ingrese contraseña"
+                                                    placeholder="Ingrese de nuevo la contraseña"
                                                     onChange={(e) =>
                                                         setField(
-                                                            'userpassword',
+                                                            'confirmpassword',
                                                             e.target.value
                                                         )
                                                     }
+                                                    required
                                                     isInvalid={
                                                         !!errors.userpassword
                                                     }
@@ -146,17 +150,6 @@ function LOGIN(props) {
                                                 </Button>
                                             </div>
                                         </Form>
-                                        <div className="mt-3">
-                                            <p className="mb-0  text-center">
-                                                ¿Desea recuperar contraseña?{' '}
-                                                <a
-                                                    href="/Recuperar"
-                                                    className="text-blue fw-bold"
-                                                >
-                                                    Click aquí
-                                                </a>
-                                            </p>
-                                        </div>
                                     </div>
                                 </div>
                             </Card.Body>
@@ -168,4 +161,4 @@ function LOGIN(props) {
     );
 }
 
-export default LOGIN;
+export default Recovery;

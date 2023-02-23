@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useParams } from 'react-router-dom';
 
 import LOGIN from './Components/LOGIN/index';
 import ROLES from './Components/ROLES/index';
@@ -10,6 +10,8 @@ import PEDIDOS from './Components/PEDIDOS/index';
 import FACTURACION from './Components/FACTURACION/index';
 import USERS from './Components/USERS/index';
 import FormPassword from './Components/FormPassword/index';
+import Productos from './Components/CREARPRODUCTOS/index';
+import Recovery from './Components/Recovery/Recovery';
 import editarProductos from './Components/FormPassword/index';
 
 import LISTAFACTURACION from './Components/LISTAFACTURACION/index';
@@ -35,6 +37,10 @@ function App() {
                 <Route path="/Users" element={<USERS />} />
                 <Route path={'/Productos'} element={<PRODUCTOS />} />
                 <Route path="/Recuperar" element={<FormPassword />} />
+                <Route
+                    path="/auth/reset-password/:token"
+                    element={<Recovery />}
+                />
                 <Route path="/editUser" element={<FormPassword />} />
                 <Route
                     path="/ListaFacturacion"
