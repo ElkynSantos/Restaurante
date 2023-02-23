@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-
-import CREARROL from '../CREARROL/index';
 import EDITARROLES from '../EDITARROLES/index';
+import CREARROL from '../CREARROL/index';
 import {
     Button,
     Col,
@@ -27,9 +26,12 @@ import {
     addRoles,
     editRoles
 } from '../../features/rolesSlice';
-import { showModal, closeModal } from '../../features/createUserSlice';
+import { showModalCR, closeModalCR } from '../../features/creacionRoles';
+
+import { showModalER, closeModalER } from '../../features/editarRoles';
 
 import BarraLateral from '../common/index';
+
 
 
 const paginationComponentOptions = {
@@ -40,30 +42,23 @@ const paginationComponentOptions = {
 };
 
 function ROLES() {
-    let formRICARDIO;
 
-    const [buttonPressed, setbuttonPressed] = useState(false);
-
-    if (buttonPressed) {
-        formRICARDIO = <EDITARROLES />;
-    }
-
-    useEffect(() => {
-        console.log('Count ' + buttonPressed);
-    }, buttonPressed);
 
     const dispatch = useDispatch();
     const [data, setData] = useState([]);
    // const users = useSelector((state) => state.users);
     const roles = useSelector((state) => state.roles);
     const handleClose = () => {
-        dispatch(closeModal());
+        dispatch(closeModalCR());
     };
 
     const handleShow = () => {
-        dispatch(showModal());
+        dispatch(showModalCR());
     };
 
+    const handleShowEDIT = () => {
+        dispatch(showModalER());
+    };
 
     const handleInitRoles = (data) => {
         dispatch(initRoles(data));
@@ -112,7 +107,7 @@ function ROLES() {
                             <button
                                 className="btn-transparent text-blue p-0"
                                 title="Editar"
-                                onClick={() => setbuttonPressed(true)}
+                                onClick={handleShowEDIT}
                             >
                                 <PencilFill />
                             </button>
@@ -155,13 +150,13 @@ function ROLES() {
     return (
         <div>
             <CREARROL />
-            {formRICARDIO}
+            <EDITARROLES />;
 
             <BarraLateral />
             <Container className="mt-5 rounded bg-white pt-5 pb-5">
                 <Row>
                     <Col>
-                        <h2 className="text-start">Usuarios</h2>
+                        <h2 className="text-start">Roles</h2>
                     </Col>
                     <Col md="auto">
                         <button className="btn-transparent h3 text-dark">

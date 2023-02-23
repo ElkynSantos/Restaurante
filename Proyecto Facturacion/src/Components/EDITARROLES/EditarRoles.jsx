@@ -1,38 +1,59 @@
 import React, { useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import {
+    Col,
     Button,
+    Row,
+    Container,
+    Card,
     Form,
+    FormControl,
+    FormLabel,
+    CloseButton,
 } from 'react-bootstrap';
+import Swal from 'sweetalert2';
 
+import { Register } from '../../services/REGISTER';
+
+import { showModalER, closeModalER } from '../../features/editarRoles';
+import { useDispatch, useSelector } from 'react-redux';
 
 function Example() {
-    const [show, setShow] = useState(false);
+    const dispatch = useDispatch();
+    // const [show, setShow] = useState(false);
+    const handleClose = () => {
+        dispatch(closeModalER());
+    };
 
-    const handleClose = () => setShow(false);
- 
+    const handleShow = () => {
+        dispatch(showModalER());
+    };
+
+    const show2 = useSelector((state) => state.editrol);
 
     return (
         <>
             <Modal
-                show={true}
+                show={show2}
+                size="lg"
                 onHide={handleClose}
                 class="modal-dialog modal-dialog-scrollable"
+                backdrop="static"
             >
-                <Modal.Header>
-                    <Modal.Title>Creación de Usuario</Modal.Title>
+                <Modal.Header className="bg-blue text-white">
+                    <Modal.Title>Edición de Roles</Modal.Title>
+                    <CloseButton variant="white" onClick={handleClose} />
                 </Modal.Header>
                 <Modal.Body>
-                    <Form>
-                        <CREARUSUARIO></CREARUSUARIO>
-                    </Form>
+                    <EDITARROL></EDITARROL>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" href="/home">
+                    <Button variant="danger" onClick={handleClose}>
                         Salir
                     </Button>
-                    <Button variant="primary" onClick={handleClose}>
-                        Guardar usuarios
+
+                    <Button className="bg-blue" form="test" type="submit">
+                        Guardar cambios
                     </Button>
                 </Modal.Footer>
             </Modal>
@@ -40,152 +61,110 @@ function Example() {
     );
 }
 
-function CREARUSUARIO() {
+function EDITARROL() {
     const [form, setForm] = useState({});
     const [errors, setErrors] = useState({});
+
+    const [checkedList, setCheckedList] = useState([]);
+    const listaPermisos = [
+      { id: "1", value: "Crear facturas" },
+      { id: "2", value: "Crear y modificar usuarios" },
+      { id: "3", value: "Crear y modificar productos" },
+      { id: "4", value: "Ver y generar reportes" },
+    ];
     const setField = (field, value) => {
         setForm({
             ...form,
             [field]: value,
         });
     };
-    function findErrors() {
+    function findErrors() 
+    {
         const newErrors = {};
-        let { email, password } = form;
-
-        if ((!email && email !== '') || email == '') {
-            //En realidad es username
-            newErrors.email = 'Espacio de ID Vacio !';
-            //email = "";
-        }
-        // validate with regex
-        /*if ((!password && password !== "") || password == "") {
-    newErrors.password = "Espacio de contrasena vacio !";
-    //password = "";
-  }*/
-
-        console.log(newErrors.password);
         return newErrors;
     }
+    const handleSelect = (event) => {
+        const value = event.target.value;
+        const isChecked = event.target.checked;
+     
+        if (isChecked) {
+          //Add checked item into checkList
+          setCheckedList([...checkedList, value]);
+        } else {
+          //Remove unchecked item from checkList
+          const filteredList = checkedList.filter((item) => item !== value);
+          setCheckedList(filteredList);
+        }
+      };
     async function handleSubmit(e) {
         e.preventDefault();
         let newErrors = findErrors();
+        // console.log(newErrors);
 
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors);
         } else {
-            //LLAMEN A LA API
+           console.log("FUNCIONA")
         }
     }
 
     return (
-        <div className="mb-3 mt-md-4">
-            <p>
-                Por favor ingrese todos los datos correspondientes del nuevo
-                usuario.
-            </p>
+        <div className="mb-3 mt-md-3">
+            <h5 className="mb-3 text-blue fw-bold">
+                Por favor ingrese todos los datos correspondientes del
+                rol a editar.{' '}
+            </h5>
+            <br>
+            </br>
+            <h3 className ="text-center ">-- USUARIO ACTUAL --</h3>
+
             <div className="mb-3">
-                <Form onSubmit={handleSubmit}>
-                    <Form.Group className="mb-3" controlId="formBasicEmail">
-                        <Form.Label className="text-center">Nombre</Form.Label>
-                        <Form.Control
-                            type="text"
-                            placeholder="Ingrese el nombre"
-                            onChange={(e) => setField('email', e.target.value)}
-                            isInvalid={!!errors.email}
-                        />
-                    </Form.Group>
-                    <Form.Group className="mb-3" controlId="formBasicEmail">
-                        <Form.Label className="text-center">
-                            Apellido
-                        </Form.Label>
-                        <Form.Control
-                            type="text"
-                            placeholder="Ingrese el apellido"
-                            onChange={(e) => setField('email', e.target.value)}
-                            isInvalid={!!errors.email}
-                        />
-                    </Form.Group>
-
-                    <Form.Label className="text-center">Genero</Form.Label>
-                    <Form.Group>
-                        <Form.Select aria-label="Genero">
-                            <option value="1"></option>
-                            <option value="2">Masculino</option>
-                            <option value="3">Femenino</option>
-                        </Form.Select>
-                    </Form.Group>
-                    <Form.Group>
-                        <Form.Label>Fecha de nacimiento</Form.Label>
-                        <Form.Control
-                            type="date"
-                            placeholder="Ingresar fecha de nacimiento"
-                        ></Form.Control>
-                    </Form.Group>
-                    <br></br>
-
-                    <Form.Group className="mb-3" controlId="formBasicEmail">
-                        <Form.Label className="text-center">
-                            Lugar de nacimiento
-                        </Form.Label>
-                        <Form.Control
-                            type="text"
-                            placeholder="Ingrese el lugar"
-                            onChange={(e) => setField('email', e.target.value)}
-                            isInvalid={!!errors.email}
-                        />
-                    </Form.Group>
-                    <br></br>
-
-                    <Form.Group className="mb-3" controlId="formBasicEmail">
-                        <Form.Label className="text-center">
-                            Número de teléfono
-                        </Form.Label>
-                        <Form.Control
-                            type="text"
-                            placeholder="Ingrese Numero"
-                            maxLength="8"
-                        />
-                    </Form.Group>
-                    <br></br>
-
-                    <Form.Label className="text-center">
-                        Rol que asignará al usuario
-                    </Form.Label>
-                    <Form.Select aria-label="Asignar impuesto">
-                        <option value="1">Administrador de sistema</option>
-                        <option value="2">Gerente</option>
-                        <option value="3">Facturador</option>
-                    </Form.Select>
-                    <Form.Group
-                        className="mb-3"
-                        controlId="formBasicCheckbox"
-                    ></Form.Group>
-                    <Form.Group className="mb-3" controlId="formBasicEmail">
-                        <Form.Label className="text-center">
-                            Dirección de correo electrónico
-                        </Form.Label>
-                        <Form.Control
-                            type="text"
-                            placeholder="Ingrese correo personal"
-                            onChange={(e) => setField('email', e.target.value)}
-                            isInvalid={!!errors.email}
-                        />
-                    </Form.Group>
-
-                    <Form.Group className="mb-3" controlId="formBasicEmail">
-                        <Form.Label className="text-center">
-                            Contraseña
-                        </Form.Label>
-                        <Form.Control
-                            type="text"
-                            placeholder="Ingrese contraseña del usuario"
-                            onChange={(e) => setField('email', e.target.value)}
-                            isInvalid={!!errors.email}
-                        />
-                    </Form.Group>
-                    <br></br>
-                    <br></br>
+                <Form onSubmit={handleSubmit} name="test" id="test">
+                    <Row>
+                        <Col>
+                            <Form.Group className="mb-3">
+                                <Form.Label className="fw-bold">
+                                    Nuevo nombre
+                                </Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    placeholder="Ingrese el nombre del rol"
+                                    onChange={(e) =>
+                                        setField('nombre', e.target.value)
+                                    }
+                                    required
+                                    // isInvalid={!!errors.nombre}
+                                />
+                            </Form.Group>
+                        </Col>
+                       
+                    </Row>
+                    
+                    <Row>
+                        <Col>
+                            <Form.Group className="mb-3">
+                                <Form.Label className="text-center fw-bold">
+                                    Seleccionar permisos
+                                </Form.Label>
+                                {listaPermisos.map((item, index) => {
+                                    return (
+                                    <div key={item.id} className="checkbox-container">
+                                        <input
+                                        type="checkbox"
+                                        name="permisos"
+                                        value={item.value}
+                                        onChange={handleSelect}                 
+                                        />
+                                        <label>&nbsp;{item.value }</label>
+                                    </div>
+                                    );
+                                })}
+                                
+                            
+                            
+                            </Form.Group>
+                        </Col>
+                    </Row>
                 </Form>
             </div>
         </div>

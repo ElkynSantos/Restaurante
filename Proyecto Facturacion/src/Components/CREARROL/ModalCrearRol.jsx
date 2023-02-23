@@ -14,22 +14,20 @@ import {
 import Swal from 'sweetalert2';
 
 import { Register } from '../../services/REGISTER';
-import { showModal, closeModal } from '../../features/createUserSlice';
+import { showModalCR, closeModalCR } from '../../features/creacionRoles';
 import { useDispatch, useSelector } from 'react-redux';
 
 function Example() {
     const dispatch = useDispatch();
     // const [show, setShow] = useState(false);
     const handleClose = () => {
-        dispatch(closeModal());
+        console.log("entro");
+        dispatch(closeModalCR());
     };
 
-    const handleShow = () => {
-        dispatch(showModal());
-    };
 
-    const show2 = useSelector((state) => state.modalAddUserState);
-
+    const show2 = useSelector((state) => state.createrol);
+    console.log(show2);
     return (
         <>
             <Modal
