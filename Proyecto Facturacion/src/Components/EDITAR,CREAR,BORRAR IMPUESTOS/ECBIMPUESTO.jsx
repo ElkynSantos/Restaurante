@@ -44,7 +44,7 @@ function ECBMPUESTO() {
 
   return (
     <div className="impuestos-table">
-      <h2>Lista de Impuestos</h2>
+      <h1>Lista de Impuestos</h1>
       <Table striped bordered hover>
         <thead>
           <tr className="table-header">
