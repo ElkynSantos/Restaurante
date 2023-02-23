@@ -3,7 +3,7 @@ import AppError from '../utilities/app.error.js';
 
 const allReadyOrders = async (req, res, next) => {
     try {
-        const [order] = await db.query('call get_completed_orders();');
+        const [order] = await db.query('call salvador3();');
 
         if (order.orders === null) {
             res.status(200).json({
@@ -13,7 +13,7 @@ const allReadyOrders = async (req, res, next) => {
         }
 
         return res.json({
-            order: order.orders,
+            order,
         });
     } catch (error) {
         return next(

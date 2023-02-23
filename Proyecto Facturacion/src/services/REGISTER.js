@@ -12,6 +12,19 @@ export async function Register(
     email,
     password
 ) {
+    console.log(
+        name,
+        lastName,
+        rol,
+        dni,
+        gender,
+        birthday,
+        placeofBirth,
+        phone,
+        email,
+        password
+    );
+
     // console.log(placeofBirth);
     const options = {
         method: 'POST',
