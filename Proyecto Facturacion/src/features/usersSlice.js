@@ -10,7 +10,12 @@ export const usersSlice = createSlice({
         addUser: (state, action) => {
             state.push(action.payload);
         },
-        editUser: (state, action) => {},
+        editUser: (state, action) => {
+            const currentUser = action.payload;
+            let foundUser = state.findIndex((user) => user.UserName === currentUser.UserName);
+            if(foundUser)
+                state[foundUser] = currentUser;
+        },
         changeUserStatus: (state, action) => {
             const DNI = action.payload;
 
@@ -22,6 +27,5 @@ export const usersSlice = createSlice({
     },
 });
 
-export const { initUsers, addUser, editUser, changeUserStatus } =
-    usersSlice.actions;
+export const { initUsers, addUser, editUser, changeUserStatus } = usersSlice.actions;
 export default usersSlice.reducer;

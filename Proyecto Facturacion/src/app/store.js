@@ -18,6 +18,7 @@ export const store = configureStore({
         sendeditableproduct: sendeditableproductSlice,
 
         modalEditUserState: editUserSlice,
+        modalEditUser: editUserSlice,
     },
     middleware: [thunk],
 });

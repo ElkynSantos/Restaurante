@@ -37,6 +37,25 @@ function Example() {
 */
     const borrar = () => localStorage.removeItem('USERNAME');
 
+    const optionsSidebar = [
+        "BsHouseFill",
+        {
+            name: "Configuración del sistema",
+            permissions: [
+                {
+
+                },
+                {
+
+                }
+            ]
+        },
+        {
+            name: "Configuración del negocio"
+            
+        }
+    ];
+
     return (
         <>
             <EditarProducto></EditarProducto>
