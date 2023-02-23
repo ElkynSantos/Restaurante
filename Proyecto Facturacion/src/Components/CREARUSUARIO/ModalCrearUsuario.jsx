@@ -1,12 +1,6 @@
 import React, { useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
-import {
-    Col,
-    Button,
-    Row,
-    Form,
-    CloseButton,
-} from 'react-bootstrap';
+import { Col, Button, Row, Form, CloseButton } from 'react-bootstrap';
 import Swal from 'sweetalert2';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -66,9 +60,7 @@ function Example() {
 function CREARUSUARIO() {
     const dispatch = useDispatch();
     const handleAddUser = (user) => {
-        dispatch(
-            addUser(user)
-        );
+        dispatch(addUser(user));
     };
 
     const [form, setForm] = useState({});
@@ -140,9 +132,9 @@ function CREARUSUARIO() {
                     form.email,
                     form.password
                 );
-                
-                const {status, newUser} = data;
-                if(status == "Ok") {
+
+                const { status, newUser } = data;
+                if (status == 'Ok') {
                     handleAddUser({
                         FullName: `${newUser.Nombre} ${newUser.Apellido}`,
                         UserName: newUser.Nom_Usuario,
@@ -155,7 +147,7 @@ function CREARUSUARIO() {
                         Email: newUser.Correo,
                         status: newUser.status,
                     });
-                    
+
                     Swal.fire({
                         position: 'top-center',
                         icon: 'success',
@@ -173,7 +165,7 @@ function CREARUSUARIO() {
                 });
             }
         }
-        e.target.reset();
+        // e.target.reset();
     }
 
     return (
@@ -355,7 +347,7 @@ function CREARUSUARIO() {
                                     onChange={(e) =>
                                         setField('DNI', e.target.value)
                                     }
-                                 />
+                                />
                             </Form.Group>
                         </Col>
                         <Col>
