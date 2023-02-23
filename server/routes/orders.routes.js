@@ -10,7 +10,7 @@ import {
 
 const orderRoutes = express.Router();
 
-orderRoutes.route('/').get(allOrders).post(newOrder);
-orderRoutes.route('/:id').get(getOrder).patch(updateOrder).delete(deleteOrder);
+orderRoutes.route('/').get(allOrders).post(newOrder).patch(updateOrder);
+orderRoutes.route('/:id').get(getOrder).delete(deleteOrder);
 
 export default orderRoutes;

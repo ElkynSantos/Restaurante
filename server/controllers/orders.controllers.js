@@ -6,13 +6,14 @@ const allOrders = async (req, res, next) => {
         const [order] = await db.query('CALL get_active_orders()');
 
         if (order.orders === null) {
-            return next(
-                new AppError(`No hay ordenes activas en este momento`, 404)
-            );
+            res.status(200).json({
+                status: 'fail',
+                message: 'No hay pedidos activos por el momento',
+            });
         }
 
         return res.json({
-            order,
+            order: order.orders,
         });
     } catch (error) {
         return next(
@@ -24,7 +25,7 @@ const allOrders = async (req, res, next) => {
     }
 };
 
-const newOrder = async (req, res) => {
+const newOrder = async (req, res, next) => {
     try {
         const { tableId, waiterId, products, delivery } = req.body;
 
@@ -45,10 +46,7 @@ const newOrder = async (req, res) => {
             msg: newOrder.msg,
         });
     } catch (error) {
-        return res.status(500).json({
-            status: 'fail',
-            message: 'No se pudo crear la nueva orden',
-        });
+        return next(new AppError(`No se pudo crear el nuevo pedido`, 500));
     }
 };
 
@@ -59,11 +57,27 @@ const getOrder = (req, res) => {
     });
 };
 
-const updateOrder = (req, res) => {
-    res.status(500).json({
-        status: 'error',
-        message: 'This route is not yet implemented',
-    });
+const updateOrder = async (req, res, next) => {
+    try {
+        const { orderId, products } = req.body;
+
+        const [updatedOrder] = await db.query(
+            'CALL edit_order_products(:order_id, :products_list)',
+            {
+                replacements: {
+                    order_id: orderId,
+                    products_list: JSON.stringify(products),
+                },
+            }
+        );
+
+        return res.status(200).json({
+            status: 'ok',
+            msg: updatedOrder.msg,
+        });
+    } catch (error) {
+        return next(new AppError('No se ha podido editar la orden', 500));
+    }
 };
 
 const deleteOrder = (req, res) => {
