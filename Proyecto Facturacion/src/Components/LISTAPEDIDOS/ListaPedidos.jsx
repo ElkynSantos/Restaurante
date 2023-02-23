@@ -27,6 +27,9 @@ function OrdenarPedido(arrayPedido) {
 function LISTAPEDIDOS() {
     const [smShow, setSmShow] = useState(false);
     const [facturador, setFacturador] = useState(true);
+    const [data1, setData] = useState([]);
+
+    const [dataPending, setDataPending] = useState([]);
 
     //HANDLERS
     const handleChangeFact = () => {
@@ -40,6 +43,39 @@ function LISTAPEDIDOS() {
     useEffect(() => {
         console.log(`Facturado ` + facturador);
     });
+
+    const getProductos = async () => {
+        await fetch('http://localhost:3000/orders/')
+            .then((response) => response.json())
+            .then((data) => {
+                console.log(data);
+            });
+    };
+
+    useEffect(() => {
+        const getAllPendingPedidos = async () => {
+            await fetch('http://localhost:3000/orders/Pending')
+                .then((response) => response.json())
+                .then((dataPending) => {
+                    console.log(dataPending.order),
+                        setDataPending(dataPending.order.reverse());
+                });
+        };
+
+        getAllPendingPedidos();
+    }, []);
+
+    useEffect(() => {
+        const getAllPedidos = async () => {
+            await fetch('http://localhost:3000/orders/')
+                .then((response) => response.json())
+                .then((data1) => {
+                    console.log(data1.order), setData(data1.order.reverse());
+                });
+        };
+
+        getAllPedidos();
+    }, []);
 
     //IFS
 
@@ -72,16 +108,16 @@ function LISTAPEDIDOS() {
         //INFO COLUMNAS
         const columns = [
             {
-                name: 'NPedido',
-                selector: (row) => row.NPedido,
+                name: 'Id',
+                selector: (row) => row.id,
             },
             {
-                name: 'Cliente',
-                selector: (row) => row.Cliente,
+                name: 'Numero de Mesa',
+                selector: (row) => row.numeroMesa,
             },
             {
-                name: 'Fecha',
-                selector: (row) => row.Fecha,
+                name: 'Estado',
+                selector: (row) => row.estadoCocina,
             },
 
             {
@@ -139,7 +175,7 @@ function LISTAPEDIDOS() {
         TablaFacturador = (
             <DataTable
                 columns={columns}
-                data={data}
+                data={data1}
                 expandableRows
                 expandableRowsComponent={ExpandedComponent}
             />
@@ -172,16 +208,16 @@ function LISTAPEDIDOS() {
         //INFO COLUMNAS
         const columns = [
             {
-                name: 'NPedido',
-                selector: (row) => row.NPedido,
+                name: 'Id',
+                selector: (row) => row.id,
             },
             {
-                name: 'Cliente',
-                selector: (row) => row.Cliente,
+                name: 'Numero de Mesa',
+                selector: (row) => row.numeroMesa,
             },
             {
-                name: 'Fecha',
-                selector: (row) => row.Fecha,
+                name: 'Estado',
+                selector: (row) => row.estadoCocina,
             },
 
             {
@@ -195,6 +231,34 @@ function LISTAPEDIDOS() {
             },
         ];
 
+        const columns2 = [
+            {
+                name: 'Id',
+                selector: (row) => row.id,
+            },
+            {
+                name: 'Numero de Mesa',
+                selector: (row) => row.numeroMesa,
+            },
+            {
+                name: 'Estado',
+                selector: (row) => row.estadoCocina,
+            },
+
+            {
+                name: 'Eliminar',
+                cell: (props) => (
+                    <Button
+                        variant="danger"
+                        onClick={() => handleChange2(props)}
+                        id={props.ID}
+                    >
+                        -
+                    </Button>
+                ),
+            },
+        ];
+
         const ExpandedComponent = ({ data }) => (
             <pre>{JSON.stringify(data.Pedido, null, 2)}</pre>
         );
@@ -202,7 +266,7 @@ function LISTAPEDIDOS() {
         TablaCocinaIzquierda = (
             <DataTable
                 columns={columns}
-                data={data}
+                data={dataPending}
                 expandableRows
                 expandableRowsComponent={ExpandedComponent}
             />
@@ -210,8 +274,8 @@ function LISTAPEDIDOS() {
 
         TablaCocinaDerecha = (
             <DataTable
-                columns={columns}
-                data={data}
+                columns={columns2}
+                data={data1}
                 expandableRows
                 expandableRowsComponent={ExpandedComponent}
             />

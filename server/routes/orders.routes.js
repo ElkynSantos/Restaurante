@@ -1,7 +1,8 @@
 import express from 'express';
 
 import {
-    allOrders,
+    allReadyOrders,
+    allPendingOrders,
     newOrder,
     getOrder,
     updateOrder,
@@ -10,7 +11,8 @@ import {
 
 const orderRoutes = express.Router();
 
-orderRoutes.route('/').get(allOrders).post(newOrder);
+orderRoutes.route('/').get(allReadyOrders).post(newOrder);
+orderRoutes.route('/Pending').get(allPendingOrders);
 orderRoutes.route('/:id').get(getOrder).patch(updateOrder).delete(deleteOrder);
 
 export default orderRoutes;

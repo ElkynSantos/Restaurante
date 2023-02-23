@@ -18,13 +18,41 @@ const columns = [
 const data = [
     {
         id: 1,
-        title: 'Beetlejuice',
-        year: '1988',
+        title: 'Factura 1',
+        year: '01/03',
     },
     {
         id: 2,
-        title: 'Ghostbusters',
-        year: '1984',
+        title: 'Factura 2',
+        year: '02/03',
+    },
+];
+
+const columns2 = [
+    {
+        name: 'Id',
+        selector: (row) => row.id,
+    },
+    {
+        name: 'Factura',
+        selector: (row) => row.title,
+    },
+    {
+        name: 'Fecha',
+        selector: (row) => row.year,
+    },
+
+    {
+        name: 'Eliminar',
+        cell: (props) => (
+            <Button
+                variant="danger"
+                //     onClick={() => handleChange2(props)}
+                id={props.ID}
+            >
+                -
+            </Button>
+        ),
     },
 ];
 
@@ -34,7 +62,7 @@ function LISTAFACTURACION() {
             <BarraLateral />
             <h1>Lista Facturacion</h1>
 
-            <DataTable columns={columns} data={data} />
+            <DataTable columns={columns2} data={data} />
         </Container>
     );
 }

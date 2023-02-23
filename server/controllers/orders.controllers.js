@@ -1,9 +1,36 @@
 import db from '../db.js';
 import AppError from '../utilities/app.error.js';
 
-const allOrders = async (req, res, next) => {
+const allReadyOrders = async (req, res, next) => {
     try {
-        const [order] = await db.query('CALL get_active_orders()');
+        const [order] = await db.query(
+            'SELECT * FROM db_rest.pedidos where estadoCocina = 1;'
+        );
+
+        if (order.orders === null) {
+            return next(
+                new AppError(`No hay ordenes activas en este momento`, 404)
+            );
+        }
+
+        return res.json({
+            order,
+        });
+    } catch (error) {
+        return next(
+            new AppError(
+                `No se pueden mostrar las ordenes en este momento`,
+                500
+            )
+        );
+    }
+};
+
+const allPendingOrders = async (req, res, next) => {
+    try {
+        const [order] = await db.query(
+            'SELECT * FROM db_rest.pedidos where estadoCocina = 0;'
+        );
 
         if (order.orders === null) {
             return next(
@@ -73,4 +100,11 @@ const deleteOrder = (req, res) => {
     });
 };
 
-export { allOrders, newOrder, getOrder, updateOrder, deleteOrder };
+export {
+    allReadyOrders,
+    allPendingOrders,
+    newOrder,
+    getOrder,
+    updateOrder,
+    deleteOrder,
+};
