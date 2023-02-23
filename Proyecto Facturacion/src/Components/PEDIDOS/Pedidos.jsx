@@ -8,6 +8,7 @@ import {
     Form,
     FormControl,
 } from 'react-bootstrap';
+import Swal from 'sweetalert2';
 import { useState, useEffect, useMemo } from 'react';
 import DataTable from 'react-data-table-component';
 import Modal from 'react-bootstrap/Modal';
@@ -60,6 +61,7 @@ function PEDIDOS() {
         console.log('Mesa' + value);
         // alert(`You clicked ${count} times`);
     });
+
     //_____________________________
     let button;
     if (true) {
@@ -151,7 +153,6 @@ function PEDIDOS() {
         setSelectedRows(outerArray);
         console.log('ALL SELECTED ROWS 2: ', AllSelectedRows);
     };
-
     useEffect(() => {
         console.log(`You clicked ${AllSelectedRows} times`);
     });
@@ -285,11 +286,20 @@ function PEDIDOS() {
             .then((response) => response.json())
             .then((data) => {
                 console.log(data);
+
+                Swal.fire({
+                    position: 'top-center',
+                    icon: 'success',
+                    title: data.msg,
+                    showConfirmButton: false,
+                    timer: 1500,
+                });
             });
 
         console.log('New Order: \n' + value + ' ' + AllSelectedRows);
 
-        AllSelectedRows.length = 0;
+        setSelectedRows([]);
+        setValue('(Seleccionar Mesa)');
     };
 
     useEffect(() => {
@@ -399,7 +409,7 @@ function PEDIDOS() {
                             <Row>
                                 <Col>
                                     {' '}
-                                    <h4>{value}</h4>
+                                    <h7>Mesa: {value}</h7>
                                 </Col>
                                 <Col>
                                     <Dropdown>

@@ -3,9 +3,7 @@ import AppError from '../utilities/app.error.js';
 
 const allReadyOrders = async (req, res, next) => {
     try {
-        const [order] = await db.query(
-            'SELECT * FROM db_rest.pedidos where estadoCocina = 1;'
-        );
+        const [order] = await db.query('call get_completed_orders();');
 
         if (order.orders === null) {
             return next(
@@ -28,9 +26,7 @@ const allReadyOrders = async (req, res, next) => {
 
 const allPendingOrders = async (req, res, next) => {
     try {
-        const [order] = await db.query(
-            'SELECT * FROM db_rest.pedidos where estadoCocina = 0;'
-        );
+        const [order] = await db.query('CALL get_active_orders();');
 
         if (order.orders === null) {
             return next(
@@ -41,6 +37,41 @@ const allPendingOrders = async (req, res, next) => {
         return res.json({
             order,
         });
+    } catch (error) {
+        return next(
+            new AppError(
+                `No se pueden mostrar las ordenes en este momento`,
+                500
+            )
+        );
+    }
+};
+const CompletedOrder = async (req, res, next) => {
+    const { id } = req.body;
+    try {
+        await db.query(
+            'UPDATE db_rest.pedidos SET estadoCocina = 1 WHERE id = ' + id + ';'
+        );
+
+        return res.json({});
+    } catch (error) {
+        return next(
+            new AppError(
+                `No se pueden mostrar las ordenes en este momento`,
+                500
+            )
+        );
+    }
+};
+
+const BackCompleteOrder = async (req, res, next) => {
+    const { id } = req.body;
+    try {
+        await db.query(
+            'UPDATE db_rest.pedidos SET estadoCocina = 0 WHERE id = ' + id + ';'
+        );
+
+        return res.json({});
     } catch (error) {
         return next(
             new AppError(
@@ -107,4 +138,6 @@ export {
     getOrder,
     updateOrder,
     deleteOrder,
+    CompletedOrder,
+    BackCompleteOrder,
 };

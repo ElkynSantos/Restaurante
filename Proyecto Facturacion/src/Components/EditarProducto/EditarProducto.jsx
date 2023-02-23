@@ -91,10 +91,11 @@ function EditarProducto() {
                     form.precio_producto
                 );
 
+                console.log(data.msg);
                 Swal.fire({
                     position: 'top-center',
                     icon: 'success',
-                    title: 'Producto editado',
+                    title: data.msg,
                     showConfirmButton: false,
                     timer: 1500,
                 });

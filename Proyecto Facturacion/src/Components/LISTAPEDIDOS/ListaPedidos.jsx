@@ -9,8 +9,9 @@ import {
     FormControl,
 } from 'react-bootstrap';
 import { useState, useEffect, useMemo } from 'react';
-import DataTable from 'react-data-table-component';
+
 import Modal from 'react-bootstrap/Modal';
+import DataTable from 'react-data-table-component';
 
 function OrdenarPedido(arrayPedido) {
     let Formato = '';
@@ -27,7 +28,7 @@ function OrdenarPedido(arrayPedido) {
 function LISTAPEDIDOS() {
     const [smShow, setSmShow] = useState(false);
     const [facturador, setFacturador] = useState(true);
-    const [data1, setData] = useState([]);
+    const [DATA, setData] = useState([]);
 
     const [dataPending, setDataPending] = useState([]);
 
@@ -44,6 +45,28 @@ function LISTAPEDIDOS() {
         console.log(`Facturado ` + facturador);
     });
 
+    const DevolverNoCocinado = async (idPedido) => {
+        await fetch(`http://localhost:3000/orders/132`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+
+            body: JSON.stringify({ id: idPedido }),
+        });
+    };
+
+    const Cocinado = async (idPedido) => {
+        await fetch(`http://localhost:3000/orders/Listo`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+
+            body: JSON.stringify({ id: idPedido }),
+        });
+    };
+
     const getProductos = async () => {
         await fetch('http://localhost:3000/orders/')
             .then((response) => response.json())
@@ -57,25 +80,26 @@ function LISTAPEDIDOS() {
             await fetch('http://localhost:3000/orders/Pending')
                 .then((response) => response.json())
                 .then((dataPending) => {
-                    console.log(dataPending.order),
-                        setDataPending(dataPending.order.reverse());
+                    console.log(dataPending.order.orders),
+                        setDataPending(dataPending.order.orders);
                 });
         };
 
         getAllPendingPedidos();
-    }, []);
+    }, [DevolverNoCocinado]);
 
     useEffect(() => {
         const getAllPedidos = async () => {
             await fetch('http://localhost:3000/orders/')
                 .then((response) => response.json())
                 .then((data1) => {
-                    console.log(data1.order), setData(data1.order.reverse());
+                    console.log(data1.order.orders),
+                        setData(data1.order.orders);
                 });
         };
 
         getAllPedidos();
-    }, []);
+    }, [DevolverNoCocinado]);
 
     //IFS
 
@@ -108,16 +132,13 @@ function LISTAPEDIDOS() {
         //INFO COLUMNAS
         const columns = [
             {
-                name: 'Id',
-                selector: (row) => row.id,
+                name: 'N_Pedido',
+                selector: (row) => row.numero_pedido,
             },
+
             {
-                name: 'Numero de Mesa',
-                selector: (row) => row.numeroMesa,
-            },
-            {
-                name: 'Estado',
-                selector: (row) => row.estadoCocina,
+                name: 'Mesa',
+                selector: (row) => row.mesaID,
             },
 
             {
@@ -167,15 +188,34 @@ function LISTAPEDIDOS() {
                 Ver como Cocina
             </Button>
         );
-        const ExpandedComponent = ({ data }) => (
-            <pre>{JSON.stringify(data.Pedido, null, 2)}</pre>
-        );
+        const productos = [];
+
+        DATA.forEach((order) => {
+            order.productos.forEach((producto) => {
+                productos.push(producto);
+            });
+        });
+
+        const ExpandedComponent = ({ data }) => {
+            console.log(data.productos);
+
+            let ContenidoPedido = '==========Pedido==========\n';
+            for (let i = 0; i < data.productos.length; i++) {
+                ContenidoPedido +=
+                    data.productos[i].nombre_producto +
+                    '-' +
+                    data.productos[i].cantidad +
+                    '\n';
+            }
+            ContenidoPedido += '==========================';
+            return <pre>{ContenidoPedido}</pre>;
+        };
         // const ExpandedComponent = OrdenarPedido(data);
-        console.log(data[[0]].Pedido.Producto);
+        // console.log(data[[0]].Pedido.Producto);
         TablaFacturador = (
             <DataTable
                 columns={columns}
-                data={data1}
+                data={DATA}
                 expandableRows
                 expandableRowsComponent={ExpandedComponent}
             />
@@ -208,23 +248,23 @@ function LISTAPEDIDOS() {
         //INFO COLUMNAS
         const columns = [
             {
-                name: 'Id',
-                selector: (row) => row.id,
+                name: 'N_Pedido',
+                selector: (row) => row.numero_pedido,
             },
+
             {
-                name: 'Numero de Mesa',
-                selector: (row) => row.numeroMesa,
-            },
-            {
-                name: 'Estado',
-                selector: (row) => row.estadoCocina,
+                name: 'Mesa',
+                selector: (row) => row.mesaID,
             },
 
             {
                 name: 'Añadir',
 
                 cell: (props) => (
-                    <Button onClick={() => handleChange(props)} id={props.ID}>
+                    <Button
+                        onClick={() => Cocinado(props.numero_pedido)}
+                        id={props.ID}
+                    >
                         +
                     </Button>
                 ),
@@ -233,24 +273,20 @@ function LISTAPEDIDOS() {
 
         const columns2 = [
             {
-                name: 'Id',
-                selector: (row) => row.id,
-            },
-            {
-                name: 'Numero de Mesa',
-                selector: (row) => row.numeroMesa,
-            },
-            {
-                name: 'Estado',
-                selector: (row) => row.estadoCocina,
+                name: 'N_Pedido',
+                selector: (row) => row.numero_pedido,
             },
 
+            {
+                name: 'Mesa',
+                selector: (row) => row.mesaID,
+            },
             {
                 name: 'Eliminar',
                 cell: (props) => (
                     <Button
                         variant="danger"
-                        onClick={() => handleChange2(props)}
+                        onClick={() => DevolverNoCocinado(props.numero_pedido)}
                         id={props.ID}
                     >
                         -
@@ -259,9 +295,20 @@ function LISTAPEDIDOS() {
             },
         ];
 
-        const ExpandedComponent = ({ data }) => (
-            <pre>{JSON.stringify(data.Pedido, null, 2)}</pre>
-        );
+        const ExpandedComponent = ({ data }) => {
+            console.log(data.productos);
+
+            let ContenidoPedido = '==========Pedido==========\n';
+            for (let i = 0; i < data.productos.length; i++) {
+                ContenidoPedido +=
+                    data.productos[i].nombre_producto +
+                    '-' +
+                    data.productos[i].cantidad +
+                    '\n';
+            }
+            ContenidoPedido += '==========================';
+            return <pre>{ContenidoPedido}</pre>;
+        };
 
         TablaCocinaIzquierda = (
             <DataTable
@@ -275,7 +322,7 @@ function LISTAPEDIDOS() {
         TablaCocinaDerecha = (
             <DataTable
                 columns={columns2}
-                data={data1}
+                data={DATA}
                 expandableRows
                 expandableRowsComponent={ExpandedComponent}
             />
