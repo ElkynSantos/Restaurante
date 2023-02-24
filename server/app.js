@@ -38,16 +38,10 @@ app.use(express.json());
 app.use('/auth', authRoutes);
 app.use('/users', usersRoutes);
 app.use('/orders', orderRoutes);
-<<<<<<< HEAD
-//app.use('/pedidos', pedidosRoutes);
-app.use('/products', productosRoutes);
-app.use('/roles', rolesRoutes);
-=======
 
 //app.use('/pedidos', pedidosRoutes);
 app.use('/products', productosRoutes);
 
->>>>>>> origin/users
 app.all('*', (req, res, next) => {
     next(new AppError(`La ruta ${req.originalUrl} no existe`, 404));
 });

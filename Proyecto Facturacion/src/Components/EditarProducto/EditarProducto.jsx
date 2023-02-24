@@ -16,11 +16,13 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import Swal from 'sweetalert2';
 import { showModalEP, closeModalEP } from '../../features/EditarProducto';
 import { guardar } from '../../features/sendeditableproduct';
-import { editar } from '../../services/Product';
+import { editar, getproduct } from '../../services/Product';
 import { useDispatch, useSelector } from 'react-redux';
+import { FileEarmarkRichtext } from 'react-bootstrap-icons';
 
 function EditarProducto() {
     const valores = useSelector((state) => state.sendeditableproduct).value;
+    const [codeold, setcodeold] = useState([]);
     const [data, setDATA] = useState([]);
     const [form, setForm] = useState({});
     const [errors, setErrors] = useState({});
@@ -47,6 +49,7 @@ function EditarProducto() {
         // console.log(valores);
         setDATA(valores);
         setForm(valores);
+        setcodeold(valores);
     }, [valores]);
 
     function findErrors() {
@@ -68,39 +71,43 @@ function EditarProducto() {
             newErrors.productName = 'ingrese nombre del producto!';
         }
 
-        console.log(newErrors.password);
         return newErrors;
     }
 
     async function handleSubmit(e) {
         e.preventDefault();
         let newErrors = findErrors();
-        // console.log(newErrors);
-        //console.log(form);
+
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors);
-            console.log(form);
         } else {
             //LLAMEN A LA API
 
             try {
                 //console.log(form);
-                const data = await editar(
-                    form.codigo_producto,
-                    form.nombre_producto,
-                    form.precio_producto
-                );
+                const data = await getproduct(codeold.codigo_producto);
 
-                console.log(data.msg);
-                Swal.fire({
-                    position: 'top-center',
-                    icon: 'success',
-                    title: data.msg,
-                    showConfirmButton: false,
-                    timer: 1500,
-                });
+                if (data.status == 'Ok') {
+                    const data2 = await editar(
+                        data.products[0].id,
+                        form.codigo_producto,
+                        form.nombre_producto,
+                        form.precio_producto
+                    );
+
+                    console.log(data2);
+                    Swal.fire({
+                        position: 'top-center',
+                        icon: 'success',
+                        title: data.msg,
+                        showConfirmButton: false,
+                        timer: 1500,
+                    });
+                }
+
                 //dispatch(closeModalEP());
             } catch (error) {
+                console.log(error);
                 Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
@@ -128,7 +135,22 @@ function EditarProducto() {
                         <br></br>
 
                         <Form.Group>
-                            <Form.Label>Editar producto</Form.Label>
+                            <Form.Label>Codigo producto</Form.Label>
+                            <Form.Control
+                                defaultValue={data?.codigo_producto || ''}
+                                type="text"
+                                placeholder="Ingrese nombre del producto"
+                                required
+                                minLength="0"
+                                maxLength="200"
+                                onChange={(e) =>
+                                    setField('codigo_producto', e.target.value)
+                                }
+                            />
+                        </Form.Group>
+
+                        <Form.Group>
+                            <Form.Label>Nombre producto</Form.Label>
                             <Form.Control
                                 defaultValue={data?.nombre_producto || ''}
                                 type="text"

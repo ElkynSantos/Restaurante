@@ -1,11 +1,33 @@
 import axios from 'axios';
 
-export async function CreateProduct(code, productName, productPrice) {
+export async function CreateProduct(productName, productPrice, productId) {
+    console.log(productPrice);
     const options = {
         method: 'POST',
         url: 'http://localhost:3000/products/',
         data: {
-            code,
+            productName,
+            productPrice,
+            productId,
+        },
+    };
+    const response = await axios.request(options);
+
+    return response.data;
+}
+
+export async function editar(
+    productId,
+    productCode,
+    productName,
+    productPrice
+) {
+    const options = {
+        method: 'PATCH',
+        url: 'http://localhost:3000/products/:id',
+        data: {
+            productId,
+            productCode,
             productName,
             productPrice,
         },
@@ -15,14 +37,12 @@ export async function CreateProduct(code, productName, productPrice) {
     return response.data;
 }
 
-export async function editar(productCode, productName, productPrice) {
+export async function getproduct(product) {
     const options = {
-        method: 'PATCH',
-        url: 'http://localhost:3000/products/:id',
+        method: 'POST',
+        url: 'http://localhost:3000/products/:productCodeDesc',
         data: {
-            productCode,
-            productName,
-            productPrice,
+            product,
         },
     };
     const response = await axios.request(options);
