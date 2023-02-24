@@ -16,6 +16,20 @@ const getAllRoles = async (req, res, next) => {
     }
 };
 
+const getAllForBarralateral = async (req, res, next) => {
+    try {
+        const allRoles = await db.query(`CALL obtener_roles_con_permisos()`);
+
+        console.log(allRoles);
+
+        return res.status(200).json({
+            allRoles,
+        });
+    } catch (error) {
+        return next(new AppError('Ups! Error en la base de datos', 500));
+    }
+};
+
 const getAllPermisos = async (req, res, next) => {
     try {
         const allRoles = await db.query(`CALL get_all_permits()`);
@@ -29,4 +43,4 @@ const getAllPermisos = async (req, res, next) => {
     }
 };
 
-export { getAllRoles, getAllPermisos };
+export { getAllRoles, getAllPermisos, getAllForBarralateral };

@@ -2,56 +2,80 @@ import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import Navbar from 'react-bootstrap/Navbar';
-import { Container } from 'react-bootstrap';
-import { List, PersonCircle } from 'react-bootstrap-icons';
-import { Accordion } from 'react-bootstrap-accordion';
-import {
-    BsFillPersonPlusFill,
-    BsFillFileEarmarkBarGraphFill,
-    BsHouseFill,
-    BsFillBookmarkFill,
-    BsFillCalculatorFill,
-} from 'react-icons/bs';
+import { Container, Accordion } from 'react-bootstrap';
+import * as Icons from 'react-bootstrap-icons';
 
-import { IoIosExit, IoIosJournal } from 'react-icons/io';
+import { IoIosExit } from 'react-icons/io';
 import { IoRestaurantSharp } from 'react-icons/io5';
 import CREARUSUARIO from '../CREARUSUARIO/index';
-
-import EditarProducto from '../EditarProducto/index';
 import './BarraLateral.css';
 
 import MESA from '../MESAS/Mesa';
-import { useDispatch, useSelector } from 'react-redux';
+
 function Example() {
-    const dispatch = useDispatch();
     const [show, setShow] = useState(false);
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
-    /*
-    const handleCloseM = () => {
-        dispatch(closeModalEP());
-    };
-    const handleShowM = () => {
-        dispatch(showModalEP());
-    };
-*/
-    const borrar = () => localStorage.removeItem('USERNAME');
 
     const optionsSidebar = [
-        'BsHouseFill',
         {
             name: 'Configuración del sistema',
-            permissions: [{}, {}],
+            icon: 'Gear',
+            permissions: [
+                {
+                    name: 'Roles',
+                    url: '/roles',
+                    icon: 'BookmarkFill',
+                },
+                {
+                    name: 'Usuarios',
+                    url: '/users',
+                    icon: 'PeopleFill',
+                },
+            ],
         },
         {
             name: 'Configuración del negocio',
+            icon: 'Shop',
+            permissions: [
+                {
+                    name: 'Menú',
+                    url: '/products',
+                    icon: 'LayoutTextSidebar',
+                },
+                {
+                    name: 'Pedidos',
+                    url: '/orders',
+                    icon: 'ListCheck',
+                },
+                {
+                    name: 'Impuestos',
+                    url: '/taxes',
+                    icon: 'Percent',
+                },
+                // {
+                //     name: "Facturas",
+                //     url: "/bills",
+                //     icon: "PeopleFill"
+                // }
+            ],
+        },
+        {
+            name: 'Reportes',
+            icon: 'BarChartLineFill',
+            permissions: [
+                {
+                    name: 'Reportes',
+                    url: '/reports',
+                    icon: 'FileEarmarkBarGraphFill',
+                },
+            ],
         },
     ];
 
     return (
         <>
-            <EditarProducto></EditarProducto>
             <Navbar className="bg-blue" expand="lg">
                 <Container>
                     <span className="d-flex justify-content-between gap-3">
@@ -60,7 +84,7 @@ function Example() {
                             size="xxl"
                             onClick={handleShow}
                         >
-                            <List></List>
+                            <Icons.List></Icons.List>
                         </Button>
                         <a href="/home">
                             <img
@@ -77,7 +101,7 @@ function Example() {
                         </span>
                         <span className="profile-image">
                             <a href="/profile" title="Ver perfil">
-                                <PersonCircle className="fs-1 text-center text-white"></PersonCircle>
+                                <Icons.PersonCircle className="fs-1 text-center text-white"></Icons.PersonCircle>
                             </a>
                         </span>
                     </span>
@@ -163,33 +187,18 @@ function Example() {
                                 <BsHouseFill></BsHouseFill> Inicio
                             </Button>
                             <Button
-                                href="/Pedidos"
+                                href="Pedidos"
                                 className="bg-blue"
                                 size="lg"
                             >
                                 <IoRestaurantSharp></IoRestaurantSharp> Pedidos
                             </Button>
-                            <Button
-                                href="/Productos"
-                                className="bg-blue"
-                                size="lg"
-                            >
-                                <IoIosJournal></IoIosJournal>Menu
-                            </Button>
-                            <Button href="/Roles" className="bg-blue" size="lg">
+                            <Button href="Roles" className="bg-blue" size="lg">
                                 <BsFillBookmarkFill></BsFillBookmarkFill> Roles
                             </Button>
                             <Button href="/users" className="bg-blue" size="lg">
                                 <BsFillPersonPlusFill></BsFillPersonPlusFill>{' '}
                                 Usuarios
-                            </Button>
-                            <Button
-                                href="/Impuestos "
-                                className="bg-blue"
-                                size="lg"
-                            >
-                                <BsFillCalculatorFill></BsFillCalculatorFill>{' '}
-                                Impuestos
                             </Button>
                             <Button
                                 href="/Reportes "
@@ -199,12 +208,7 @@ function Example() {
                                 <BsFillFileEarmarkBarGraphFill></BsFillFileEarmarkBarGraphFill>{' '}
                                 Reportes
                             </Button>
-                            <Button
-                                href="/"
-                                className="bg-blue"
-                                size="lg"
-                                onClick={borrar}
-                            >
+                            <Button href="/" className="bg-blue" size="lg">
                                 <IoIosExit></IoIosExit> Salir
                             </Button> */}
                         </div>
@@ -245,4 +249,3 @@ function Borrar() {
     localStorage.removeItem('USERNAME');
 }
 export default Example;
-//<BsFillBookmarkFill></BsFillBookmarkFill> Roles
