@@ -21,18 +21,12 @@ import {
 } from 'react-bootstrap-icons';
 import Swal from 'sweetalert2';
 
-import {
-    initRoles,
-    addRoles,
-    editRoles
-} from '../../features/rolesSlice';
+import { initRoles, addRoles, editRoles } from '../../features/rolesSlice';
 import { showModalCR, closeModalCR } from '../../features/creacionRoles';
 
 import { showModalER, closeModalER } from '../../features/editarRoles';
 
 import BarraLateral from '../common/index';
-
-
 
 const paginationComponentOptions = {
     rowsPerPageText: 'Filas por página',
@@ -42,11 +36,9 @@ const paginationComponentOptions = {
 };
 
 function ROLES() {
-
-
     const dispatch = useDispatch();
     const [data, setData] = useState([]);
-   // const users = useSelector((state) => state.users);
+    // const users = useSelector((state) => state.users);
     const roles = useSelector((state) => state.roles);
     const handleClose = () => {
         dispatch(closeModalCR());
@@ -57,12 +49,12 @@ function ROLES() {
     };
 
     const handleShowEDIT = () => {
+        console.log('Prueba2');
         dispatch(showModalER());
     };
 
     const handleInitRoles = (data) => {
         dispatch(initRoles(data));
-       
     };
 
     useEffect(() => {
@@ -70,8 +62,11 @@ function ROLES() {
             await fetch('http://localhost:3000/roles')
                 .then((response) => response.json())
                 .then((data) => {
+                    console.log('================================');
+                    console.log(data.allRoles[0]);
+
                     handleInitRoles(data.allRoles[0]);
-                   setData(data.allRoles[0]);
+                    setData(data.allRoles[0]);
                 })
                 .catch((error) => {
                     console.error(error);
@@ -107,7 +102,10 @@ function ROLES() {
                             <button
                                 className="btn-transparent text-blue p-0"
                                 title="Editar"
-                                onClick={handleShowEDIT}
+                                onClick={() => {
+                                    console.log('Prueba');
+                                    handleShowEDIT();
+                                }}
                             >
                                 <PencilFill />
                             </button>
@@ -151,7 +149,6 @@ function ROLES() {
         <div>
             <CREARROL />
             <EDITARROLES />;
-
             <BarraLateral />
             <Container className="mt-5 rounded bg-white pt-5 pb-5">
                 <Row>
@@ -162,7 +159,9 @@ function ROLES() {
                         <button className="btn-transparent h3 text-dark">
                             <PersonPlusFill
                                 title="Agregar usuario"
-                                onClick={() => handleShow()}
+                                onClick={() => {
+                                    handleShow();
+                                }}
                             />
                         </button>
                     </Col>
