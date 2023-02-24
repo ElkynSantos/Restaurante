@@ -1,12 +1,19 @@
-import  express from 'express';
+import express from 'express';
 
 import {
     getTaxes,
     addTax,
-} from '../controllers/orders.controllers.js';
+    editTax,
+    deleteTax,
+} from '../controllers/taxes.controllers.js';
 
 const taxesRoutes = express.Router();
 
-taxesRoutes.route('/').get(getTaxes).post(addTax);
+taxesRoutes
+    .route('/')
+    .get(getTaxes)
+    .post(addTax)
+    .patch(editTax)
+    .delete(deleteTax);
 
 export default taxesRoutes;
