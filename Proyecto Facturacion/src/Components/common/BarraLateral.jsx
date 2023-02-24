@@ -73,7 +73,7 @@ function Example() {
                             >
                                 <IoRestaurantSharp></IoRestaurantSharp> Pedidos
                             </Button>
-                            <Button href="Roles" className="bg-blue" size="lg">
+                            <Button href="/Roles" className="bg-blue" size="lg">
                                 <BsFillBookmarkFill></BsFillBookmarkFill> Roles
                             </Button>
                             <Button href="/users" className="bg-blue" size="lg">
