@@ -61,11 +61,15 @@ function BasicExample() {
 
     function findErrors() {
         const newErrors = {};
+<<<<<<< HEAD
         let { code, productName, productPrice } = form;
         if ((!code && code !== '') || code == '') {
             //En realidad es username
             newErrors.productName = 'ingrese nombre del producto!';
         }
+=======
+        let { productName, productPrice } = form;
+>>>>>>> origin/users
 
         if ((!productName && productName !== '') || productName == '') {
             //En realidad es username
@@ -110,14 +114,18 @@ function BasicExample() {
                 });
             }
         }
+<<<<<<< HEAD
 
         e.target.reset();
+=======
+>>>>>>> origin/users
     }
     return (
         <Form onSubmit={handleSubmit} name="test" id="test">
             <br></br>
 
             <Form.Group>
+<<<<<<< HEAD
                 <Form.Label>Codigo</Form.Label>
                 <Form.Control
                     type="text"
@@ -134,6 +142,12 @@ function BasicExample() {
                 <Form.Control
                     type="text"
                     placeholder="Ingrese codigo del producto"
+=======
+                <Form.Label>Nombre del producto</Form.Label>
+                <Form.Control
+                    type="text"
+                    placeholder="Ingrese nombre del producto"
+>>>>>>> origin/users
                     required
                     minLength="0"
                     maxLength="200"
@@ -149,6 +163,7 @@ function BasicExample() {
                         aria-label="Amount (to the nearest dollar)"
                         placeholder="Ingrese el precio"
                         required
+<<<<<<< HEAD
                         type="double"
                         min="0"
                         max="9999999.99"
@@ -160,6 +175,21 @@ function BasicExample() {
                         }
                     />
                 </Form.Group>
+=======
+                        minLength="0"
+                        maxLength="4"
+                        onChange={(e) =>
+                            setField('productPrice', e.target.value)
+                        }
+                        onKeyPress={(event) => {
+                            if (!/[0-9]/.test(event.key)) {
+                                event.preventDefault();
+                            }
+                        }}
+                    />
+                </Form.Group>
+                <InputGroup.Text>.00</InputGroup.Text>
+>>>>>>> origin/users
             </InputGroup>
         </Form>
     );
