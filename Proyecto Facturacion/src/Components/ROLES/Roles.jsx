@@ -63,10 +63,10 @@ function ROLES() {
                 .then((response) => response.json())
                 .then((data) => {
                     console.log('================================');
-                    console.log(data.allRoles[0]);
+                    console.log(data.allRoles);
 
-                    handleInitRoles(data.allRoles[0]);
-                    setData(data.allRoles[0]);
+                    handleInitRoles(data.allRoles);
+                    setData(data.allRoles);
                 })
                 .catch((error) => {
                     console.error(error);

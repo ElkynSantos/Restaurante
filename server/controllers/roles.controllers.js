@@ -21,7 +21,6 @@ const getAllPermisos = async (req, res, next) => {
         const allRoles = await db.query(`CALL get_all_permits()`);
 
         return res.status(200).json({
-            status: 'Ok',
             allRoles,
         });
     } catch (error) {

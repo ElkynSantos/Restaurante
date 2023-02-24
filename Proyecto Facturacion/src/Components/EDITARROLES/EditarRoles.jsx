@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import {
     Col,
@@ -66,12 +66,42 @@ function EDITARROL() {
     const [errors, setErrors] = useState({});
 
     const [checkedList, setCheckedList] = useState([]);
-    const listaPermisos = [
+    const [DATA, setData] = useState([]);
+
+    useEffect(() => {
+        const getAllPermisos = async () => {
+            await fetch('http://localhost:3000/roles/permits')
+                .then((response) => response.json())
+                .then((data) => {
+                    console.log('================================');
+                    console.log(data.allRoles);
+
+                    //   handleInitRoles(data.allRoles);
+                    setData(data.allRoles);
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        };
+
+        getAllPermisos();
+    }, []);
+    console.log('===========DATA==============');
+    console.log(DATA);
+
+    let listaPermisos = [];
+    for (let i = 0; i < DATA.length; i++) {
+        listaPermisos.push({ id: DATA[i].id, value: DATA[i].N_Permiso });
+    }
+
+    console.log('===========listaPermisos==============');
+    console.log(listaPermisos);
+    /*   const listaPermisos = [
         { id: '1', value: 'Crear facturas' },
         { id: '2', value: 'Crear y modificar usuarios' },
         { id: '3', value: 'Crear y modificar productos' },
-        { id: '4', value: 'Ver y generar reportes' },
-    ];
+    //    { id: '4', value: 'Ver y generar reportes' },
+    ];*/
     const setField = (field, value) => {
         setForm({
             ...form,
