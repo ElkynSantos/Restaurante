@@ -39,7 +39,7 @@ app.use('/auth', authRoutes);
 app.use('/users', usersRoutes);
 app.use('/orders', orderRoutes);
 //app.use('/pedidos', pedidosRoutes);
-app.use('/productos', productosRoutes);
+app.use('/products', productosRoutes);
 app.use('/roles', rolesRoutes);
 app.all('*', (req, res, next) => {
     next(new AppError(`La ruta ${req.originalUrl} no existe`, 404));

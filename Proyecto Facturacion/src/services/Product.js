@@ -1,10 +1,11 @@
 import axios from 'axios';
 
-export async function CreateProduct(productName, productPrice) {
+export async function CreateProduct(code, productName, productPrice) {
     const options = {
         method: 'POST',
         url: 'http://localhost:3000/products/',
         data: {
+            code,
             productName,
             productPrice,
         },

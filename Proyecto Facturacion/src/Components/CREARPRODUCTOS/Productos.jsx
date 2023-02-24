@@ -61,7 +61,11 @@ function BasicExample() {
 
     function findErrors() {
         const newErrors = {};
-        let { productName, productPrice } = form;
+        let { code, productName, productPrice } = form;
+        if ((!code && code !== '') || code == '') {
+            //En realidad es username
+            newErrors.productName = 'ingrese nombre del producto!';
+        }
 
         if ((!productName && productName !== '') || productName == '') {
             //En realidad es username
@@ -114,10 +118,22 @@ function BasicExample() {
             <br></br>
 
             <Form.Group>
-                <Form.Label>Nombre del producto</Form.Label>
+                <Form.Label>Codigo</Form.Label>
                 <Form.Control
                     type="text"
                     placeholder="Ingrese nombre del producto"
+                    required
+                    minLength="0"
+                    maxLength="200"
+                    onChange={(e) => setField('code', e.target.value)}
+                />
+            </Form.Group>
+
+            <Form.Group>
+                <Form.Label>Nombre del producto</Form.Label>
+                <Form.Control
+                    type="text"
+                    placeholder="Ingrese codigo del producto"
                     required
                     minLength="0"
                     maxLength="200"
@@ -133,19 +149,17 @@ function BasicExample() {
                         aria-label="Amount (to the nearest dollar)"
                         placeholder="Ingrese el precio"
                         required
-                        minLength="0"
-                        maxLength="4"
+                        type="double"
+                        min="0"
+                        max="9999999.99"
                         onChange={(e) =>
-                            setField('productPrice', e.target.value)
+                            setField(
+                                'precio_producto',
+                                parseFloat(e.target.value).toFixed(2)
+                            )
                         }
-                        onKeyPress={(event) => {
-                            if (!/[0-9]/.test(event.key)) {
-                                event.preventDefault();
-                            }
-                        }}
                     />
                 </Form.Group>
-                <InputGroup.Text>.00</InputGroup.Text>
             </InputGroup>
         </Form>
     );

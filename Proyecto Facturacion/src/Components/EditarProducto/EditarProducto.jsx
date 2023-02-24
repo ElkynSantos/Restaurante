@@ -151,22 +151,19 @@ function EditarProducto() {
                                     aria-label="Amount (to the nearest dollar)"
                                     placeholder="Ingrese el precio"
                                     required
-                                    minLength="0"
-                                    maxLength="4"
+                                    type="double"
+                                    min="0"
+                                    max="9999999.99"
                                     onChange={(e) =>
                                         setField(
                                             'precio_producto',
-                                            e.target.value
+                                            parseFloat(e.target.value).toFixed(
+                                                2
+                                            )
                                         )
                                     }
-                                    onKeyPress={(event) => {
-                                        if (!/[0-9]/.test(event.key)) {
-                                            event.preventDefault();
-                                        }
-                                    }}
                                 />
                             </Form.Group>
-                            <InputGroup.Text>.00</InputGroup.Text>
                         </InputGroup>
                     </Form>
                 </Modal.Body>
