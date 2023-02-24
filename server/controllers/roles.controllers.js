@@ -4,12 +4,13 @@ import db from '../db.js';
 
 const getAllRoles = async (req, res, next) => {
     try {
-        const allRoles = await db.query('SELECT * FROM db_rest.roles;');
+        const allRoles = await db.query(
+            'SELECT * FROM ' + process.env.NAME_DB + '.roles;'
+        );
 
         console.log(allRoles);
 
         return res.status(200).json({
-            status: 'Ok',
             allRoles,
         });
     } catch (error) {
