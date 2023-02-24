@@ -1,12 +1,27 @@
-import {createPool} from "mysql2";
-import dotenv from "dotenv";
+import { Sequelize } from 'sequelize';
+import dotenv from 'dotenv';
 
 dotenv.config();
 
-export const pool = new createPool({
-   host: process.env.HOST_DB,
-   port: process.env.PORT_DB,
-   user: process.env.USER_DB,
-   password: process.env.PASSWORD_DB,
-   database: process.env.NAME_DB
-});
+const db = new Sequelize(
+    process.env.NAME_DB,
+    process.env.USER_DB,
+    process.env.PASSWORD_DB ?? '',
+    {
+        host: process.env.HOST_DB,
+        port: process.env.PORT_DB,
+
+        dialect: 'mysql',
+        define: {
+            timestamps: true,
+        },
+        pool: {
+            max: 5,
+            min: 0,
+            acquire: 30000,
+            idle: 1000,
+        },
+    }
+);
+
+export default db;

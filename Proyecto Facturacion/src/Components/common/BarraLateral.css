@@ -1,0 +1,25 @@
+#nav-brand {
+  height: 3.5rem;
+  width: auto;
+}
+
+.btn-navbar {
+  font-size: 2rem !important;
+  padding: 0 !important;
+  border: none !important;
+  background-color: transparent !important;
+}
+
+body {
+    width: 100% !important;
+}
+
+.imagen {
+    width: 320px;
+    height: 100px;
+}
+
+.imagen2 {
+    width: 400px;
+    height: 200px;
+}
