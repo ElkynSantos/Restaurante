@@ -48,12 +48,9 @@ function Example() {
                     <EDITARROL></EDITARROL>
                 </Modal.Body>
                 <Modal.Footer>
+                    {' '}
                     <Button variant="danger" onClick={handleClose}>
                         Salir
-                    </Button>
-
-                    <Button className="bg-blue" form="test" type="submit">
-                        Guardar cambios
                     </Button>
                 </Modal.Footer>
             </Modal>
@@ -86,6 +83,22 @@ function EDITARROL() {
 
         getAllPermisos();
     }, []);
+
+    const setPermisos = async (idRol, arrayPermisos) => {
+        const response = await fetch(
+            'http://localhost:3000/roles/NuevosPermisos',
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+
+                body: JSON.stringify({ idrol: 3, ArrayPermisos: [1, 2] }),
+            }
+        );
+        const data = await response.json();
+    };
+
     console.log('===========DATA==============');
     console.log(DATA);
 
@@ -191,6 +204,15 @@ function EDITARROL() {
                                 })}
                             </Form.Group>
                         </Col>
+
+                        <Button
+                            className="bg-blue"
+                            form="test"
+                            type="submit"
+                            onClick={() => setPermisos(1, 2)}
+                        >
+                            Guardar cambios
+                        </Button>
                     </Row>
                 </Form>
             </div>

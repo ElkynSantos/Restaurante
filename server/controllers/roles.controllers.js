@@ -2,6 +2,25 @@ import AppError from '../utilities/app.error.js';
 
 import db from '../db.js';
 
+const setNewRoles = async (req, res, next) => {
+    try {
+        const { idrol, ArrayPermisos } = req.body;
+        const permisosString = ArrayPermisos.join(',');
+
+        await db.query(
+            'CALL asignar_permisos_rol(' +
+                idrol +
+                ', "' +
+                permisosString +
+                '", @resultado);'
+        );
+
+        return res.status(200).json({});
+    } catch (error) {
+        return next(new AppError('Ups! Error en la base de datos', 500));
+    }
+};
+
 const getAllRoles = async (req, res, next) => {
     try {
         const allRoles = await db.query(`CALL get_all_roles()`);
@@ -43,4 +62,4 @@ const getAllPermisos = async (req, res, next) => {
     }
 };
 
-export { getAllRoles, getAllPermisos, getAllForBarralateral };
+export { getAllRoles, getAllPermisos, getAllForBarralateral, setNewRoles };
