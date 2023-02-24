@@ -14,6 +14,46 @@ import Productos from './Components/CREARPRODUCTOS/index';
 import Recovery from './Components/Recovery/Recovery';
 import editarProductos from './Components/FormPassword/index';
 
+import LISTAFACTURACION from './Components/LISTAFACTURACION/index';
+
+import './App.css';
+import { useDispatch, useSelector } from 'react-redux';
+
+import Email from './Components/EmailVerification/index';
+import IMPUESTO from './Components/IMPUESTOS';
+import ECBMPUESTO from './Components/EDITAR,CREAR,BORRAR IMPUESTOS';
+import RecuperarContraseña from './Components/RecoveryPassword/index';
+import FormPass from './Components/FormPassword/index';
+import ChangePass from './Components/ChangePassword/index';
+import PRODUCTOS from './Components/Productos/Index';
+
+function App() {
+    return (
+        <BrowserRouter>
+            <Routes>
+                <Route index element={<LOGIN />} />
+                <Route path="/Home" element={<INICIO />} />
+                <Route path="/Pedidos" element={<PEDIDOS />} />
+                <Route path="/ListaPedidos" element={<LISTAPEDIDOS />} />
+                <Route path="/mesas" element={<MESAS />} />
+                <Route path="/facturacion" element={<FACTURACION />} />
+                <Route path="/Users" element={<USERS />} />
+                <Route path={'/Productos'} element={<PRODUCTOS />} />
+                <Route path="/Recuperar" element={<FormPassword />} />
+                <Route
+                    path="/auth/reset-password/:token"
+                    element={<Recovery />}
+                />
+                <Route path="/editUser" element={<FormPassword />} />
+                <Route
+                    path="/ListaFacturacion"
+                    element={<LISTAFACTURACION />}
+                />
+                <Route path="/Impuestos" element={<ECBMPUESTO />} />
+                <Route path="/roles" element={<ROLES />} />
+            </Routes>
+        </BrowserRouter>
+    );
 }
 
 export default App;

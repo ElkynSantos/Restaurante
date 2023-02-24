@@ -30,4 +30,16 @@ function generateToken() {
     return token;
 }
 
-export { userIdGenerator, generateToken };
+const productIdGenerator = (name, date) => {
+    const productArray = [
+        name.substring(0, 4).toUpperCase(),
+        date.substring(2, 4),
+        Math.floor(100000 + Math.random() * 900000)
+            .toString()
+            .substring(0, 4),
+    ];
+
+    return productArray.join('');
+};
+
+export { userIdGenerator, generateToken, productIdGenerator };
