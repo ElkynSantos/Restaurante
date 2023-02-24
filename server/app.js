@@ -39,6 +39,7 @@ app.use(express.json());
 app.use('/auth', authRoutes);
 app.use('/users', usersRoutes);
 app.use('/orders', orderRoutes);
+
 //app.use('/pedidos', pedidosRoutes);
 app.use('/products', productosRoutes);
 app.use('/roles', rolesRoutes);
