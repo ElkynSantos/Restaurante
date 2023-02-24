@@ -5,10 +5,12 @@ import dotenv from 'dotenv';
 import authRoutes from './routes/auth.routes.js';
 import usersRoutes from './routes/users.routes.js';
 import orderRoutes from './routes/orders.routes.js';
-import taxesRoutes from './routes/taxes.routes.js';
 
 //import pedidosRoutes from './routes/pedidos.routes.js';
+import rolesRoutes from './routes/roles.routes.js';
 import productosRoutes from './routes/products.routes.js';
+
+//import pedidosRoutes from './routes/pedidos.routes.js';
 
 import AppError from './utilities/app.error.js';
 import cors from 'cors';
@@ -37,11 +39,10 @@ app.use(express.json());
 app.use('/auth', authRoutes);
 app.use('/users', usersRoutes);
 app.use('/orders', orderRoutes);
-app.use('/taxes', taxesRoutes);
 
 //app.use('/pedidos', pedidosRoutes);
 app.use('/products', productosRoutes);
-
+app.use('/roles', rolesRoutes);
 app.all('*', (req, res, next) => {
     next(new AppError(`La ruta ${req.originalUrl} no existe`, 404));
 });

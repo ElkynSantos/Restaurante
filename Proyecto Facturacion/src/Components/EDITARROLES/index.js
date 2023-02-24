@@ -1,3 +1,3 @@
-import EDITAROLES from "./EditarRoles"
+import EDITAROLES from './EditarRoles';
 
 export default EDITAROLES;

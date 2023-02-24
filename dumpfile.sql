@@ -329,7 +329,7 @@ CREATE TABLE `roles` (
   `Fecha_Creacion` date NOT NULL,
   `id_categoria` int DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -338,7 +338,7 @@ CREATE TABLE `roles` (
 
 LOCK TABLES `roles` WRITE;
 /*!40000 ALTER TABLE `roles` DISABLE KEYS */;
-INSERT INTO `roles` VALUES (1,'Administrador','2023-02-02',NULL),(2,'Facturador','2023-02-02',NULL);
+INSERT INTO `roles` VALUES (1,'Administrador','2023-02-02',NULL);
 /*!40000 ALTER TABLE `roles` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -396,7 +396,7 @@ CREATE TABLE `usuarios` (
   UNIQUE KEY `N_Identidad_UNIQUE` (`N_Identidad`),
   KEY `fk_idroles_idx` (`id_Rol`),
   CONSTRAINT `fk_idroles` FOREIGN KEY (`id_Rol`) REFERENCES `roles` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -405,7 +405,7 @@ CREATE TABLE `usuarios` (
 
 LOCK TABLES `usuarios` WRITE;
 /*!40000 ALTER TABLE `usuarios` DISABLE KEYS */;
-INSERT INTO `usuarios` VALUES (36,'Juan','Arias','csssc',2,'10332','M','1995-01-28','La Lima','9393','pruxc@gmsail.com','$2b$10$do1XmzgK43LXuvBbWCEt4.0HePOwQGvnCyHO/JuZyVzLheO5qhC8W','hrhJQYqw3V2p',1),(37,'Juan','Arias','cc',1,'1032','H','1995-01-28','La Lima','9393','pruxcssx@gmsail.com','$2b$10$AWvqkhWBWLMGn1O5tiiyVekoipGHwL44tvV/SUB/91Srkj3P5aPv.',NULL,1),(38,'Juan','Arias','JUAR5219',1,'01','H','1995-01-28','Choloma','9393','t@gmil.com','$2b$10$q8qZ8RusbxGiOw4msrFRnuNLdUKUONAUyH8yFAnC81XckbmH25ECG','kn2o6ZUqOlHC',1),(39,'Juan','Arias','JUAR9423',1,'1234567891234','H','1995-01-28','Choloma','9393','2ssa@gmail.com','$2b$10$JNbsbAoHb8TC.J66A/27cetmdnKXOrR4x7esmgjG/ve6t0K196Wt2','sUxNFGZvC7ht',1),(40,'Juan','Arias','JUAR5923',1,'1804200001272','H','1995-01-28','Choloma','9393','2ss@gmail.com','$2b$10$ybrwRnGnvgeNexFjkvlZkuWrQeTipRXQpGrIJPS7D090JxHBEt1Sq','wcJauDN08i1x',0),(42,'Juan','Arias','JUAR2823',2,'1804202001272','H','1995-01-28','Choloma','9393','2ssss@gmail.com','$2b$10$t7SDBCwYSSQHMykwYtCI.Ou3QGFds/1EbRiDeTNm9W0DU3zvBaL.6','IWDSQF5cBTFZ',1),(43,'Juan','Arias','JUAR6823',1,'0502199600071','M','1998-02-01','San Pedro','98989898','jar@gmail.com','$2b$10$WPJAcJY5zqfG08/Itjii/.BD9uesTUCyAZDzp6rKfZyEJVFkn/WAK','BxADX7Is3nKm',0);
+
 /*!40000 ALTER TABLE `usuarios` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -603,7 +603,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `edit_user_status`(opt INT, userDni BIGINT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `edit_user_status`(opt INT,userDni INT)
 BEGIN
     DECLARE userExists INT;
     SELECT COUNT(*) INTO userExists FROM usuarios WHERE N_Identidad = userDni;
@@ -806,7 +806,7 @@ BEGIN
     ELSEIF opt = 0 THEN
     	SELECT status FROM usuarios WHERE Nom_Usuario = userID;
     ELSE
-        SELECT id_Usuarios as userIdDb, Nombre as Name, Apellido as LastName,Nom_Usuario AS UserName, Nomb_Rol AS RolName, id as Rol, N_Identidad AS DNI, Genero AS Gender, Fecha_Nacimiento AS Birthday, Lugar_Nacimiento AS PlaceofBirth, N_Celular AS Phone, Correo AS Email, status as userStatus
+        SELECT id_Usuarios as useridDb, CONCAT(Nombre, ' ', Apellido) AS FullName, Nom_Usuario AS UserName, Nomb_Rol AS Rol, N_Identidad AS DNI, Genero AS		 Gender, Fecha_Nacimiento AS Birthday, Lugar_Nacimiento AS PlaceofBirth, N_Celular AS Phone, Correo AS Email, status as userStatus
         FROM usuarios
         INNER JOIN roles ON usuarios.id_Rol = roles.id
         WHERE (Nom_Usuario = userID OR N_Identidad = userID);
@@ -1153,4 +1153,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-02-24  0:45:53
+
