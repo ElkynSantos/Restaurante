@@ -13,9 +13,10 @@ import { tokenVerification } from '../middlewares/jwt.verification.js';
 
 const userRouter = express.Router();
 
-userRouter.route('/').get(tokenVerification, allUsers).post(createUser);
+// userRouter.route('/').get(tokenVerification, allUsers).post(createUser);
+userRouter.route('/').get(allUsers).post(createUser); //Sin token
 userRouter.route('/status').patch(editUserStaus);
 userRouter.route('/new-password').patch(updatePassword);
-userRouter.route('/:id').get(getUser).patch(updateUser);
+userRouter.route('/user').post(getUser).patch(updateUser);
 
 export default userRouter;

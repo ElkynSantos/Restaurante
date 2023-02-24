@@ -1,0 +1,13 @@
+.sticky-right-column {
+}
+
+.sticky-right-column .rdt_TableHeadRow .rdt_TableCol:nth-last-child(1),
+.sticky-right-column .rdt_TableRow .rdt_TableCell:nth-last-child(1) {
+   position: sticky;
+   right: 0;
+   
+}
+
+.sticky-right-column .rdt_TableRow .rdt_TableCell:nth-last-child(1) {
+   background-color: var(--blue-lighter);
+}

@@ -1,10 +1,24 @@
-import { configureStore } from '@reduxjs/toolkit'
-
-//* IMPORTAR REDUCER DE COMPONENTE, ejemplo:
-//* import loginReducer from "componentes/..."
+import { configureStore, applyMiddleware, compose } from '@reduxjs/toolkit';
+import thunk from 'redux-thunk';
+import usersSlice from '../features/usersSlice';
+import createUserSlice from '../features/createUserSlice';
+import EditarProductoSlice from '../features/EditarProducto';
+import ProductosSlice from '../features/Productos';
+import CreateProductSlice from '../features/CreateProduct';
+import sendeditableproductSlice from '../features/sendeditableproduct';
+import editUserSlice from '../features/editUserSlice';
 
 export const store = configureStore({
-  reducer: {
-      //* Agregar el reducer del componente importado, ejemplo => login: loginReducer
-  },
-})
+    reducer: {
+        users: usersSlice,
+        modalAddUserState: createUserSlice,
+        EditarProducto: EditarProductoSlice,
+        products: ProductosSlice,
+        CreateProduct: CreateProductSlice,
+        sendeditableproduct: sendeditableproductSlice,
+
+        modalEditUserState: editUserSlice,
+        modalEditUser: editUserSlice,
+    },
+    middleware: [thunk],
+});
