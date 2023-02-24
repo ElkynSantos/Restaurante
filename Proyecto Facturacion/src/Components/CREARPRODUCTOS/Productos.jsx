@@ -97,13 +97,21 @@ function BasicExample() {
                     form.code
                 );
 
-                Swal.fire({
-                    position: 'top-center',
-                    icon: 'success',
-                    title: 'Producto Creado',
-                    showConfirmButton: false,
-                    timer: 1500,
-                });
+                if (data.msg == 'Este codigo ya existe en el menú') {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: data.msg,
+                    });
+                } else {
+                    Swal.fire({
+                        position: 'top-center',
+                        icon: 'success',
+                        title: data.msg,
+                        showConfirmButton: false,
+                        timer: 1500,
+                    });
+                }
             } catch (error) {
                 Swal.fire({
                     icon: 'error',
@@ -151,8 +159,9 @@ function BasicExample() {
                         aria-label="Amount (to the nearest dollar)"
                         placeholder="Ingrese el precio"
                         required
-                        type="text"
+                        type="number"
                         min="0"
+                        step="0.01"
                         max="9999999.99"
                         onChange={(e) =>
                             setField(
