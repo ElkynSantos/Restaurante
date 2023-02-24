@@ -4,9 +4,7 @@ import db from '../db.js';
 
 const getAllRoles = async (req, res, next) => {
     try {
-        const allRoles = await db.query(
-            'SELECT * FROM ' + process.env.NAME_DB + '.roles;'
-        );
+        const allRoles = await db.query(`CALL get_all_roles()`);
 
         console.log(allRoles);
 
@@ -17,4 +15,19 @@ const getAllRoles = async (req, res, next) => {
         return next(new AppError('Ups! Error en la base de datos', 500));
     }
 };
-export { getAllRoles };
+
+const getAllPermisos = async (req, res, next) => {
+    try {
+        const allRoles = await db.query(`CALL get_all_permits()`);
+
+        return res.status(200).json({
+            status: 'Ok',
+            allRoles,
+        });
+    } catch (error) {
+        console.log(error);
+        return next(new AppError(`Ups! Error en la base de datos`, 500));
+    }
+};
+
+export { getAllRoles, getAllPermisos };
