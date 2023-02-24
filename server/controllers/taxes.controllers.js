@@ -4,15 +4,11 @@ import db from '../db.js';
 
 const getTaxes = async (req, res, next) => {
     try {
-        const allTaxes = await db.query(
-            'SELECT Desc_Impuesto, Porcentaje FROM bd_restaurante.impuestos;'
-        );
-
-        console.log(allTaxes);
+        const allTaxes = await db.query('CALL get_all_taxes()');
 
         return res.status(200).json({
             status: 'Ok',
-            allRoles: allTaxes,
+            allTaxes,
         });
     } catch (error) {
         return next(new AppError('Ups! Error en la base de datos', 500));
@@ -21,27 +17,86 @@ const getTaxes = async (req, res, next) => {
 
 const addTax = async (req, res, next) => {
     try {
-        const { descripcion_impuesto, porcentaje_impuesto } = req.body;
-
-        const emptyParams = Object.values({
-            descripcion_impuesto,
-            porcentaje_impuesto,
-        }).some((val) => !val);
-
-        if (emptyParams) {
-            return next(new AppError('Favor completar todos los campos', 401));
-        }
+        const { taxDescription, taxAmount } = req.body;
 
         const [newTax] = await db.query(
-            'INSERT INTO db_restaurante.impuestos (descripcion_impuesto, porcentaje_impuesto) VALUES ?, ?',
-            [descripcion_impuesto, porcentaje_impuesto]
+            'CALL new_tax(:tax_name, :tax_amount)',
+            {
+                replacements: {
+                    tax_name: taxDescription,
+                    tax_amount: taxAmount,
+                },
+            }
         );
 
-        return res.status(200).json({
-            status: 'Ok',
+        if (newTax.response === 0) {
+            return res.status(409).json({
+                status: 'fail',
+                msg: newTax.msg,
+            });
+        }
+
+        return res.status(201).json({
+            status: 'ok',
+            msg: newTax.msg,
         });
     } catch (error) {
-        console.log(error);
         return next(new AppError('Ups! Error en la base de datos', 500));
     }
 };
+
+const editTax = async (req, res, next) => {
+    try {
+        const { taxId, taxName, taxAmount } = req.body;
+
+        const [updatedTax] = await db.query(
+            'CALL update_tax(:tax_id, :tax_name, :tax_amount)',
+            {
+                replacements: {
+                    tax_id: taxId,
+                    tax_name: taxName,
+                    tax_amount: taxAmount,
+                },
+            }
+        );
+
+        if (updatedTax.response === 0) {
+            return res.status(409).json({
+                status: 'fail',
+                msg: updatedTax.msg,
+            });
+        }
+
+        return res.status(200).json({
+            status: 'ok',
+            msg: updatedTax.msg,
+        });
+    } catch (error) {
+        return next(new AppError('Ups! Error en la base de datos', 500));
+    }
+};
+
+const deleteTax = async (req, res, next) => {
+    try {
+        const { taxId, taxStatus } = req.body;
+
+        const [updatedTax] = await db.query(
+            'CALL change_tax_status(:tax_id, :new_status)',
+            {
+                replacements: {
+                    tax_id: taxId,
+                    new_status: taxStatus,
+                },
+            }
+        );
+
+        return res.status(200).json({
+            status: 'ok',
+            msg: updatedTax.msg,
+        });
+    } catch (error) {
+        return next(new AppError('Ups! Error en la base de datos', 500));
+    }
+};
+
+export { getTaxes, addTax, editTax, deleteTax };
