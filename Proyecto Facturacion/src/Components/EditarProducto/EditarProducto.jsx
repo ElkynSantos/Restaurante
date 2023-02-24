@@ -173,9 +173,10 @@ function EditarProducto() {
                                     aria-label="Amount (to the nearest dollar)"
                                     placeholder="Ingrese el precio"
                                     required
-                                    type="double"
+                                    type="number"
                                     min="0"
                                     max="9999999.99"
+                                    step="0.01"
                                     onChange={(e) =>
                                         setField(
                                             'precio_producto',
