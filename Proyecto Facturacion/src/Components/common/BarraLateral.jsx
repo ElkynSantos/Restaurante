@@ -9,6 +9,7 @@ import {
     BsFillFileEarmarkBarGraphFill,
     BsHouseFill,
     BsFillBookmarkFill,
+    BsFillCalculatorFill,
 } from 'react-icons/bs';
 
 import { IoIosExit, IoIosJournal } from 'react-icons/io';
@@ -36,6 +37,17 @@ function Example() {
     };
 */
     const borrar = () => localStorage.removeItem('USERNAME');
+
+    const optionsSidebar = [
+        'BsHouseFill',
+        {
+            name: 'Configuración del sistema',
+            permissions: [{}, {}],
+        },
+        {
+            name: 'Configuración del negocio',
+        },
+    ];
 
     return (
         <>
@@ -81,7 +93,7 @@ function Example() {
                                 <BsHouseFill></BsHouseFill> Inicio
                             </Button>
                             <Button
-                                href="Pedidos"
+                                href="/Pedidos"
                                 className="bg-blue"
                                 size="lg"
                             >
@@ -100,6 +112,14 @@ function Example() {
                             <Button href="/users" className="bg-blue" size="lg">
                                 <BsFillPersonPlusFill></BsFillPersonPlusFill>{' '}
                                 Usuarios
+                            </Button>
+                            <Button
+                                href="/Impuestos "
+                                className="bg-blue"
+                                size="lg"
+                            >
+                                <BsFillCalculatorFill></BsFillCalculatorFill>{' '}
+                                Impuestos
                             </Button>
                             <Button
                                 href="/Reportes "

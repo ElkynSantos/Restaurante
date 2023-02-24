@@ -5,7 +5,7 @@ import db from '../db.js';
 const getAllRoles = async (req, res, next) => {
     try {
         const allRoles = await db.query(
-            'SELECT Desc_Permiso FROM bd_restaurante.permisos;'
+            'SELECT* from bd_restaurante.roles'
         );
 
         console.log(allRoles);
@@ -18,3 +18,4 @@ const getAllRoles = async (req, res, next) => {
         return next(new AppError('Ups! Error en la base de datos', 500));
     }
 };
+export {getAllRoles};

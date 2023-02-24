@@ -10,6 +10,9 @@ import {
 const productsRoutes = express.Router();
 
 productsRoutes.route('/').get(getAllProducts).post(newProduct);
-productsRoutes.route('/:id').get(getProductbyCodeDesc).patch(editProduct);
+productsRoutes
+    .route('/:productCodeDesc')
+    .post(getProductbyCodeDesc)
+    .patch(editProduct);
 
 export default productsRoutes;

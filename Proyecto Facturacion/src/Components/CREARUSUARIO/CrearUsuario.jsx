@@ -1,23 +1,16 @@
 import React, { useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import {
-    Col,
     Button,
-    Row,
-    Container,
-    Card,
     Form,
-    FormControl,
-    FormLabel,
 } from 'react-bootstrap';
-import Dropdown from 'react-bootstrap/Dropdown';
-import DropdownButton from 'react-bootstrap/DropdownButton';
+
 
 function Example() {
     const [show, setShow] = useState(false);
 
     const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
+ 
 
     return (
         <>

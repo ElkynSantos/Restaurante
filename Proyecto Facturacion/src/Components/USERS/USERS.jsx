@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import EDITARUSUARIOS from '../editarUsuario/index';
 import {
     Button,
@@ -7,12 +7,15 @@ import {
     Container,
     Card,
     Form,
+    FormControl,
     InputGroup,
 } from 'react-bootstrap';
 import DataTable from 'react-data-table-component';
 import { useSelector, useDispatch } from 'react-redux';
 import {
     PersonPlusFill,
+    PersonFillSlash,
+    PersonCheckFill,
     Search,
     PencilFill,
     Trash3Fill,
@@ -26,7 +29,8 @@ import {
     changeUserStatus,
 } from '../../features/usersSlice';
 import { showModal, closeModal } from '../../features/createUserSlice';
-
+import { setCurrentEditUser, showModal as showEditModal, closeModal as closeEditModal } from '../../features/editUserSlice';
+import { getAllUsers, getUser, editUserStatus } from '../../services/users';
 import BarraLateral from '../common/index';
 import CREARUSUARIO from '../CREARUSUARIO';
 
@@ -38,21 +42,17 @@ const paginationComponentOptions = {
 };
 
 function USUARIOS() {
-    let formRICARDIO;
-
-    const [buttonPressed, setbuttonPressed] = useState(false);
-
-    if (buttonPressed) {
-        formRICARDIO = <EDITARUSUARIOS />;
-    }
-
-    useEffect(() => {
-        console.log('Count ' + buttonPressed);
-    }, buttonPressed);
-
     const dispatch = useDispatch();
-    const [data, setData] = useState([]);
     const users = useSelector((state) => state.users);
+    const modalState = useSelector((state) => state.modalAddUserState);
+
+    const handleShowEditModal = async (DNI) => {
+        await getUser(DNI).then((dataUser) => {
+            // console.log("userRespModal", dataUser)
+            dispatch(setCurrentEditUser(dataUser.user));
+            dispatch(showEditModal());
+        })
+    };
 
     const handleClose = () => {
         dispatch(closeModal());
@@ -62,64 +62,34 @@ function USUARIOS() {
         dispatch(showModal());
     };
 
-    const handleAdd = () => {
-        dispatch(
-            addUser({
-                Birthday: '1995-01-28',
-                DNI: '458378',
-                Email: 'juadn@gmil.com',
-                FullName: 'Daniel Ponce',
-                Gender: 'H',
-                Phone: '9393',
-                PlaceofBirth: 'Choloma',
-                Rol: 'Administrador',
-                UsernName: 'JUAR453',
-            })
-        );
-    };
-
     const handleDelete = (DNI, status) => {
         Swal.fire({
             icon: 'info',
             text: `¿Desea ${
-                status == 1 ? 'activar' : 'desactivar'
+                status == 1 ? 'desactivar' : 'activar'
             } al usuario con el DNI ${DNI}?`,
             showCancelButton: true,
             cancelButtonColor: '#DC3545',
+            cancelButtonText: 'Cancelar',
             confirmButtonColor: 'var(--blue)',
             confirmButtonText: 'Si',
-        }).then((result) => {
+        }).then(async (result) => {
             if (result.isConfirmed) {
-                fetch('http://localhost:3000/users/status', {
-                    method: 'PATCH',
-                    body: JSON.stringify({
-                        userDni: DNI,
-                        opt: status == 1 ? 0 : 1,
-                    }),
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                })
-                    .then((response) => response.json())
-                    .then((data) => {
-                        if (data.status != 'Ok') {
-                            Swal.fire({
-                                text: `¡No se pudo ${
-                                    status == 1 ? 'desactivar' : 'activar'
-                                } el usuario!`,
-                                icon: 'error',
-                            });
-                            return;
-                        }
-
-                        dispatch(changeUserStatus(DNI));
+                await editUserStatus(DNI, status).then((data) => {
+                    if (data.status != 'Ok') {
                         Swal.fire({
-                            text: `¡Usuario ${
-                                status == 1 ? 'activado' : 'desactivado'
-                            }!`,
-                            icon: 'success',
+                            text: data.message,
+                            icon: 'error',
                         });
-                    })
+                        return;
+                    }
+
+                    dispatch(changeUserStatus(DNI));
+                    Swal.fire({
+                        text: data.msg,
+                        icon: 'success',
+                    });
+                })
                     .catch((error) => {
                         console.error(error);
                     });
@@ -132,24 +102,32 @@ function USUARIOS() {
     };
 
     useEffect(() => {
-        const getAllUsers = async () => {
-            await fetch('http://localhost:3000/users')
-                .then((response) => response.json())
-                .then((data) => {
-                    handleInitUsers(data.allUsers);
-                })
-                .catch((error) => {
-                    console.error(error);
+        // const userResp = await getUser(10332).then(() => )
+        const response = Promise.all([
+            getAllUsers()
+        ])
+            .then((data) => {
+                handleInitUsers(data[0].allUsers);
+            })
+            .catch((error) => {
+                console.log(error);
+                Swal.fire({
+                    text: "No se pudieron cargar los usuarios",
+                    icon: 'error',
                 });
-        };
+            })
 
-        getAllUsers();
+        // getAllUsers();
     }, []);
 
     const columns = [
         {
+            name: 'DNI',
+            selector: (row) => row.DNI,
+        },
+        {
             name: 'Nombre de usuario',
-            selector: (row) => row.UsernName,
+            selector: (row) => row.UserName,
         },
         {
             name: 'Nombre Completo',
@@ -176,9 +154,9 @@ function USUARIOS() {
             selector: (row) => row.Email,
         },
         {
-            name: 'Esta',
+            name: 'Estado',
             selector: (row) => {
-                return row.status == 1 ? 'Inactivo' : 'Activo';
+                return row.status == 1 ? 'Activo' : 'Inactivo';
             },
         },
         {
@@ -190,27 +168,27 @@ function USUARIOS() {
                             <button
                                 className="btn-transparent text-blue p-0"
                                 title="Editar"
-                                onClick={() => setbuttonPressed(true)}
+                                onClick={() => handleShowEditModal(row.DNI)}
                             >
                                 <PencilFill />
                             </button>
                         </Col>
                         <Col>
                             <button
-                                className="btn-transparent text-danger p-0"
-                                title="Eliminar"
+                                className="btn-transparent p-0 fs-5"
                                 onClick={() =>
                                     handleDelete(row.DNI, row.status)
                                 }
                             >
-                                <Trash3Fill />
+                                {row.status == 1? <PersonFillSlash className="text-danger" title="Desactivar usuario"/>: <PersonCheckFill className="text-success" title="Activar usuario"/>}
+                                    
                             </button>
                         </Col>
                     </Row>
                 );
             },
-        },
-    ];
+        }
+    ]
 
     const customStyles = {
         headCells: {
@@ -233,10 +211,18 @@ function USUARIOS() {
         },
     };
 
+    const [filterText, setFilterText] = useState('');
+    const [resetPaginationToggle, setResetPaginationToggle] = useState(false);
+    const filteredItems = users.filter(
+        (item) =>
+            item.UserName.toLowerCase().includes(filterText.toLowerCase()) || item.FullName.toLowerCase().includes(filterText.toLowerCase()) || item.DNI.includes(filterText)
+    );
+
     return (
         <div>
+            <link rel="stylesheet" href="/css/tables.css"/>
             <CREARUSUARIO />
-            {formRICARDIO}
+            <EDITARUSUARIOS />
 
             <BarraLateral />
             <Container className="mt-5 rounded bg-white pt-5 pb-5">
@@ -254,7 +240,7 @@ function USUARIOS() {
                     </Col>
                     <Col sm={4}>
                         <InputGroup>
-                            <Form.Control aria-label="Dollar amount (with dot and two decimal places)" />
+                            <FormControl placeholder='Buscar...' onChange={(e) => setFilterText(e.target.value)}/>
                             <InputGroup.Text>
                                 <Search />
                             </InputGroup.Text>
@@ -262,14 +248,16 @@ function USUARIOS() {
                     </Col>
                 </Row>
                 <DataTable
-                    className="mt-3"
+                    className="mt-3 sticky-right-column"
                     columns={columns}
-                    data={users}
+                    data={filteredItems}
                     customStyles={customStyles}
                     noDataComponent={
                         <div className="p-4">No se encontraron usuarios</div>
                     }
+                    persistTableHead
                     pagination
+                    paginationResetDefaultPage={resetPaginationToggle}
                     paginationComponentOptions={paginationComponentOptions}
                 />
             </Container>
