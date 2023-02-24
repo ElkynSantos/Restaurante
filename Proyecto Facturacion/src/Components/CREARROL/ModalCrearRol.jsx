@@ -21,10 +21,9 @@ function Example() {
     const dispatch = useDispatch();
     // const [show, setShow] = useState(false);
     const handleClose = () => {
-        console.log("entro");
+        console.log('entro');
         dispatch(closeModalCR());
     };
-
 
     const show2 = useSelector((state) => state.createrol);
     console.log(show2);
@@ -64,10 +63,10 @@ function CREARROL() {
 
     const [checkedList, setCheckedList] = useState([]);
     const listaPermisos = [
-      { id: "1", value: "Crear facturas" },
-      { id: "2", value: "Crear y modificar usuarios" },
-      { id: "3", value: "Crear y modificar productos" },
-      { id: "4", value: "Ver y generar reportes" },
+        { id: '1', value: 'Crear facturas' },
+        { id: '2', value: 'Crear y modificar usuarios' },
+        { id: '3', value: 'Crear y modificar productos' },
+        { id: '4', value: 'Ver y generar reportes' },
     ];
     const setField = (field, value) => {
         setForm({
@@ -75,24 +74,23 @@ function CREARROL() {
             [field]: value,
         });
     };
-    function findErrors() 
-    {
+    function findErrors() {
         const newErrors = {};
         return newErrors;
     }
     const handleSelect = (event) => {
         const value = event.target.value;
         const isChecked = event.target.checked;
-     
+
         if (isChecked) {
-          //Add checked item into checkList
-          setCheckedList([...checkedList, value]);
+            //Add checked item into checkList
+            setCheckedList([...checkedList, value]);
         } else {
-          //Remove unchecked item from checkList
-          const filteredList = checkedList.filter((item) => item !== value);
-          setCheckedList(filteredList);
+            //Remove unchecked item from checkList
+            const filteredList = checkedList.filter((item) => item !== value);
+            setCheckedList(filteredList);
         }
-      };
+    };
     async function handleSubmit(e) {
         e.preventDefault();
         let newErrors = findErrors();
@@ -101,7 +99,7 @@ function CREARROL() {
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors);
         } else {
-           console.log("FUNCIONA")
+            console.log('FUNCIONA');
         }
     }
 
@@ -130,9 +128,8 @@ function CREARROL() {
                                 />
                             </Form.Group>
                         </Col>
-                       
                     </Row>
-                    
+
                     <Row>
                         <Col>
                             <Form.Group className="mb-3">
@@ -141,20 +138,20 @@ function CREARROL() {
                                 </Form.Label>
                                 {listaPermisos.map((item, index) => {
                                     return (
-                                    <div key={item.id} className="checkbox-container">
-                                        <input
-                                        type="checkbox"
-                                        name="permisos"
-                                        value={item.value}
-                                        onChange={handleSelect}                 
-                                        />
-                                        <label>&nbsp;{item.value }</label>
-                                    </div>
+                                        <div
+                                            key={item.id}
+                                            className="checkbox-container"
+                                        >
+                                            <input
+                                                type="checkbox"
+                                                name="permisos"
+                                                value={item.value}
+                                                onChange={handleSelect}
+                                            />
+                                            <label>&nbsp;{item.value}</label>
+                                        </div>
                                     );
                                 })}
-                                
-                            
-                            
                             </Form.Group>
                         </Col>
                     </Row>

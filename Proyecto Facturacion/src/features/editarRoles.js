@@ -5,11 +5,9 @@ export const editarRoles = createSlice({
     initialState: false,
     reducers: {
         showModalER: (state, action) => {
-            console.log('showModalER');
             return true;
         },
         closeModalER: (state, action) => {
-            console.log('closeModalER');
             return false;
         },
     },

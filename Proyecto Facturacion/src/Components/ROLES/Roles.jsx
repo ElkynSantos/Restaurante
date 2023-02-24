@@ -102,10 +102,7 @@ function ROLES() {
                             <button
                                 className="btn-transparent text-blue p-0"
                                 title="Editar"
-                                onClick={() => {
-                                    console.log('Prueba');
-                                    handleShowEDIT();
-                                }}
+                                onClick={handleShowEDIT}
                             >
                                 <PencilFill />
                             </button>

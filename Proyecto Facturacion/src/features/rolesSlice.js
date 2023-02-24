@@ -10,12 +10,9 @@ export const rolesSlice = createSlice({
         addRoles: (state, action) => {
             state.push(action.payload);
         },
-        editRoles: (state, action) => {
-
-        }
+        editRoles: (state, action) => {},
     },
 });
 
-export const { initRoles, addRoles, editRoles } =
-    rolesSlice.actions;
+export const { initRoles, addRoles, editRoles } = rolesSlice.actions;
 export default rolesSlice.reducer;
