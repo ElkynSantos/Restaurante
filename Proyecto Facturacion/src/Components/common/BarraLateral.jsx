@@ -2,14 +2,8 @@ import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import Navbar from 'react-bootstrap/Navbar';
-import { Container } from 'react-bootstrap';
-import { List } from 'react-bootstrap-icons';
-import {
-    BsFillPersonPlusFill,
-    BsFillFileEarmarkBarGraphFill,
-    BsHouseFill,
-    BsFillBookmarkFill,
-} from 'react-icons/bs';
+import { Container, Accordion } from 'react-bootstrap';
+import * as Icons from 'react-bootstrap-icons';
 
 import { IoIosExit } from 'react-icons/io';
 import { IoRestaurantSharp } from 'react-icons/io5';
@@ -25,21 +19,58 @@ function Example() {
     const handleShow = () => setShow(true);
 
     const optionsSidebar = [
-        "BsHouseFill",
         {
             name: "Configuración del sistema",
+            icon: "Gear",
             permissions: [
                 {
-
+                    name: "Roles",
+                    url: "/roles",
+                    icon: "BookmarkFill"
                 },
                 {
-
+                    name: "Usuarios",
+                    url: "/users",
+                    icon: "PeopleFill"
                 }
             ]
         },
         {
-            name: "Configuración del negocio"
-            
+            name: "Configuración del negocio",
+            icon: "Shop",
+            permissions: [
+                {
+                    name: "Menú",
+                    url: "/products",
+                    icon: "LayoutTextSidebar"
+                },
+                {
+                    name: "Pedidos",
+                    url: "/orders",
+                    icon: "ListCheck"
+                },
+                {
+                    name: "Impuestos",
+                    url: "/taxes",
+                    icon: "Percent"
+                },
+                // {
+                //     name: "Facturas",
+                //     url: "/bills",
+                //     icon: "PeopleFill"
+                // }
+            ]
+        },
+        {
+            name: "Reportes",
+            icon: "BarChartLineFill",
+            permissions: [
+                {
+                    name: "Reportes",
+                    url: "/reports",
+                    icon: "FileEarmarkBarGraphFill"
+                },
+            ]
         }
     ];
 
@@ -47,26 +78,34 @@ function Example() {
         <>
             <Navbar className="bg-blue" expand="lg">
                 <Container>
-                    <Button
-                        className="btn-navbar"
-                        size="xxl"
-                        onClick={handleShow}
-                    >
-                        <List></List>
-                    </Button>
-                    <a href="/home">
-                        <img
-                            id="nav-brand"
-                            src="/assets/images/logo.png"
-                            className="imagen"
-                        ></img>
-                    </a>
-
+                    <span className='d-flex justify-content-between gap-3'>
+                        <Button
+                            className="btn-navbar"
+                            size="xxl"
+                            onClick={handleShow}
+                            >
+                            <Icons.List></Icons.List>
+                        </Button>
+                        <a href="/home">
+                            <img id="nav-brand" src="/assets/images/logo.png" className="imagen"></img>
+                        </a>
+                    </span>
+                    <span className='profile-container'>
+                        <span className='profile-info text-white'>
+                            <h6 className='profile-name'>Usuario</h6>
+                            <h7 className='profile-rol'>Rol</h7>
+                        </span>
+                        <span className='profile-image'>
+                            <a href="/profile" title='Ver perfil'>
+                                <Icons.PersonCircle className='fs-1 text-center text-white'></Icons.PersonCircle>
+                            </a>
+                        </span>
+                    </span>
                     {/* <p>Garifunas Food</p> */}
                 </Container>
             </Navbar>
 
-            <Offcanvas show={show} onHide={handleClose}>
+            <Offcanvas show={show} onHide={handleClose} className="sidebar">
                 <Offcanvas.Header
                     className="bg-blue"
                     closeButton
@@ -82,7 +121,40 @@ function Example() {
                 <Offcanvas.Body>
                     <Container>
                         <div className="d-grid gap-2">
-                            <Button href="/home" className="bg-blue" size="lg">
+                            <Accordion defaultActiveKey="0">
+                                {
+                                    optionsSidebar.map((category, index) => {
+                                        const {[category.icon]: TempIconHeader} = Icons;
+                                        return <Accordion.Item eventKey={index} key={index}>
+                                            <Accordion.Header><TempIconHeader/> {category.name}</Accordion.Header>
+                                            <Accordion.Body>
+                                                {
+                                                    category.permissions.map((permission, index) => {
+                                                        const {[permission.icon]: TempIcon} = Icons;
+                                                        return <div className='sidebar-item' key={index}>
+                                                            <TempIcon/><a className='siidebar-link pl-1' href={permission.url}>{permission.name}</a>
+                                                         </div>
+                                                    })
+                                                }
+                                            </Accordion.Body>
+                                        </Accordion.Item>
+                                    })
+                                }
+                                {/* <SidebarItems/> */}
+                                {/* <Accordion.Item eventKey="1">
+                                    <Accordion.Header>Accordion Item #2</Accordion.Header>
+                                    <Accordion.Body>
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+                                    eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+                                    minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+                                    aliquip ex ea commodo consequat. Duis aute irure dolor in
+                                    reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+                                    pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
+                                    culpa qui officia deserunt mollit anim id est laborum.
+                                    </Accordion.Body>
+                                </Accordion.Item> */}
+                            </Accordion>
+                            {/* <Button href="/home" className="bg-blue" size="lg">
                                 <BsHouseFill></BsHouseFill> Inicio
                             </Button>
                             <Button
@@ -109,13 +181,40 @@ function Example() {
                             </Button>
                             <Button href="/" className="bg-blue" size="lg">
                                 <IoIosExit></IoIosExit> Salir
-                            </Button>
+                            </Button> */}
                         </div>
                     </Container>
                 </Offcanvas.Body>
+                <div className="offcanvas-footer bg-blue">
+                    <a className='bg-transparent rounded text-white' href='/'>
+                        Cerrar sesión <Icons.ArrowBarRight className='fs-3'></Icons.ArrowBarRight>
+                    </a>
+                </div>
             </Offcanvas>
         </>
     );
+}
+
+function SidebarItems() {
+    
+    
+    // let ItemsSidebar = [];
+    // for (let i = 0; i < optionsSidebar.length; i++) {
+    //     const permissions = optionsSidebar[i].permissions;
+    //     // console.log(permissions);
+    //     // for (let j = 0; j < permissions.length; j++) {
+    //         ItemsSidebar.push(
+    //             <Accordion.Item eventKey={`${i}`}>
+    //                 <Accordion.Header>{optionsSidebar[i].name}</Accordion.Header>
+    //                 <Accordion.Body>
+    //                     {optionsSidebar[i].name}
+    //                 </Accordion.Body>
+    //             </Accordion.Item>
+    //         )
+    //     // }
+    // }
+
+    return <div>{ItemsSidebar}</div>
 }
 
 function Borrar() {
