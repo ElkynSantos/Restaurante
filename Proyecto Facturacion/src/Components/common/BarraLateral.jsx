@@ -3,7 +3,8 @@ import Button from 'react-bootstrap/Button';
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import Navbar from 'react-bootstrap/Navbar';
 import { Container } from 'react-bootstrap';
-import { List } from 'react-bootstrap-icons';
+import { List, PersonCircle } from 'react-bootstrap-icons';
+import { Accordion } from 'react-bootstrap-accordion';
 import {
     BsFillPersonPlusFill,
     BsFillFileEarmarkBarGraphFill,
@@ -31,7 +32,6 @@ function Example() {
     const handleCloseM = () => {
         dispatch(closeModalEP());
     };
-
     const handleShowM = () => {
         dispatch(showModalEP());
     };
@@ -60,7 +60,7 @@ function Example() {
                             size="xxl"
                             onClick={handleShow}
                         >
-                            <Icons.List></Icons.List>
+                            <List></List>
                         </Button>
                         <a href="/home">
                             <img
@@ -77,7 +77,7 @@ function Example() {
                         </span>
                         <span className="profile-image">
                             <a href="/profile" title="Ver perfil">
-                                <Icons.PersonCircle className="fs-1 text-center text-white"></Icons.PersonCircle>
+                                <PersonCircle className="fs-1 text-center text-white"></PersonCircle>
                             </a>
                         </span>
                     </span>
@@ -199,7 +199,6 @@ function Example() {
                                 <BsFillFileEarmarkBarGraphFill></BsFillFileEarmarkBarGraphFill>{' '}
                                 Reportes
                             </Button>
-
                             <Button
                                 href="/"
                                 className="bg-blue"
