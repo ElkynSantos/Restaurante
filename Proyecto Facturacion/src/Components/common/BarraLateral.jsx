@@ -129,6 +129,7 @@ function Example() {
                                 <BsFillFileEarmarkBarGraphFill></BsFillFileEarmarkBarGraphFill>{' '}
                                 Reportes
                             </Button>
+
                             <Button
                                 href="/"
                                 className="bg-blue"
