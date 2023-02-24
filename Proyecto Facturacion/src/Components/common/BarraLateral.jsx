@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import Navbar from 'react-bootstrap/Navbar';
 import { Container, Accordion } from 'react-bootstrap';
 import * as Icons from 'react-bootstrap-icons';
-
+import { BsHouseFill } from 'react-icons/bs';
 import { IoIosExit } from 'react-icons/io';
 import { IoRestaurantSharp } from 'react-icons/io5';
 import CREARUSUARIO from '../CREARUSUARIO/index';
@@ -18,6 +18,26 @@ function Example() {
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
+    const [DATA, setData] = useState([]);
+
+    useEffect(() => {
+        const getAllRoles = async () => {
+            await fetch('http://localhost:3000/roles/ForBarralateral')
+                .then((response) => response.json())
+                .then((data) => {
+                    console.log('================================');
+                    console.log(data.allRoles);
+
+                    setData(data.allRoles);
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        };
+
+        getAllRoles();
+    }, []);
+
     const optionsSidebar = [
         {
             name: 'Configuración del sistema',
@@ -30,7 +50,12 @@ function Example() {
                 },
                 {
                     name: 'Usuarios',
-                    url: '/users',
+                    url: '/Users',
+                    icon: 'PeopleFill',
+                },
+                {
+                    name: 'Recuperar Contraseña',
+                    url: '/Recuperar',
                     icon: 'PeopleFill',
                 },
             ],
@@ -41,17 +66,17 @@ function Example() {
             permissions: [
                 {
                     name: 'Menú',
-                    url: '/products',
+                    url: '/productos',
                     icon: 'LayoutTextSidebar',
                 },
                 {
                     name: 'Pedidos',
-                    url: '/orders',
+                    url: '/Pedidos',
                     icon: 'ListCheck',
                 },
                 {
                     name: 'Impuestos',
-                    url: '/taxes',
+                    url: '/Impuestos',
                     icon: 'Percent',
                 },
                 // {
@@ -124,6 +149,13 @@ function Example() {
                 </Offcanvas.Header>
                 <Offcanvas.Body>
                     <Container>
+                        <div className="d-grid gap-2">
+                            <Button href="/home" className="bg-blue" size="lg">
+                                <BsHouseFill></BsHouseFill> Inicio
+                            </Button>
+                        </div>
+                        <p></p>
+
                         <div className="d-grid gap-2">
                             <Accordion defaultActiveKey="0">
                                 {optionsSidebar.map((category, index) => {

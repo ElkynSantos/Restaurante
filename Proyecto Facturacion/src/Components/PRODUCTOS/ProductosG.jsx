@@ -58,7 +58,6 @@ function PRODUCTOT() {
     useEffect(() => {
         // Do something with the selected row data each time it changes
 
-        console.log(selectedRow);
         dispatch(guardar(selectedRow));
         //setSelectedRow(null);
     }, [selectedRow]);

@@ -41,6 +41,13 @@ const login = async (req, res, next) => {
         if (userExists.response === 0) {
             return next(new AppError(userExists.msg, 404));
         }
+        console.log('valor:', userExists.status);
+        console.log('valor:', userExists);
+        if (userExists.status !== 1) {
+            return next(
+                new AppError('El usuario se encuentra desactivado', 401)
+            );
+        }
 
         const rightPassword = await comparePassword(
             userPassword,

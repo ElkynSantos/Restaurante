@@ -3,6 +3,7 @@ import { productIdGenerator } from '../utilities/random.users.js';
 import db from '../db.js';
 
 const getAllProducts = async (req, res, next) => {
+    console.log('entro');
     try {
         const allProducts = await db.query('CALL get_all_products()');
         return res.status(200).json({
@@ -85,11 +86,14 @@ const newProduct = async (req, res, next) => {
 
 const editProduct = async (req, res, next) => {
     try {
-        const { productCode, productName, productPrice } = req.body;
+        const { productId, productCode, productName, productPrice } = req.body;
+
+        console.log(productId, productCode, productName, productPrice);
         const updatedProduct = await db.query(
-            'CALL edit_product(:productCode, :productName, :productPrice)',
+            'CALL edit_product(:productId, :productCode,  :productName,  :productPrice)',
             {
                 replacements: {
+                    productId: productId,
                     productCode: productCode,
                     productName: productName,
                     productPrice: productPrice,
