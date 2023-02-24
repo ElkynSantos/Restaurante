@@ -243,6 +243,7 @@ const editUserStaus = async (req, res, next) => {
             msg: changeUserStatus.msg,
         });
     } catch (error) {
+        console.log(error);
         return next(new AppError(`Error en la base de datos ${error}`, 500));
     }
 };
