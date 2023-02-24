@@ -47,10 +47,6 @@ function Example() {
                     <Button variant="danger" onClick={handleClose}>
                         Salir
                     </Button>
-
-                    <Button className="bg-blue" form="test" type="submit">
-                        Guardar rol
-                    </Button>
                 </Modal.Footer>
             </Modal>
         </>
@@ -60,14 +56,25 @@ function Example() {
 function CREARROL() {
     const [form, setForm] = useState({});
     const [errors, setErrors] = useState({});
-
+    const [Vsend, setVsend] = useState('');
     const [checkedList, setCheckedList] = useState([]);
-    const listaPermisos = [
-        { id: '1', value: 'Crear facturas' },
-        { id: '2', value: 'Crear y modificar usuarios' },
-        { id: '3', value: 'Crear y modificar productos' },
-        { id: '4', value: 'Ver y generar reportes' },
-    ];
+
+    const setNuevoRol = async (NR) => {
+        const response = await fetch(
+            'http://localhost:3000/roles/CreateNewRole',
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+
+                body: JSON.stringify({ NombreRol: NR }),
+            }
+        );
+        const data = await response.json();
+    };
+
+    const listaPermisos = [];
     const setField = (field, value) => {
         setForm({
             ...form,
@@ -120,9 +127,7 @@ function CREARROL() {
                                 <Form.Control
                                     type="text"
                                     placeholder="Ingrese el nombre del rol"
-                                    onChange={(e) =>
-                                        setField('nombre', e.target.value)
-                                    }
+                                    onChange={(e) => setVsend(e.target.value)}
                                     required
                                     // isInvalid={!!errors.nombre}
                                 />
@@ -133,9 +138,7 @@ function CREARROL() {
                     <Row>
                         <Col>
                             <Form.Group className="mb-3">
-                                <Form.Label className="text-center fw-bold">
-                                    Permisos
-                                </Form.Label>
+                                <Form.Label className="text-center fw-bold"></Form.Label>
                                 {listaPermisos.map((item, index) => {
                                     return (
                                         <div
@@ -154,6 +157,15 @@ function CREARROL() {
                                 })}
                             </Form.Group>
                         </Col>
+
+                        <Button
+                            className="bg-blue"
+                            form="test"
+                            type="submit"
+                            onClick={() => setNuevoRol(Vsend)}
+                        >
+                            Guardar rol
+                        </Button>
                     </Row>
                 </Form>
             </div>

@@ -57,6 +57,24 @@ function ROLES() {
         dispatch(initRoles(data));
     };
 
+    const eliminar = async (NRol) => {
+        const response = await fetch('http://localhost:3000/roles/DeleteRole', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+
+            body: JSON.stringify({ NombreRol: NRol }),
+        });
+        const data = await response.json();
+    };
+
+    const handleDelete = (props) => {
+        // reale.stopPropagation();
+
+        props.id;
+    };
+
     useEffect(() => {
         const getAllRoles = async () => {
             await fetch('http://localhost:3000/roles')
@@ -89,10 +107,7 @@ function ROLES() {
             name: 'Fecha de creación',
             selector: (row) => row.Fecha_Creacion,
         },
-        {
-            name: 'id categoría',
-            selector: (row) => row.id_categoria,
-        },
+
         {
             name: 'Acciones',
             selector: (row) => {
@@ -111,6 +126,7 @@ function ROLES() {
                             <button
                                 className="btn-transparent text-danger p-0"
                                 title="Eliminar"
+                                onClick={() => handleDelete(row)}
                             >
                                 <Trash3Fill />
                             </button>
