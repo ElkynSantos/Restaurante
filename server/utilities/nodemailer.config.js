@@ -45,19 +45,20 @@ const forgotPassordEmail = async (options) => {
         to: email,
         subject: 'Cambio de contraseña',
         text: 'Confirma el cambio de tu contraseña',
-        attachments: [
-            // {
-            //     filename: 'logo.png',
-            //     path: `${__dirname}/public/assets/images/logo.png`,
-            //     cid: 'logo',
-            // },
-            {
-                filename: 'palm-blue.webp',
-                path: `server/public/assets/palm-blue.png`,
-                cid: 'palm-blue',
-            },
-        ],
-        html: contentHTML,
+        html: `
+
+        <p> ¡Hola ${name}!,</p>
+
+        <p>Se ha solicitado un correo de cambio de contraseña</p>
+
+        <p>Para completar el proceso, por favor haz click en el siguiente enlace: 
+        <a href="http://localhost:5173/auth/reset-password/${token}"> Cambiar Contraseña</a></p>
+        
+        <p>Si no has solicitado un cambio de contraseña, por favor ignora este correo</p>
+
+        <p>Saludos,</p>
+        <p>Garifunas Food</p>
+        `,
     };
 
     // ? 3 Send the email

@@ -15,6 +15,8 @@ import Modal from 'react-bootstrap/Modal';
 import BarraLateral from '../common/index';
 
 function MENU() {
+    const [smShow, setSmShow] = useState(false);
+    const [lgShow, setLgShow] = useState(false);
     const [show, setShow] = useState(false);
 
     const handleSelect = () => {
@@ -64,85 +66,122 @@ function MENU() {
 
     return (
         <Container>
-            <BarraLateral />
-            <p></p>
-            <p></p>
-            <Row className="add-space">
-                {array1.map((mesa) => (
-                    <Col lg>
-                        <p>
-                            <Card style={{ width: '18rem' }}>
-                                <Card.Img variant="top" src="mesa.png" />
-                                <Card.Body>
-                                    <Card.Title>Mesa {mesa.numero}</Card.Title>
-                                    <Card.Text>Disponible</Card.Text>
+            <>
+                <Button onClick={() => setSmShow(true)} className="me-2">
+                    Small modal
+                </Button>
 
-                                    <>
-                                        <Button
-                                            variant="primary"
-                                            onClick={handleShow}
-                                        >
-                                            Seleccionar
-                                        </Button>
+                <Modal
+                    size="sm"
+                    show={smShow}
+                    onHide={() => setSmShow(false)}
+                    aria-labelledby="example-modal-sizes-title-sm"
+                >
+                    <Modal.Header closeButton>
+                        <Modal.Title id="example-modal-sizes-title-sm">
+                            Small Modal
+                        </Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <Row className="add-space">
+                            {array1.map((mesa) => (
+                                <Col lg>
+                                    <p>
+                                        <Card style={{ width: '18rem' }}>
+                                            <Card.Img
+                                                variant="top"
+                                                src="mesa.png"
+                                            />
+                                            <Card.Body>
+                                                <Card.Title>
+                                                    Mesa {mesa.numero}
+                                                </Card.Title>
+                                                <Card.Text>
+                                                    Disponible
+                                                </Card.Text>
 
-                                        <Modal show={show} onHide={handleClose}>
-                                            <Modal.Header closeButton>
-                                                <Modal.Title>
-                                                    Informacion de Cliente
-                                                </Modal.Title>
-                                            </Modal.Header>
-                                            <Modal.Body>
-                                                <Form>
-                                                    <Form.Group
-                                                        className="mb-3"
-                                                        controlId="exampleForm.ControlInput1"
+                                                <>
+                                                    <Button
+                                                        variant="primary"
+                                                        //    onClick={handleShow}
+                                                        href="/Pedidos"
                                                     >
-                                                        <Form.Label>
-                                                            Nombre Cliente
-                                                        </Form.Label>
-                                                        <Form.Control
-                                                            placeholder="(nombre)"
-                                                            autoFocus
-                                                        />
-                                                    </Form.Group>
-                                                    <Form.Group
-                                                        className="mb-3"
-                                                        controlId="exampleForm.ControlInput1"
+                                                        Seleccionar
+                                                    </Button>
+
+                                                    <Modal
+                                                        show={show}
+                                                        onHide={handleClose}
                                                     >
-                                                        <Form.Label>
-                                                            Numero de RTN
-                                                            (Opcional)
-                                                        </Form.Label>
-                                                        <Form.Control
-                                                            placeholder="(rtn)"
-                                                            autoFocus
-                                                        />
-                                                    </Form.Group>
-                                                </Form>
-                                            </Modal.Body>
-                                            <Modal.Footer>
-                                                <Button
-                                                    variant="danger"
-                                                    onClick={handleClose}
-                                                >
-                                                    Cancelar
-                                                </Button>
-                                                <Button
-                                                    href="\facturacion"
-                                                    variant="success"
-                                                    onClick={handleSelect}
-                                                >
-                                                    Facturar
-                                                </Button>
-                                            </Modal.Footer>
-                                        </Modal>
-                                    </>
-                                </Card.Body>
-                            </Card>
-                        </p>
-                    </Col>
-                ))}
-            </Row>
+                                                        <Modal.Header
+                                                            closeButton
+                                                        >
+                                                            <Modal.Title>
+                                                                Informacion de
+                                                                Cliente
+                                                            </Modal.Title>
+                                                        </Modal.Header>
+                                                        <Modal.Body>
+                                                            <Form>
+                                                                <Form.Group
+                                                                    className="mb-3"
+                                                                    controlId="exampleForm.ControlInput1"
+                                                                >
+                                                                    <Form.Label>
+                                                                        Nombre
+                                                                        Cliente
+                                                                    </Form.Label>
+                                                                    <Form.Control
+                                                                        placeholder="(nombre)"
+                                                                        autoFocus
+                                                                    />
+                                                                </Form.Group>
+                                                                <Form.Group
+                                                                    className="mb-3"
+                                                                    controlId="exampleForm.ControlInput1"
+                                                                >
+                                                                    <Form.Label>
+                                                                        Numero
+                                                                        de RTN
+                                                                        (Opcional)
+                                                                    </Form.Label>
+                                                                    <Form.Control
+                                                                        placeholder="(rtn)"
+                                                                        autoFocus
+                                                                    />
+                                                                </Form.Group>
+                                                            </Form>
+                                                        </Modal.Body>
+                                                        <Modal.Footer>
+                                                            <Button
+                                                                variant="danger"
+                                                                onClick={
+                                                                    handleClose
+                                                                }
+                                                            >
+                                                                Cancelar
+                                                            </Button>
+                                                            <Button
+                                                                href="\facturacion"
+                                                                variant="success"
+                                                                onClick={
+                                                                    handleSelect
+                                                                }
+                                                            >
+                                                                Facturar
+                                                            </Button>
+                                                        </Modal.Footer>
+                                                    </Modal>
+                                                </>
+                                            </Card.Body>
+                                        </Card>
+                                    </p>
+                                </Col>
+                            ))}
+                        </Row>
+                    </Modal.Body>
+                </Modal>
+            </>
         </Container>
     );
 

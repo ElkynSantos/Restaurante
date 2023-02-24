@@ -9,23 +9,49 @@ import {
     BsFillFileEarmarkBarGraphFill,
     BsHouseFill,
     BsFillBookmarkFill,
+    BsFillCalculatorFill,
 } from 'react-icons/bs';
 
-import { IoIosExit } from 'react-icons/io';
+import { IoIosExit, IoIosJournal } from 'react-icons/io';
 import { IoRestaurantSharp } from 'react-icons/io5';
 import CREARUSUARIO from '../CREARUSUARIO/index';
+
+import EditarProducto from '../EditarProducto/index';
 import './BarraLateral.css';
 
 import MESA from '../MESAS/Mesa';
-
+import { useDispatch, useSelector } from 'react-redux';
 function Example() {
+    const dispatch = useDispatch();
     const [show, setShow] = useState(false);
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+    /*
+    const handleCloseM = () => {
+        dispatch(closeModalEP());
+    };
+
+    const handleShowM = () => {
+        dispatch(showModalEP());
+    };
+*/
+    const borrar = () => localStorage.removeItem('USERNAME');
+
+    const optionsSidebar = [
+        'BsHouseFill',
+        {
+            name: 'Configuración del sistema',
+            permissions: [{}, {}],
+        },
+        {
+            name: 'Configuración del negocio',
+        },
+    ];
 
     return (
         <>
+            <EditarProducto></EditarProducto>
             <Navbar className="bg-blue" expand="lg">
                 <Container>
                     <Button
@@ -67,18 +93,33 @@ function Example() {
                                 <BsHouseFill></BsHouseFill> Inicio
                             </Button>
                             <Button
-                                href="Pedidos"
+                                href="/Pedidos"
                                 className="bg-blue"
                                 size="lg"
                             >
                                 <IoRestaurantSharp></IoRestaurantSharp> Pedidos
                             </Button>
-                            <Button href="Roles" className="bg-blue" size="lg">
+                            <Button
+                                href="/Productos"
+                                className="bg-blue"
+                                size="lg"
+                            >
+                                <IoIosJournal></IoIosJournal>Menu
+                            </Button>
+                            <Button href="/Roles" className="bg-blue" size="lg">
                                 <BsFillBookmarkFill></BsFillBookmarkFill> Roles
                             </Button>
                             <Button href="/users" className="bg-blue" size="lg">
                                 <BsFillPersonPlusFill></BsFillPersonPlusFill>{' '}
                                 Usuarios
+                            </Button>
+                            <Button
+                                href="/Impuestos "
+                                className="bg-blue"
+                                size="lg"
+                            >
+                                <BsFillCalculatorFill></BsFillCalculatorFill>{' '}
+                                Impuestos
                             </Button>
                             <Button
                                 href="/Reportes "
@@ -88,7 +129,13 @@ function Example() {
                                 <BsFillFileEarmarkBarGraphFill></BsFillFileEarmarkBarGraphFill>{' '}
                                 Reportes
                             </Button>
-                            <Button href="/" className="bg-blue" size="lg">
+
+                            <Button
+                                href="/"
+                                className="bg-blue"
+                                size="lg"
+                                onClick={borrar}
+                            >
                                 <IoIosExit></IoIosExit> Salir
                             </Button>
                         </div>
@@ -103,3 +150,4 @@ function Borrar() {
     localStorage.removeItem('USERNAME');
 }
 export default Example;
+//<BsFillBookmarkFill></BsFillBookmarkFill> Roles

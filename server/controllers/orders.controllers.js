@@ -1,9 +1,9 @@
 import db from '../db.js';
 import AppError from '../utilities/app.error.js';
 
-const allOrders = async (req, res, next) => {
+const allReadyOrders = async (req, res, next) => {
     try {
-        const [order] = await db.query('CALL get_active_orders()');
+        const [order] = await db.query('call salvador3();');
 
         if (order.orders === null) {
             res.status(200).json({
@@ -13,8 +13,66 @@ const allOrders = async (req, res, next) => {
         }
 
         return res.json({
-            order: order.orders,
+            order,
         });
+    } catch (error) {
+        return next(
+            new AppError(
+                `No se pueden mostrar las ordenes en este momento`,
+                500
+            )
+        );
+    }
+};
+
+const allPendingOrders = async (req, res, next) => {
+    try {
+        const [order] = await db.query('CALL get_active_orders();');
+
+        if (order.orders === null) {
+            return next(
+                new AppError(`No hay ordenes activas en este momento`, 404)
+            );
+        }
+
+        return res.json({
+            order,
+        });
+    } catch (error) {
+        return next(
+            new AppError(
+                `No se pueden mostrar las ordenes en este momento`,
+                500
+            )
+        );
+    }
+};
+const CompletedOrder = async (req, res, next) => {
+    const { id } = req.body;
+    try {
+        await db.query(
+            'UPDATE db_rest.pedidos SET estadoCocina = 1 WHERE id = ' + id + ';'
+        );
+
+        return res.json({});
+    } catch (error) {
+        return next(
+            new AppError(
+                `No se pueden mostrar las ordenes en este momento`,
+                500
+            )
+        );
+    }
+};
+
+const BackCompleteOrder = async (req, res, next) => {
+    const { id } = req.body;
+    try {
+        await db.query(
+            'UPDATE db_rest.pedidos SET estadoCocina = 0 WHERE id = ' + id + ';'
+        );
+
+        return res.json({});
     } catch (error) {
         return next(
             new AppError(
@@ -87,4 +145,13 @@ const deleteOrder = (req, res) => {
     });
 };
 
-export { allOrders, newOrder, getOrder, updateOrder, deleteOrder };
+export {
+    allReadyOrders,
+    allPendingOrders,
+    newOrder,
+    getOrder,
+    updateOrder,
+    deleteOrder,
+    CompletedOrder,
+    BackCompleteOrder,
+};

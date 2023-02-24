@@ -8,14 +8,83 @@ import {
     Form,
     FormControl,
 } from 'react-bootstrap';
+import Swal from 'sweetalert2';
 import { useState, useEffect, useMemo } from 'react';
 import DataTable from 'react-data-table-component';
 import Modal from 'react-bootstrap/Modal';
-
+import { TruckFlatbed } from 'react-bootstrap-icons';
+import Dropdown from 'react-bootstrap/Dropdown';
 function PEDIDOS() {
+    const [smShow, setSmShow] = useState(true);
     let selectedRows;
+    let MesasTitulos;
     const [AllSelectedRows, setSelectedRows] = useState([]);
     const [DATO, setData] = useState([]);
+
+    //=================MESAS======================================
+    const [value, setValue] = useState('(Seleccionar Mesa)');
+    const [show, setShow] = useState(false);
+
+    const handleSelect = () => {
+        setShow(false);
+        <Nav.Link eventKey="/mesas">Link</Nav.Link>;
+    };
+
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
+
+    let Tarjet;
+
+    const [count, setCount] = useState(0);
+
+    // Similar to componentDidMount and componentDidUpdate:
+
+    const handleMesas = (e) => {
+        console.log(e);
+        MesasTitulos = 'Mesa ' + e;
+        setValue(e);
+    };
+
+    //INICIAR MESAS HARCODEADO
+    let DROPDOWN_Items = [];
+    var array1 = [];
+    for (let i = 0; i < 12; i++) {
+        array1.push({ numero: i + 1, estado: false });
+        DROPDOWN_Items[i] = (
+            <Dropdown.Item eventKey={i + 1} onClick={() => handleMesas(i + 1)}>
+                {i + 1}
+            </Dropdown.Item>
+        );
+    }
+    useEffect(() => {
+        // Update the document title using the browser API
+        console.log('Mesa' + value);
+        // alert(`You clicked ${count} times`);
+    });
+
+    //_____________________________
+    let button;
+    if (true) {
+        button = (
+            <Button
+                variant="outline-success"
+                onClick={() => setCount(count + 1)}
+            >
+                Disponible
+            </Button>
+        );
+    } else {
+        button = (
+            <Button
+                variant="outline-danger"
+                onClick={() => setOrder(props.estadoMesa)}
+            >
+                Ocupada
+            </Button>
+        );
+    }
+
+    //==============================================
 
     const handleChange = (props) => {
         // reale.stopPropagation();
@@ -51,6 +120,7 @@ function PEDIDOS() {
         }
 
         setSelectedRows(outerArray);
+        console.log(AllSelectedRows);
 
         console.log('ALL SELECTED ROWS: ', AllSelectedRows);
     };
@@ -83,7 +153,6 @@ function PEDIDOS() {
         setSelectedRows(outerArray);
         console.log('ALL SELECTED ROWS 2: ', AllSelectedRows);
     };
-
     useEffect(() => {
         console.log(`You clicked ${AllSelectedRows} times`);
     });
@@ -157,12 +226,88 @@ function PEDIDOS() {
         },
     ];*/
 
+    const getProductId = async (productName) => {
+        const response = await fetch(`http://localhost:3000/products/GG`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+
+            body: JSON.stringify({ product: productName }),
+        });
+        const data = await response.json();
+
+        console.log('==================DATA===============');
+        console.log(data);
+
+        return data.products[0].id;
+    };
+
+    const newOrder = async () => {
+        console.log(AllSelectedRows);
+        let listaprod = [];
+        for (let i = 0; i < AllSelectedRows.length; i++) {
+            const ProdID = await getProductId(
+                AllSelectedRows[i].nombre_producto
+            ).catch((error) => {
+                console.error(error);
+            });
+
+            console.log(ProdID);
+            console.log(AllSelectedRows[i].cant_producto);
+            listaprod.push({
+                idProducto: ProdID,
+                cantidad: AllSelectedRows[i].cant_producto,
+            });
+        }
+
+        console.log(
+            JSON.stringify({
+                tableId: value,
+                waiterId: 21,
+                products: listaprod,
+                delivery: 0,
+            })
+        );
+        console.log(listaprod);
+
+        await fetch('http://localhost:3000/orders/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                tableId: value,
+                waiterId: 37,
+                products: listaprod,
+                delivery: 0,
+            }),
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                console.log(data);
+
+                Swal.fire({
+                    position: 'top-center',
+                    icon: 'success',
+                    title: data.msg,
+                    showConfirmButton: false,
+                    timer: 1500,
+                });
+            });
+
+        console.log('New Order: \n' + value + ' ' + AllSelectedRows);
+
+        setSelectedRows([]);
+        setValue('(Seleccionar Mesa)');
+    };
+
     useEffect(() => {
         const getAllProducts = async () => {
             await fetch('http://localhost:3000/products')
                 .then((response) => response.json())
                 .then((data) => {
-                    console.log(data), setData(data);
+                    console.log(data), setData(data.allProducts);
                 });
         };
 
@@ -210,6 +355,25 @@ function PEDIDOS() {
     return (
         <Container>
             <BarraLateral />
+
+            <Form>
+                <Row>
+                    <Col>
+                        <Button variant="secondary" size="lg">
+                            Atras
+                        </Button>
+                    </Col>
+                    <Col>
+                        <Button
+                            href="/ListaPedidos"
+                            variant="secondary"
+                            size="lg"
+                        >
+                            Mostrar Pedidos
+                        </Button>
+                    </Col>
+                </Row>
+            </Form>
             <h1>PEDIDOS</h1>
 
             <Row>
@@ -233,7 +397,6 @@ function PEDIDOS() {
                 </Col>
 
                 <Col>
-                    {' '}
                     <DataTable
                         title="Orden"
                         columns={columns2}
@@ -242,16 +405,43 @@ function PEDIDOS() {
                     />
                     <div class="p-3 mb-2 bg-light text-dark">
                         {' '}
+                        <div>
+                            <Row>
+                                <Col>
+                                    {' '}
+                                    <h7>Mesa: {value}</h7>
+                                </Col>
+                                <Col>
+                                    <Dropdown>
+                                        <Dropdown.Toggle
+                                            variant="outline-primary"
+                                            id="dropdown-basic"
+                                        >
+                                            Seleccionar
+                                        </Dropdown.Toggle>
+
+                                        <Dropdown.Menu>
+                                            {DROPDOWN_Items}
+                                        </Dropdown.Menu>
+                                    </Dropdown>
+                                </Col>
+                            </Row>
+                        </div>
+                        <p></p>
+                        <p></p>
                         <Button href="/home" variant="outline-danger" size="lg">
                             Cancelar
                         </Button>{' '}
                         <Button
-                            href="/mesas"
-                            variant="outline-success"
+                            //       href="/ListaPedidos"
+                            variant="primary"
                             size="lg"
+                            onClick={() => newOrder()}
+                            // href="\listaPedidos"
                         >
                             Facturar
-                        </Button>{' '}
+                        </Button>
+                        {handleChange2}
                     </div>
                 </Col>
             </Row>
@@ -299,4 +489,69 @@ export default PEDIDOS;
                 ))}
             </ul>
         );
+*/
+
+/*
+
+
+
+
+
+
+
+
+
+
+
+ <>
+                <Modal
+                    size="lg"
+                    show={smShow}
+                    onHide={() => setSmShow(false)}
+                    aria-labelledby="example-modal-sizes-title"
+                >
+                    <Modal.Header closeButton>
+                        <Modal.Title id="example-modal-sizes-title">
+                            Seleccionar Mesa
+                        </Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <Row className="add-space">
+                            {array1.map((mesa) => (
+                                <Col lg>
+                                    <p>
+                                        <Card style={{ width: '18rem' }}>
+                                            <Card.Img
+                                                variant="top"
+                                                src="mesa.png"
+                                            />
+                                            <Card.Body>
+                                                <Card.Title>
+                                                    Mesa {mesa.numero}
+                                                </Card.Title>
+                                                <Card.Text>
+                                                    Disponible
+                                                </Card.Text>
+
+                                                <>
+                                                    <Button
+                                                        variant="primary"
+                                                        //    onClick={handleShow}
+                                                        href="/Pedidos"
+                                                    >
+                                                        Seleccionar
+                                                    </Button>
+                                                </>
+                                            </Card.Body>
+                                        </Card>
+                                    </p>
+                                </Col>
+                            ))}
+                        </Row>
+                    </Modal.Body>
+                </Modal>
+            </>
+
+
+
 */

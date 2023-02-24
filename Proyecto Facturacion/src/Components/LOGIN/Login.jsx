@@ -39,11 +39,11 @@ function LOGIN(props) {
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors);
         } else {
-            console.log(form.user);
-            console.log(form.userpassword);
+            //console.log(form.user);
+            //console.log(form.userpassword);
             try {
                 const data = await login(form.user, form.userpassword);
-
+                //console.log(data);
                 Swal.fire({
                     position: 'top-center',
                     icon: 'success',
@@ -51,13 +51,14 @@ function LOGIN(props) {
                     showConfirmButton: false,
                     timer: 1500,
                 });
-                localStorage.setItem('USERNAME', JSON.stringify(form.user));
+                //console.log(data.jwtToken.userExists.name);
+                localStorage.setItem('USERNAME', JSON.stringify(data.msg));
                 navigate('/home');
             } catch (error) {
                 Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
-                    text: 'Usuario o contrasena no valido',
+                    text: error.response.data.message,
                 });
             }
         }

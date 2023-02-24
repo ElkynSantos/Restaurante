@@ -19,6 +19,7 @@ const login = async (req, res, next) => {
     try {
         const { user, userPassword } = req.body;
 
+        console.log(user, userPassword);
         if (!user || !userPassword) {
             return next(
                 new AppError(
@@ -59,6 +60,7 @@ const login = async (req, res, next) => {
         return res.status(200).json({
             status: 'Ok',
             jwtToken,
+
             msg: `¡Bienvenido al sistema, ${userExists.name}!`,
         });
     } catch (error) {

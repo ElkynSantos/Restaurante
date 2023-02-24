@@ -1,0 +1,3 @@
+import LISTAFACTURACION from './LISTAFACTURACION';
+
+export default LISTAFACTURACION;
