@@ -40,7 +40,7 @@ export async function editar(
 export async function getproduct(product) {
     const options = {
         method: 'POST',
-        url: 'http://localhost:3000/products/:productCodeDesc',
+        url: 'http://localhost:3000/products/productCodeDesc',
         data: {
             product,
         },

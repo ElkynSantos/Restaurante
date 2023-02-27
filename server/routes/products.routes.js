@@ -11,7 +11,7 @@ const productsRoutes = express.Router();
 
 productsRoutes.route('/').get(getAllProducts).post(newProduct);
 productsRoutes
-    .route('/:productCodeDesc')
+    .route('/productCodeDesc')
     .post(getProductbyCodeDesc)
     .patch(editProduct);
 
