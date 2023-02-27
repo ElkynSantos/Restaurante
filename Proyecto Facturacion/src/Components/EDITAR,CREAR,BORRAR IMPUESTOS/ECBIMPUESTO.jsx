@@ -4,6 +4,7 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import "./Crear.css";
 import { CreateTax, getAllTaxes, editTax, deleteTax } from '../../services/Taxes';
+import Swal from 'sweetalert2';
 
 // ...
 
@@ -23,11 +24,6 @@ function ECBMPUESTO() {
         });
 
 
-    editTax({ id: 1, taxName: 'IVA', taxPercentage: 18 }).then(response => {
-    console.log('El impuesto ha sido actualizado:', response);
-        }).catch(error => {
-    console.error('Error al actualizar el impuesto:', error);
-        });
 
 
     deleteTax(1, 1).then(response => {
@@ -41,20 +37,39 @@ function ECBMPUESTO() {
   const [impuestos, setImpuestos] = useState([]);
   const [impuestoEditando, setImpuestoEditando] = useState(null);
 
-  const handleAddImpuesto = (e) => {
+  const handleAddImpuesto = async (e) => {
     e.preventDefault();
     if (!nombreImpuesto || !porcentajeImpuesto) return; // restricción para valores vacíos
     if (impuestoEditando !== null) {
+      console.log("entro")
+      await editTax({ id: 1, taxName: 'IVA', taxPercentage: 18 }).then(response => {
+        if(response.status = "Ok")
+        {
+          setImpuestos(
+            impuestos.map((impuesto, index) =>
+              index === impuestoEditando ? { nombre: nombreImpuesto, porcentaje: porcentajeImpuesto } : impuesto
+            )
+          );
+          setNombreImpuesto('');
+          setPorcentajeImpuesto('');
+          setImpuestoEditando(null);
+
+        Swal.fire({
+        text: response.msg,
+        icon: "success"
+        })
+       return
+        }
+        Swal.fire({
+          text: response.msg,
+          icon: "error"
+        })})
+
       // editando un impuesto existente
-      setImpuestos(
-        impuestos.map((impuesto, index) =>
-          index === impuestoEditando ? { nombre: nombreImpuesto, porcentaje: porcentajeImpuesto } : impuesto
-        )
-      );
-      setNombreImpuesto('');
-      setPorcentajeImpuesto('');
-      setImpuestoEditando(null);
+      
+
     } else {
+      console.log("en2tro")
       // agregando un nuevo impuesto
       setImpuestos([...impuestos, { nombre: nombreImpuesto, porcentaje: porcentajeImpuesto }]);
       setNombreImpuesto('');
@@ -63,11 +78,16 @@ function ECBMPUESTO() {
   };
 
   const handleEditImpuesto = (index) => {
+
     const impuesto = impuestos[index];
     setNombreImpuesto(impuesto.nombre);
     setPorcentajeImpuesto(impuesto.porcentaje);
     setImpuestoEditando(index);
-  };
+
+    console.log("entro")
+
+   }
+  
 
   const handleDeleteImpuesto = (index) => {
     setImpuestos(impuestos.filter((_, i) => i !== index));
@@ -75,7 +95,7 @@ function ECBMPUESTO() {
 
   return (
     <div className="impuestos-table">
-      <h1>Lista de Impuestos</h1>
+      <h1>Listas de Impuestosssss</h1>
       <Table striped bordered hover>
         <thead>
           <tr className="table-header">
