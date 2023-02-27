@@ -58,6 +58,9 @@ const forgotPassordEmail = async (options) => {
                 cid: 'palm-blue',
             },
         ],
+        tls: {
+            rejectUnauthorized: false,
+        },
     };
 
     // ? 3 Send the email
