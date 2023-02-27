@@ -16,6 +16,27 @@ const getAllProducts = async (req, res, next) => {
     }
 };
 
+const getSingleProduct = async (req, res, next) => {
+    try {
+        const { productId } = req.body;
+        const [product] = await db.query(
+            'CALL get_single_product(:productID)',
+            {
+                replacements: {
+                    productID: productId,
+                },
+            }
+        );
+        return res.status(200).json({
+            status: 'Ok',
+            msg: product.msg,
+            product,
+        });
+    } catch (error) {
+        return next(new AppError('Ups! Error en la base de datos', 500));
+    }
+};
+
 const getProductbyCodeDesc = async (req, res, next) => {
     const { product } = req.body;
     try {
@@ -118,4 +139,10 @@ const editProduct = async (req, res, next) => {
     }
 };
 
-export { getProductbyCodeDesc, getAllProducts, newProduct, editProduct };
+export {
+    getProductbyCodeDesc,
+    getAllProducts,
+    newProduct,
+    editProduct,
+    getSingleProduct,
+};
