@@ -33,9 +33,6 @@ function EditarProducto() {
         dispatch(closeModalEP());
     };
 
-    const handleShow = () => {
-        dispatch(showModalEP());
-    };
     const show2 = useSelector((state) => state.EditarProducto);
 
     const setField = (field, value) => {
@@ -46,7 +43,7 @@ function EditarProducto() {
     };
 
     useEffect(() => {
-        // console.log(valores);
+        console.log(valores?.id);
         setDATA(valores);
         setForm(valores);
         setcodeold(valores);
@@ -86,6 +83,7 @@ function EditarProducto() {
             try {
                 //console.log(form);
                 const data = await getproduct(codeold.codigo_producto);
+                console.log(data);
 
                 if (data.status == 'Ok') {
                     const data2 = await editar(
@@ -152,7 +150,7 @@ function EditarProducto() {
                         <Form.Group>
                             <Form.Label>Nombre producto</Form.Label>
                             <Form.Control
-                                defaultValue={data?.nombre_producto || ''}
+                                defaultValue={valores?.nombre_producto || ''}
                                 type="text"
                                 placeholder="Ingrese nombre del producto"
                                 required

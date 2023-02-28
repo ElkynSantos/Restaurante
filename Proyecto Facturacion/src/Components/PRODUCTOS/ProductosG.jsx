@@ -25,7 +25,7 @@ import Swal from 'sweetalert2';
 import { showModalEP, closeModalEP } from '../../features/EditarProducto';
 import { showModalCP, closeModalCP } from '../../features/CreateProduct';
 import { guardar } from '../../features/sendeditableproduct';
-
+import { editar, getproduct } from '../../services/Product';
 import BarraLateral from '../common/index';
 import CREARPRODUCTO from '../CREARPRODUCTOS/index';
 
@@ -47,14 +47,18 @@ function PRODUCTOT() {
     const [DATA, setData] = useState([]);
     const [selectedRow, setSelectedRow] = useState(null);
     const [filterText, setFilterText] = useState('');
+    const valores = useSelector((state) => state.sendeditableproduct).value;
 
-    const handleRowClicked = (row) => {
-        if (products == null) {
-            setSelectedRow(row);
-        } else {
-            setSelectedRow(row);
-        }
+    const handleShowEditModal = async (codigo_producto) => {
+        await getproduct(codigo_producto).then((dataproduct) => {
+            // console.log("userRespModal", dataUser)
+            dispatch(guardar(dataproduct.products[0]));
+            dispatch(showModalEP());
+        });
+
+        console.log(valores);
     };
+
     useEffect(() => {
         // Do something with the selected row data each time it changes
 
@@ -117,10 +121,9 @@ function PRODUCTOT() {
                             <button
                                 className="btn-transparent text-blue p-0"
                                 title="Editar"
-                                onClick={() => {
-                                    handleRowClicked(row);
-                                    handleShowEP();
-                                }}
+                                onClick={() =>
+                                    handleShowEditModal(row.codigo_producto)
+                                }
                             >
                                 <PencilFill />
                             </button>
