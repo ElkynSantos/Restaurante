@@ -1,6 +1,5 @@
 
 
-
 import React, { useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import { Col, Button, Row, Form, CloseButton } from 'react-bootstrap';
@@ -135,7 +134,7 @@ function CREARUSUARIO() {
                 Complete los datos del cliente al que se le facturará.{' '}
             </h4>
             <h5 className="mb-3 text-blue fw-bold">
-                Atendido por: {  localStorage.getItem('USERNAME')}{' '}
+                Atendido por: {  localStorage.getItem('USER')}{' '}
             </h5>
 
             <div className="mb-3">
@@ -169,8 +168,8 @@ function CREARUSUARIO() {
                                     type="text"
                                     placeholder="Número de RTN "
                                     required
-                                    maxLength="14"
-                                    minLength="14"
+                                    maxLength="13"
+                                    minLength="13"
                                     onKeyPress={(event) => {
                                         if (!/[0-9]/.test(event.key)) {
                                             event.preventDefault();

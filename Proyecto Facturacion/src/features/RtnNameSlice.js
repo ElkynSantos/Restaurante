@@ -1,6 +1,6 @@
-import { RtnName} from "@reduxjs/toolkit";
+import { createSlice} from "@reduxjs/toolkit";
 
-export const RtnName = RtnNameSlice({
+export const RtnNamex = RtnNameSlice({
    name: "Rtn y Nombre",
    initialState: false,
    reducers: {
@@ -13,5 +13,5 @@ export const RtnName = RtnNameSlice({
    }
 })
 
-export const { showModal, closeModal } = RtnName.actions;
-export default RtnName.reducer;
+export const { showModal, closeModal } = RtnNamex.actions;
+export default RtnNamex.reducer;
