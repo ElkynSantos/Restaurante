@@ -33,7 +33,7 @@ function App() {
             <Routes>
                 <Route index element={<LOGIN />} />
                 <Route path="/Home" element={<INICIO />} />
-                <Route path="/" element={<LOGIN />} />
+
                 <Route path="/Pedidos" element={<PEDIDOS />} />
                 <Route path="/ListaPedidos" element={<LISTAPEDIDOS />} />
                 <Route path="/mesas" element={<MESAS />} />
