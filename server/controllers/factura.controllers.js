@@ -7,7 +7,7 @@ const getFacturas = async(req,res,next)=>{
         const allFacturas = await db.query('CALL get_facturas()');
         return res.status(200).json({
             status: 'Ok',
-            msg: 'Lista de todos los productos del menú',
+            msg: 'Lista de todos las facturas',
             allFacturas,
         });
     } catch (error) {
