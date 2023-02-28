@@ -2,6 +2,20 @@ import AppError from '../utilities/app.error.js';
 
 import db from '../db.js';
 
+const getUsers_RoleandPermissions = async (req, res, next) => {
+    try {
+        const { User } = req.body;
+
+        const RolesPermissions = await db.query(
+            'CALL ObtenerRolYPermisos("' + User + '");'
+        );
+
+        return res.status(200).json({ RolesPermissions });
+    } catch (error) {
+        return next(new AppError('Ups! Error en la base de datos', 500));
+    }
+};
+
 const setNewRoles = async (req, res, next) => {
     try {
         const { idrol, ArrayPermisos } = req.body;
@@ -93,4 +107,5 @@ export {
     setNewRoles,
     CreateNewRole,
     DeleteRole,
+    getUsers_RoleandPermissions,
 };

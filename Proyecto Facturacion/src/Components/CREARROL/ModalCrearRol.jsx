@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import {
     Col,
@@ -58,9 +58,14 @@ function CREARROL() {
     const [errors, setErrors] = useState({});
     const [Vsend, setVsend] = useState('');
     const [checkedList, setCheckedList] = useState([]);
+    const [PERMISOS, setPERMISOS] = useState([]);
 
     const setNuevoRol = async (NR) => {
-        const response = await fetch(
+        console.log('PERMISOS');
+
+        console.log(checkedList);
+
+        /* const response = await fetch(
             'http://localhost:3000/roles/CreateNewRole',
             {
                 method: 'POST',
@@ -71,10 +76,33 @@ function CREARROL() {
                 body: JSON.stringify({ NombreRol: NR }),
             }
         );
-        const data = await response.json();
+        const data = await response.json();*/
     };
 
+    useEffect(() => {
+        const getAllPermisos = async () => {
+            await fetch('http://localhost:3000/roles/permits')
+                .then((response) => response.json())
+                .then((data) => {
+                    console.log('================================');
+                    console.log(data.allRoles);
+
+                    //   handleInitRoles(data.allRoles);
+                    setPERMISOS(data.allRoles);
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        };
+
+        getAllPermisos();
+    }, []);
+
     const listaPermisos = [];
+    for (let i = 0; i < PERMISOS.length; i++) {
+        listaPermisos.push(PERMISOS[i]);
+    }
+
     const setField = (field, value) => {
         setForm({
             ...form,
@@ -85,13 +113,17 @@ function CREARROL() {
         const newErrors = {};
         return newErrors;
     }
-    const handleSelect = (event) => {
-        const value = event.target.value;
+    const handleSelect = (id) => {
+        const value = id;
         const isChecked = event.target.checked;
-
+        console.log('Antes');
+        console.log(value);
         if (isChecked) {
             //Add checked item into checkList
-            setCheckedList([...checkedList, value]);
+            checkedList.push(value);
+            setCheckedList(checkedList);
+            console.log('======CHEQUIADOS======');
+            console.log(checkedList);
         } else {
             //Remove unchecked item from checkList
             const filteredList = checkedList.filter((item) => item !== value);
@@ -148,10 +180,14 @@ function CREARROL() {
                                             <input
                                                 type="checkbox"
                                                 name="permisos"
-                                                value={item.value}
-                                                onChange={handleSelect}
+                                                value={item.N_Permiso}
+                                                onChange={() =>
+                                                    handleSelect(item.id)
+                                                }
                                             />
-                                            <label>&nbsp;{item.value}</label>
+                                            <label>
+                                                &nbsp;{item.N_Permiso}
+                                            </label>
                                         </div>
                                     );
                                 })}

@@ -72,7 +72,7 @@ function ROLES() {
     const handleDelete = (props) => {
         // reale.stopPropagation();
 
-        props.id;
+        eliminar(props.id);
     };
 
     useEffect(() => {
