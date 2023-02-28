@@ -33,6 +33,11 @@ app.use(cors());
 app.use(morgan('dev'));
 app.use(express.json());
 
+app.use(function (req, res, next) {
+    res.header('Access-Control-Allow-Origin', '*');
+    next();
+});
+
 // ? ROUTES
 app.use('/auth', authRoutes);
 app.use('/users', usersRoutes);

@@ -19,7 +19,6 @@ const login = async (req, res, next) => {
     try {
         const { user, userPassword } = req.body;
 
-        console.log(user, userPassword);
         if (!user || !userPassword) {
             return next(
                 new AppError(
