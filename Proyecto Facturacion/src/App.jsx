@@ -21,7 +21,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import Email from './Components/EmailVerification/index';
 import IMPUESTO from './Components/IMPUESTOS';
-import ECBMPUESTO from './Components/EDITAR,CREAR,BORRAR IMPUESTOS';
+import ECBMPUESTO from './Components/IMPUESTOSG';
 import RecuperarContraseña from './Components/RecoveryPassword/index';
 import FormPass from './Components/FormPassword/index';
 import ChangePass from './Components/ChangePassword/index';
@@ -33,6 +33,7 @@ function App() {
             <Routes>
                 <Route index element={<LOGIN />} />
                 <Route path="/Home" element={<INICIO />} />
+
                 <Route path="/Pedidos" element={<PEDIDOS />} />
                 <Route path="/ListaPedidos" element={<LISTAPEDIDOS />} />
                 <Route path="/mesas" element={<MESAS />} />
@@ -50,6 +51,7 @@ function App() {
                     element={<LISTAFACTURACION />}
                 />
                 <Route path="/Impuestos" element={<ECBMPUESTO />} />
+                <Route path="/roles" element={<ROLES />} />
             </Routes>
         </BrowserRouter>
     );

@@ -8,6 +8,32 @@
   padding: 0 !important;
   border: none !important;
   background-color: transparent !important;
+  padding-right: 1rem;
+}
+
+.btn-navbar::after {
+  content: "|";
+  font-weight: 100;
+}
+
+.profile-container {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.profile-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-name,
+.profile-rol {
+  text-align: right;
+}
+
+.profile-image {
+
 }
 
 body {
@@ -22,4 +48,87 @@ body {
 .imagen2 {
     width: 400px;
     height: 200px;
+}
+
+.sidebar {
+}
+
+.sidebar .offcanvas-body {
+  background-color: var(--yellow-lighter);
+}
+
+.sidebar .offcanvas-footer {
+  padding: 1rem;
+  background-color: var(--yellow-lighter);
+  color: white;
+  font-size: 1rem;
+  text-align: right;
+}
+
+.sidebar .accordion {
+  /* background-color: red !important; */
+}
+
+.sidebar .accordion-item {
+  border: none !important;
+  background-color: transparent !important;
+  margin-bottom: 1rem !important;
+}
+
+.sidebar .accordion-header .accordion-button {
+  font-weight: bold !important;
+  /* background-color: var(--yellow-lighter); */
+  background-color: var(--blue) !important;
+  border: none !important;
+  color: white;
+  border-radius: 1rem !important;
+  display: flex;
+  gap: 0.7rem;
+  align-items: center;
+}
+
+.sidebar .accordion-header .accordion-button::after {
+  filter: grayscale(1) brightness(5);
+}
+
+.sidebar .accordion-header .accordion-button:not(.collapsed) {
+  font-weight: bold !important;
+  background-color: var(--blue) !important;
+  border: none !important;
+  color: white !important;
+  border-bottom-left-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+}
+
+.sidebar .accordion-header .accordion-button:not(.collapsed)::after {
+  
+}
+
+.sidebar .accordion-body {
+  background-color: var(--blue-lighter);
+  border-bottom-left-radius: 1rem !important;
+  border-bottom-right-radius: 1rem !important;
+}
+
+.sidebar .accordion-body a {
+  color: black !important;
+  text-decoration: none;
+  /* background-color: var(--blue-lighter); */
+}
+
+.sidebar .sidebar-item {
+  padding: .5rem 0 .5rem 2rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.sidebar a {
+  text-decoration: none !important;
+  /* padding: 0 0 0.5rem 2rem; */
+}
+
+.sidebar a:visited {
+  text-decoration: none !important;
+  /* padding: 0 0 0.5rem 2rem; */
 }

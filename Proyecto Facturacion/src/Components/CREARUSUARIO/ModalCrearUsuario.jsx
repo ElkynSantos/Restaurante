@@ -157,11 +157,11 @@ function CREARUSUARIO() {
                     });
                 }
             } catch (error) {
-                console.error(error);
+                const { message } = error.response.data;
                 Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: 'Hubo un problema al crear usuario',
+                    icon: 'warning',
+                    title: 'No se pudo crear el usuario',
+                    text: message,
                 });
             }
         }

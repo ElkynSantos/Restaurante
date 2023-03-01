@@ -9,6 +9,9 @@ const forgotPassordEmail = async (options) => {
             user: process.env.USER_EMAIL,
             pass: process.env.USER_PASS,
         },
+        tls: {
+            rejectUnauthorized: false,
+        },
     });
 
     // ? Define the email options
@@ -25,9 +28,9 @@ const forgotPassordEmail = async (options) => {
                <p><b>Se ha solicitado un correo de cambio de contraseña.</b></p>
                
                <p>Para completar el proceso, por favor haz click en el siguiente enlace: 
-        <a href="${process.env.BACKEND_URL}:${
-        process.env.PORT ?? 3000
-    }/auth/reset-password/${token}"> Cambiar Contraseña</a></p>
+        <a href="${
+            process.env.BACKEND_URL
+        }:${5173}/auth/reset-password/${token}"> Cambiar Contraseña</a></p>
                
                <p>Si no has solicitado un cambio de contraseña, por favor ignora este correo.</p>
                

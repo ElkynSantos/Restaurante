@@ -61,15 +61,18 @@ function BasicExample() {
 
     function findErrors() {
         const newErrors = {};
-        let { productName, productPrice } = form;
+        let { code, productName, productPrice } = form;
+        console.log(form);
+        if ((!code && code !== '') || code == '') {
+            //En realidad es username
+            newErrors.productName = 'ingrese nombre del producto!';
+            onsole.log('error en codigo');
+        }
 
         if ((!productName && productName !== '') || productName == '') {
             //En realidad es username
             newErrors.productName = 'ingrese nombre del producto!';
-        }
-        if ((!productPrice && productPrice !== '') || productPrice == '') {
-            //En realidad es username
-            newErrors.productPrice = 'Ingrese precio del producto!';
+            console.log('error en PRODUCTO');
         }
 
         console.log(newErrors.password);
@@ -82,6 +85,7 @@ function BasicExample() {
 
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors);
+            console.log('entroERROR');
         } else {
             //LLAMEN A LA API
             console.log('entro');
@@ -89,15 +93,25 @@ function BasicExample() {
                 console.log('entro');
                 const data = await CreateProduct(
                     form.productName,
-                    form.productPrice
+                    form.precio_producto,
+                    form.code
                 );
-                Swal.fire({
-                    position: 'top-center',
-                    icon: 'success',
-                    title: 'Producto Creado',
-                    showConfirmButton: false,
-                    timer: 1500,
-                });
+
+                if (data.msg == 'Este codigo ya existe en el menú') {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: data.msg,
+                    });
+                } else {
+                    Swal.fire({
+                        position: 'top-center',
+                        icon: 'success',
+                        title: data.msg,
+                        showConfirmButton: false,
+                        timer: 1500,
+                    });
+                }
             } catch (error) {
                 Swal.fire({
                     icon: 'error',
@@ -106,16 +120,30 @@ function BasicExample() {
                 });
             }
         }
+
+        e.target.reset();
     }
     return (
         <Form onSubmit={handleSubmit} name="test" id="test">
             <br></br>
 
             <Form.Group>
-                <Form.Label>Nombre del producto</Form.Label>
+                <Form.Label>Codigo</Form.Label>
                 <Form.Control
                     type="text"
                     placeholder="Ingrese nombre del producto"
+                    required
+                    minLength="0"
+                    maxLength="200"
+                    onChange={(e) => setField('code', e.target.value)}
+                />
+            </Form.Group>
+
+            <Form.Group>
+                <Form.Label>Nombre del producto</Form.Label>
+                <Form.Control
+                    type="text"
+                    placeholder="Ingrese codigo del producto"
                     required
                     minLength="0"
                     maxLength="200"
@@ -131,19 +159,18 @@ function BasicExample() {
                         aria-label="Amount (to the nearest dollar)"
                         placeholder="Ingrese el precio"
                         required
-                        minLength="0"
-                        maxLength="4"
+                        type="number"
+                        min="0"
+                        step="0.01"
+                        max="9999999.99"
                         onChange={(e) =>
-                            setField('productPrice', e.target.value)
+                            setField(
+                                'precio_producto',
+                                parseFloat(e.target.value).toFixed(2)
+                            )
                         }
-                        onKeyPress={(event) => {
-                            if (!/[0-9]/.test(event.key)) {
-                                event.preventDefault();
-                            }
-                        }}
                     />
                 </Form.Group>
-                <InputGroup.Text>.00</InputGroup.Text>
             </InputGroup>
         </Form>
     );

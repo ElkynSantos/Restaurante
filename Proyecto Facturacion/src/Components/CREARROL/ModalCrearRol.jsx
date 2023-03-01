@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import {
     Col,
@@ -14,23 +14,19 @@ import {
 import Swal from 'sweetalert2';
 
 import { Register } from '../../services/REGISTER';
-
-import { showModalER, closeModalER } from '../../features/editarRoles';
+import { showModalCR, closeModalCR } from '../../features/creacionRoles';
 import { useDispatch, useSelector } from 'react-redux';
 
 function Example() {
     const dispatch = useDispatch();
     // const [show, setShow] = useState(false);
     const handleClose = () => {
-        dispatch(closeModalER());
+        console.log('entro');
+        dispatch(closeModalCR());
     };
 
-    const handleShow = () => {
-        dispatch(showModalER());
-    };
-
-    const show2 = useSelector((state) => state.editrol);
-
+    const show2 = useSelector((state) => state.createrol);
+    console.log(show2);
     return (
         <>
             <Modal
@@ -41,14 +37,13 @@ function Example() {
                 backdrop="static"
             >
                 <Modal.Header className="bg-blue text-white">
-                    <Modal.Title>Edición de Roles</Modal.Title>
+                    <Modal.Title>Creación de Roles</Modal.Title>
                     <CloseButton variant="white" onClick={handleClose} />
                 </Modal.Header>
                 <Modal.Body>
-                    <EDITARROL></EDITARROL>
+                    <CREARROL></CREARROL>
                 </Modal.Body>
                 <Modal.Footer>
-                    {' '}
                     <Button variant="danger" onClick={handleClose}>
                         Salir
                     </Button>
@@ -58,63 +53,28 @@ function Example() {
     );
 }
 
-function EDITARROL() {
+function CREARROL() {
     const [form, setForm] = useState({});
     const [errors, setErrors] = useState({});
-
+    const [Vsend, setVsend] = useState('');
     const [checkedList, setCheckedList] = useState([]);
-    const [DATA, setData] = useState([]);
 
-    useEffect(() => {
-        const getAllPermisos = async () => {
-            await fetch('http://localhost:3000/roles/permits')
-                .then((response) => response.json())
-                .then((data) => {
-                    console.log('================================');
-                    console.log(data.allRoles);
-
-                    //   handleInitRoles(data.allRoles);
-                    setData(data.allRoles);
-                })
-                .catch((error) => {
-                    console.error(error);
-                });
-        };
-
-        getAllPermisos();
-    }, []);
-
-    const setPermisos = async (idRol, arrayPermisos) => {
+    const setNuevoRol = async (NR) => {
         const response = await fetch(
-            'http://localhost:3000/roles/NuevosPermisos',
+            'http://localhost:3000/roles/CreateNewRole',
             {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
 
-                body: JSON.stringify({ idrol: 3, ArrayPermisos: [1, 2] }),
+                body: JSON.stringify({ NombreRol: NR }),
             }
         );
         const data = await response.json();
     };
 
-    console.log('===========DATA==============');
-    console.log(DATA);
-
-    let listaPermisos = [];
-    for (let i = 0; i < DATA.length; i++) {
-        listaPermisos.push({ id: DATA[i].id, value: DATA[i].N_Permiso });
-    }
-
-    console.log('===========listaPermisos==============');
-    console.log(listaPermisos);
-    /*   const listaPermisos = [
-        { id: '1', value: 'Crear facturas' },
-        { id: '2', value: 'Crear y modificar usuarios' },
-        { id: '3', value: 'Crear y modificar productos' },
-    //    { id: '4', value: 'Ver y generar reportes' },
-    ];*/
+    const listaPermisos = [];
     const setField = (field, value) => {
         setForm({
             ...form,
@@ -153,26 +113,21 @@ function EDITARROL() {
     return (
         <div className="mb-3 mt-md-3">
             <h5 className="mb-3 text-blue fw-bold">
-                Por favor ingrese todos los datos correspondientes del rol a
-                editar.{' '}
+                Por favor ingrese todos los datos correspondientes del nuevo
+                rol.{' '}
             </h5>
-            <br></br>
-            <h3 className="text-center ">-- USUARIO ACTUAL --</h3>
-
             <div className="mb-3">
                 <Form onSubmit={handleSubmit} name="test" id="test">
                     <Row>
                         <Col>
                             <Form.Group className="mb-3">
                                 <Form.Label className="fw-bold">
-                                    Nuevo nombre
+                                    Nombre
                                 </Form.Label>
                                 <Form.Control
                                     type="text"
                                     placeholder="Ingrese el nombre del rol"
-                                    onChange={(e) =>
-                                        setField('nombre', e.target.value)
-                                    }
+                                    onChange={(e) => setVsend(e.target.value)}
                                     required
                                     // isInvalid={!!errors.nombre}
                                 />
@@ -183,9 +138,7 @@ function EDITARROL() {
                     <Row>
                         <Col>
                             <Form.Group className="mb-3">
-                                <Form.Label className="text-center fw-bold">
-                                    Seleccionar permisos
-                                </Form.Label>
+                                <Form.Label className="text-center fw-bold"></Form.Label>
                                 {listaPermisos.map((item, index) => {
                                     return (
                                         <div
@@ -209,9 +162,9 @@ function EDITARROL() {
                             className="bg-blue"
                             form="test"
                             type="submit"
-                            onClick={() => setPermisos(1, 2)}
+                            onClick={() => setNuevoRol(Vsend)}
                         >
-                            Guardar cambios
+                            Guardar rol
                         </Button>
                     </Row>
                 </Form>

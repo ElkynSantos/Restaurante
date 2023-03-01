@@ -1,129 +1,203 @@
-import React, { useState } from 'react';
-import { Col, Button, Row, Container, Card, Form } from 'react-bootstrap';
-import Dropdown from 'react-bootstrap/Dropdown';
-import DropdownButton from 'react-bootstrap/DropdownButton';
-import './ROLES.css';
+import React, { useState, useEffect } from 'react';
+import EDITARROLES from '../EDITARROLES/index';
+import CREARROL from '../CREARROL/index';
+import {
+    Button,
+    Col,
+    Row,
+    Container,
+    Card,
+    Form,
+    InputGroup,
+} from 'react-bootstrap';
+import DataTable from 'react-data-table-component';
+import { useSelector, useDispatch } from 'react-redux';
+import {
+    PersonPlusFill,
+    Search,
+    PencilFill,
+    Trash3Fill,
+    Display,
+} from 'react-bootstrap-icons';
+import Swal from 'sweetalert2';
+
+import { initRoles, addRoles, editRoles } from '../../features/rolesSlice';
+import { showModalCR, closeModalCR } from '../../features/creacionRoles';
+
+import { showModalER, closeModalER } from '../../features/editarRoles';
+
+import BarraLateral from '../common/index';
+
+const paginationComponentOptions = {
+    rowsPerPageText: 'Filas por página',
+    rangeSeparatorText: 'de',
+    selectAllRowsItem: true,
+    selectAllRowsItemText: 'Todos',
+};
 
 function ROLES() {
-    const [form, setForm] = useState({});
-    const [errors, setErrors] = useState({});
-    const setField = (field, value) => {
-        setForm({
-            ...form,
-            [field]: value,
-        });
+    const dispatch = useDispatch();
+    const [data, setData] = useState([]);
+    // const users = useSelector((state) => state.users);
+    const roles = useSelector((state) => state.roles);
+    const handleClose = () => {
+        dispatch(closeModalCR());
     };
-    function findErrors() {
-        const newErrors = {};
-        let { email, password } = form;
 
-        if ((!email && email !== '') || email == '') {
-            //En realidad es username
-            newErrors.email = 'Espacio de ID Vacio !';
-            //email = "";
-        }
-        // validate with regex
-        /*if ((!password && password !== "") || password == "") {
-      newErrors.password = "Espacio de contrasena vacio !";
-      //password = "";
-    }*/
+    const handleShow = () => {
+        dispatch(showModalCR());
+    };
 
-        console.log(newErrors.password);
-        return newErrors;
-    }
-    async function handleSubmit(e) {
-        e.preventDefault();
-        let newErrors = findErrors();
+    const handleShowEDIT = () => {
+        console.log('Prueba2');
+        dispatch(showModalER());
+    };
 
-        if (Object.keys(newErrors).length > 0) {
-            setErrors(newErrors);
-        } else {
-            //LLAMEN A LA API
-        }
-    }
+    const handleInitRoles = (data) => {
+        dispatch(initRoles(data));
+    };
+
+    const eliminar = async (NRol) => {
+        const response = await fetch('http://localhost:3000/roles/DeleteRole', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+
+            body: JSON.stringify({ NombreRol: NRol }),
+        });
+        const data = await response.json();
+    };
+
+    const handleDelete = (props) => {
+        // reale.stopPropagation();
+
+        props.id;
+    };
+
+    useEffect(() => {
+        const getAllRoles = async () => {
+            await fetch('http://localhost:3000/roles')
+                .then((response) => response.json())
+                .then((data) => {
+                    console.log('================================');
+                    console.log(data.allRoles);
+
+                    handleInitRoles(data.allRoles);
+                    setData(data.allRoles);
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        };
+
+        getAllRoles();
+    }, []);
+
+    const columns = [
+        {
+            name: 'id',
+            selector: (row) => row.id,
+        },
+        {
+            name: 'Nombre de Rol',
+            selector: (row) => row.Nomb_Rol,
+        },
+        {
+            name: 'Fecha de creación',
+            selector: (row) => row.Fecha_Creacion,
+        },
+
+        {
+            name: 'Acciones',
+            selector: (row) => {
+                return (
+                    <Row>
+                        <Col>
+                            <button
+                                className="btn-transparent text-blue p-0"
+                                title="Editar"
+                                onClick={handleShowEDIT}
+                            >
+                                <PencilFill />
+                            </button>
+                        </Col>
+                        <Col>
+                            <button
+                                className="btn-transparent text-danger p-0"
+                                title="Eliminar"
+                                onClick={() => handleDelete(row)}
+                            >
+                                <Trash3Fill />
+                            </button>
+                        </Col>
+                    </Row>
+                );
+            },
+        },
+    ];
+
+    const customStyles = {
+        headCells: {
+            style: {
+                backgroundColor: 'var(--blue)',
+                fontWeight: 'bold',
+                justifyContent: 'center',
+                color: 'white',
+            },
+        },
+        cells: {
+            style: {
+                justifyContent: 'center',
+            },
+        },
+        rows: {
+            style: {
+                // backgroundColor: "var(--yellow-light)"
+            },
+        },
+    };
 
     return (
         <div>
-            <Container>
-                <Row className="vh-100 d-flex justify-content-center align-items-center">
-                    <Col md={88} lg={6} xs={15}>
-                        <div className="border border-3 border-primary"></div>
-                        <Card className="shadow">
-                            <Card.Body>
-                                <div className="mb-3 mt-md-4">
-                                    <h2 className="fw-bold mb-2 text-uppercase ">
-                                        Edición de roles
-                                    </h2>
-                                    <p>
-                                        Por favor ingrese El ID del usuario y el
-                                        rol que editará
-                                    </p>
-                                    <div className="mb-3">
-                                        <Form onSubmit={handleSubmit}>
-                                            <Form.Group
-                                                className="mb-3"
-                                                controlId="formBasicEmail"
-                                            >
-                                                <Form.Label className="text-center">
-                                                    ID de usuario
-                                                </Form.Label>
-                                                <Form.Control
-                                                    type="text"
-                                                    placeholder="Ingrese Usuario"
-                                                    onChange={(e) =>
-                                                        setField(
-                                                            'email',
-                                                            e.target.value
-                                                        )
-                                                    }
-                                                    isInvalid={!!errors.email}
-                                                />
-                                            </Form.Group>
-                                            <Form.Label className="text-center">
-                                                Roles posibles
-                                            </Form.Label>
-                                            <DropdownButton
-                                                id="dropdown-basic-button"
-                                                title="Roles"
-                                            >
-                                                <Dropdown.Item href="#/action-1">
-                                                    Administrador del sistema
-                                                </Dropdown.Item>
-                                                <Dropdown.Item href="#/action-2">
-                                                    Gerente
-                                                </Dropdown.Item>
-                                                <Dropdown.Item href="#/action-3">
-                                                    Facturador
-                                                </Dropdown.Item>
-                                            </DropdownButton>
-                                            <Form.Group
-                                                className="mb-3"
-                                                controlId="formBasicCheckbox"
-                                            ></Form.Group>
-                                            <div className="d-grid">
-                                                <Button
-                                                    variant="primary"
-                                                    type="submit"
-                                                >
-                                                    Añadir rol a usuario
-                                                </Button>
-                                            </div>
-                                            <br></br>
-                                            <div className="d-grid">
-                                                <Button
-                                                    variant="primary"
-                                                    type="submit"
-                                                >
-                                                    Salir
-                                                </Button>
-                                            </div>
-                                        </Form>
-                                    </div>
-                                </div>
-                            </Card.Body>
-                        </Card>
+            <CREARROL />
+            <EDITARROLES />;
+            <BarraLateral />
+            <Container className="mt-5 rounded bg-white pt-5 pb-5">
+                <Row>
+                    <Col>
+                        <h2 className="text-start">Roles</h2>
+                    </Col>
+                    <Col md="auto">
+                        <button className="btn-transparent h3 text-dark">
+                            <PersonPlusFill
+                                title="Agregar usuario"
+                                onClick={() => {
+                                    handleShow();
+                                }}
+                            />
+                        </button>
+                    </Col>
+                    <Col sm={4}>
+                        <InputGroup>
+                            <Form.Control aria-label="Dollar amount (with dot and two decimal places)" />
+                            <InputGroup.Text>
+                                <Search />
+                            </InputGroup.Text>
+                        </InputGroup>
                     </Col>
                 </Row>
+                <DataTable
+                    className="mt-3"
+                    columns={columns}
+                    data={data}
+                    customStyles={customStyles}
+                    noDataComponent={
+                        <div className="p-4">No se encontraron roles</div>
+                    }
+                    pagination
+                    paginationComponentOptions={paginationComponentOptions}
+                />
             </Container>
         </div>
     );
