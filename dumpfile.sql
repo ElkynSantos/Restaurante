@@ -280,6 +280,7 @@ CREATE TABLE `productos` (
   `nombre_producto` varchar(80) NOT NULL,
   `precio_producto` double NOT NULL,
   `tax_rate` int NOT NULL,
+  `status` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `tax_rate` (`tax_rate`),
   CONSTRAINT `productos_ibfk_1` FOREIGN KEY (`tax_rate`) REFERENCES `taxes` (`id`)
@@ -292,7 +293,7 @@ CREATE TABLE `productos` (
 
 LOCK TABLES `productos` WRITE;
 /*!40000 ALTER TABLE `productos` DISABLE KEYS */;
-INSERT INTO `productos` VALUES (1,'Hola','Aguacate',123334,1),(2,'DSHO278','Agua de coco',1213,1),(3,'AS6162','asasas',123334,1),(4,'ASAS7438','asasasdsds',123334,1);
+INSERT INTO `productos` VALUES (1,'Hola','Aguacate',123334,1,0),(2,'ElklynRokma','coco',90,2,0),(3,'AS6162','asasas',123334,1,1),(4,'ASAS7438','asasasdsds',123334,1,1);
 /*!40000 ALTER TABLE `productos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -426,7 +427,7 @@ CREATE TABLE `taxes` (
 
 LOCK TABLES `taxes` WRITE;
 /*!40000 ALTER TABLE `taxes` DISABLE KEYS */;
-INSERT INTO `taxes` VALUES (1,'IVA15',0.18,0),(3,'IVA18',0.15,1),(7,'IVA19',0.18,1);
+INSERT INTO `taxes` VALUES (1,'IVA15',0.18,0),(2,'IVA18',0.15,1),(3,'IVA19',0.18,1);
 /*!40000 ALTER TABLE `taxes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -540,6 +541,30 @@ BEGIN
   -- Actualizar el valor de la variable de resultado
   SET p_resultado = 'Permisos asignados correctamente al rol';
   
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `change_product_status` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `change_product_status`(productId INT, newStatus INT)
+BEGIN
+    UPDATE productos SET status = newStatus WHERE id = productId;
+    IF newStatus = 0 THEN
+        SELECT CONCAT('El producto ha sido desactivado') as msg, 0 as response;
+    ELSEIF newStatus = 1 THEN
+        SELECT CONCAT('El producto ha sido activado') as msg, 1 as response;
+    END IF;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -660,9 +685,10 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `edit_product`(productId int, productCode VARCHAR(15), productName VARCHAR(80), productPrice DOUBLE)
-exit_proc:BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `edit_product`(IN productId int, IN productCode VARCHAR(15), IN productName VARCHAR(80), IN productPrice DOUBLE, In taxRate INT, productStatus TINYINT)
+BEGIN
   DECLARE productCount INT;
+  DECLARE codeCount INT;
   
   SELECT COUNT(*) INTO productCount
   FROM productos
@@ -670,15 +696,17 @@ exit_proc:BEGIN
   
   IF productCount = 0 THEN
     SELECT 'No existe el producto en la base de datos' as msg, 0 as response;
-	LEAVE exit_proc;
   ELSE
-    SET productCode = IFNULL(productCode, (SELECT codigo_producto FROM productos WHERE id= productId));
-    SET productName = IFNULL(productName, (SELECT nombre_producto FROM productos WHERE id = productId));
-    SET productPrice = IFNULL(productPrice, (SELECT precio_producto FROM productos WHERE id = productId));
-    UPDATE productos
-    SET codigo_producto = productCode, nombre_producto = productName, precio_producto = productPrice
-    WHERE id= productId;
-	SELECT 'El producto se ha actualizado correctamente' as msg, 1 as response;
+    SET codeCount = (SELECT COUNT(*) FROM productos WHERE codigo_producto = productCode AND id <> productId);
+    
+    IF codeCount > 0 THEN
+        SELECT 'El codigo_producto ya existe en otro producto' as msg, 0 as response;
+    ELSE
+        UPDATE productos
+        SET codigo_producto = productCode, nombre_producto = productName, precio_producto = productPrice, tax_rate = taxRate, status = productStatus
+        WHERE id= productId;
+        SELECT 'El producto se ha actualizado correctamente' as msg, 1 as response;
+    END IF;
   END IF;
 END ;;
 DELIMITER ;
@@ -907,7 +935,7 @@ DELIMITER ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_all_products`()
 BEGIN
-	SELECT productos.id, codigo_producto, nombre_producto, precio_producto, taxes.id, taxes.name
+	SELECT productos.id, codigo_producto, nombre_producto, precio_producto, taxes.id as taxId, taxes.name
 	FROM productos INNER JOIN taxes ON productos.tax_rate = taxes.id;
 END ;;
 DELIMITER ;
@@ -1156,7 +1184,7 @@ DELIMITER ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_single_product`(IN productID INT)
 BEGIN
-    SELECT 'Se ha encontrado el producto' as msg, 1 as response, id, codigo_producto, nombre_producto, precio_producto
+    SELECT 'Se ha encontrado el producto' as msg, 1 as response, id, codigo_producto, nombre_producto, precio_producto, tax_rate as taxId, status 
     FROM productos
     WHERE id = productID;
 END ;;
@@ -1270,8 +1298,8 @@ proc_Exit:BEGIN
 		LEAVE proc_Exit;
 	ELSE
 		BEGIN
-			INSERT INTO productos (codigo_producto, nombre_producto, precio_producto, tax_rate) 
-			VALUES (productId, productName, productPrice, taxtId);
+			INSERT INTO productos (codigo_producto, nombre_producto, precio_producto, tax_rate, status) 
+			VALUES (productId, productName, productPrice, taxtId, 1);
 		END;
 	BEGIN
 		SELECT 'Se ha registrado el producto correctamente' as msg, 1 as response;
@@ -1733,4 +1761,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-02-28 22:35:36
+-- Dump completed on 2023-02-28 23:24:35
