@@ -20,7 +20,7 @@ import './App.css';
 import { useDispatch, useSelector } from 'react-redux';
 
 import Email from './Components/EmailVerification/index';
-import IMPUESTO from './Components/IMPUESTOS';
+// import IMPUESTO from './Components/IMPUESTOS';
 import ECBMPUESTO from './Components/IMPUESTOSG';
 import RecuperarContraseña from './Components/RecoveryPassword/index';
 import FormPass from './Components/FormPassword/index';
