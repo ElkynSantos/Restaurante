@@ -1,3 +1,3 @@
 import './impues.css';
-import IMPUESTO from './IMPUESTO';
+import IMPUESTO from './Impuesto.JSX';
 export default IMPUESTO;
