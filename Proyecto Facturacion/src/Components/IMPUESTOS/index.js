@@ -1,4 +1,3 @@
-import IMPUESTO from "./IMPUESTO";
-import "./impues.css";
-
+import IMPUESTO from './impuesto';
+import './impues.css';
 export default IMPUESTO;
