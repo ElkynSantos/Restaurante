@@ -51,10 +51,9 @@ const newFactura =async (req,res,next) =>{
 try{
 
     const { 
-        id, 
         Rtn,
         nombreRestaurante,
-        domocilio,
+        domicilio,
         celular,
         correo,
         cai,
@@ -69,15 +68,16 @@ try{
         total,
         tarjetaEfectivo,
         cambio,
-        anular
+        anular,
+        usuarioAtiende
 
     } = req.body;
 
     console.log( 
-        id, 
+
         Rtn,
         nombreRestaurante,
-        domocilio,
+        domicilio,
         celular,
         correo,
         cai,
@@ -92,14 +92,14 @@ try{
         total,
         tarjetaEfectivo,
         cambio,
-        anular
+        anular,
+        usuarioAtiende
         );
 
         const emptyParams = Object.values({
-        id, 
         Rtn,
         nombreRestaurante,
-        domocilio,
+        domicilio,
         celular,
         correo,
         cai,
@@ -114,7 +114,8 @@ try{
         total,
         tarjetaEfectivo,
         cambio,
-        anular
+        anular,
+        usuarioAtiende
         }).some((val) => !val);
 
     if (emptyParams) {
@@ -122,9 +123,28 @@ try{
     }
 
     const [newFactura] = await db.query(
-        'CALL new_bill(:Name, :price, :id)',
+        'CALL new_factura(:p_RTN, :p_Nombre_Restaurante, :p_domicilio,:p_celular,:p_correo,:p_cai,:p_numero_factura,:p_descripcion_restaurante,:p_fecha_limite_emision,:p_rango_documentos,:p_nombre_cliente,:p_rtn_cliente,:p_fecha_creacion,:p_subtotal,:p_total,:p_tarjeta-efectivo,:p_cambio, :p_anular, :p_usuario_atiende)',
         {
             replacements: {
+                p_RTN : Rtn, 
+                p_Nombre_Restaurante : nombreRestaurante, 
+                p_domicilio : domicilio, 
+                p_celular : celular,
+                p_correo : correo, 
+                p_cai :cai, 
+                p_numero_factura : numeroFactura, 
+                p_descripcion_restaurante : descripcionRestaurante, 
+                p_fecha_limite_emision : fechaLimiteEmision, 
+                p_rango_documentos : rangoDocumentos, 
+                p_nombre_cliente : nombreCliente, 
+                p_rtn_cliente : RtnCliente, 
+                p_fecha_creacion : fechaCreacion, 
+                p_subtotal : subtotal, 
+                p_total : total, 
+                "p_tarjeta-efectivo" : tarjetaEfectivo, 
+                p_cambio : cambio,  
+                p_anular : anular,  
+                p_usuario_atiende : usuarioAtiende
         
             },
         }
