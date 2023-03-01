@@ -1,3 +1,3 @@
-import FACTURACION from './FACTURACION';
+import FACTURACION from './Facturacion';
 
 export default FACTURACION;

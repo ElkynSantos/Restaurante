@@ -1,9 +1,7 @@
 import AppError from '../utilities/app.error.js';
-import { productIdGenerator } from '../utilities/random.users.js';
 import db from '../db.js';
 
 const getAllProducts = async (req, res, next) => {
-    console.log('entro');
     try {
         const allProducts = await db.query('CALL get_all_products()');
         return res.status(200).json({
@@ -75,7 +73,10 @@ const newProduct = async (req, res, next) => {
             return next(new AppError('Favor completar todos los campos', 400));
         }
 
+<<<<<<< HEAD
         console.log('entrooo');
+=======
+>>>>>>> origin/users
         const [newProduct] = await db.query(
             'CALL new_product(:productId, :productName, :productPrice, :taxId)',
             {
@@ -137,10 +138,38 @@ const editProduct = async (req, res, next) => {
     }
 };
 
+const editProductStatus = async (req, res, next) => {
+    try {
+        const { productID, status } = req.body;
+
+        if (!productID || !status) {
+            return next(new AppError(`No se permiten campos vacios`, 400));
+        }
+
+        const [changeProductStatus] = await db.query(
+            `CALL change_product_status(:productId, :newStatus)`,
+            {
+                replacements: {
+                    productId: productID,
+                    newStatus: status,
+                },
+            }
+        );
+
+        return res.status(200).json({
+            status: 'Ok',
+            msg: changeProductStatus.msg,
+        });
+    } catch (error) {
+        return next(new AppError(`Error en la base de datos ${error}`, 500));
+    }
+};
+
 export {
     getProductbyCodeDesc,
     getAllProducts,
     newProduct,
     editProduct,
     getSingleProduct,
+    editProductStatus,
 };
