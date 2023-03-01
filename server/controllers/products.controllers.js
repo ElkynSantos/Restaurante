@@ -101,17 +101,25 @@ const newProduct = async (req, res, next) => {
 
 const editProduct = async (req, res, next) => {
     try {
-        const { productId, productCode, productName, productPrice } = req.body;
+        const {
+            productId,
+            productCode,
+            productName,
+            productPrice,
+            taxId,
+            productStatus,
+        } = req.body;
 
-        console.log(productId, productCode, productName, productPrice);
         const updatedProduct = await db.query(
-            'CALL edit_product(:productId, :productCode,  :productName,  :productPrice)',
+            'CALL edit_product(:productId, :productCode,  :productName,  :productPrice, :taxRate, :productStatus, )',
             {
                 replacements: {
                     productId: productId,
                     productCode: productCode,
                     productName: productName,
                     productPrice: productPrice,
+                    taxRate: taxId,
+                    productStatus: productStatus,
                 },
             }
         );

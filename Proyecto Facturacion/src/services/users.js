@@ -1,6 +1,6 @@
 export const getAllUsers = () => {
-    return fetch('http://localhost:3000/users').then((response) =>
-        response.json()
+    return fetch(`${import.meta.env.VITE_REACT_APP_API_URL}/users`).then(
+        (response) => response.json()
     );
 };
 
