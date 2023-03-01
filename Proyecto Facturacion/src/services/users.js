@@ -1,5 +1,5 @@
 export const getAllUsers = () => {
-    return fetch('http://192.168.100.38:3000/users').then((response) =>
+    return fetch('http://localhost:3000/users').then((response) =>
         response.json()
     );
 };
