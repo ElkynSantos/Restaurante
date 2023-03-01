@@ -111,6 +111,10 @@ function PRODUCTOT() {
             name: 'Precio',
             selector: (row) => row.precio_producto,
         },
+        {
+            name: 'Impuesto',
+            selector: (row) => row.taxId,
+        },
 
         {
             name: 'Acciones',

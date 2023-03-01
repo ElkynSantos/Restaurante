@@ -19,13 +19,16 @@ import { guardar } from '../../features/sendeditableproduct';
 import { editar, getproduct } from '../../services/Product';
 import { useDispatch, useSelector } from 'react-redux';
 import { FileEarmarkRichtext } from 'react-bootstrap-icons';
+import { agetAllTaxes } from '../../services/Taxes';
 
 function EditarProducto() {
     const valores = useSelector((state) => state.sendeditableproduct).value;
-    const [codeold, setcodeold] = useState([]);
+    const [datadrop, setDATADROP] = useState([]);
+    const [codeold, setcodeold] = useState();
     const [data, setDATA] = useState([]);
     const [form, setForm] = useState({});
     const [errors, setErrors] = useState({});
+    const [dropdown, setdropdown] = useState([]);
     const dispatch = useDispatch();
 
     const handleClose = () => {
@@ -35,6 +38,20 @@ function EditarProducto() {
 
     const show2 = useSelector((state) => state.EditarProducto);
 
+    useEffect(() => {
+        const response = Promise.all([agetAllTaxes()])
+            .then((data1) => {
+                setdropdown(data1[0].allTaxes);
+            })
+            .catch((error) => {
+                console.log(error);
+                Swal.fire({
+                    text: 'No se pudieron cargar los impuestos',
+                    icon: 'error',
+                });
+            });
+    }, []);
+
     const setField = (field, value) => {
         setForm({
             ...form,
@@ -43,12 +60,12 @@ function EditarProducto() {
     };
 
     useEffect(() => {
-        console.log(valores?.id);
+        console.log(valores);
         setDATA(valores);
         setForm(valores);
         setcodeold(valores);
     }, [valores]);
-
+    console.log(dropdown);
     function findErrors() {
         const newErrors = {};
         let { nombre_producto, precio_producto } = form;
@@ -114,7 +131,7 @@ function EditarProducto() {
             }
         }
     }
-
+    console.log(form);
     return (
         <>
             <Modal
@@ -186,6 +203,24 @@ function EditarProducto() {
                                 />
                             </Form.Group>
                         </InputGroup>
+                        <Form.Label className="text-center fw-semibold">
+                            Escoger Impuesto:
+                        </Form.Label>
+                        <Form.Group>
+                            <Form.Select
+                                value={dropdown[2]?.name}
+                                aria-label="Asignar impuesto"
+                                onChange={(e) =>
+                                    setField('impuesto', e.target.value)
+                                }
+                            >
+                                {dropdown.map((option) => (
+                                    <option key={option.id}>
+                                        {option.name}
+                                    </option>
+                                ))}
+                            </Form.Select>
+                        </Form.Group>
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>

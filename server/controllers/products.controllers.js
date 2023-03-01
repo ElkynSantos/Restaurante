@@ -64,7 +64,7 @@ const getProductbyCodeDesc = async (req, res, next) => {
 
 const newProduct = async (req, res, next) => {
     try {
-        const { productName, productPrice } = req.body;
+        const { productName, productPrice, productId, taxId } = req.body;
 
         const emptyParams = Object.values({
             productName,
@@ -75,18 +75,15 @@ const newProduct = async (req, res, next) => {
             return next(new AppError('Favor completar todos los campos', 400));
         }
 
-        const productId = productIdGenerator(
-            productName,
-            new Date().getDate().toString()
-        );
-
+        console.log('entrooo');
         const [newProduct] = await db.query(
-            'CALL new_product(:productId, :productName, :productPrice)',
+            'CALL new_product(:productId, :productName, :productPrice, :taxId)',
             {
                 replacements: {
                     productId: productId,
                     productName: productName,
                     productPrice: productPrice,
+                    taxId: taxId,
                 },
             }
         );
@@ -96,6 +93,7 @@ const newProduct = async (req, res, next) => {
             msg: newProduct.msg,
         });
     } catch (error) {
+        console.log(error);
         return next(
             new AppError(
                 'Ha ocurrido algún error al crear el nuevo producto',

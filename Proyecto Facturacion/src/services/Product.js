@@ -1,6 +1,11 @@
 import axios from 'axios';
 
-export async function CreateProduct(productName, productPrice, productId) {
+export async function CreateProduct(
+    productName,
+    productPrice,
+    productId,
+    taxId
+) {
     console.log(productPrice);
     const options = {
         method: 'POST',
@@ -9,6 +14,7 @@ export async function CreateProduct(productName, productPrice, productId) {
             productName,
             productPrice,
             productId,
+            taxId,
         },
     };
     const response = await axios.request(options);
