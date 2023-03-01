@@ -5,7 +5,7 @@ import ROLES from './Components/ROLES/index';
 import CREARUSUARIO from './Components/CREARUSUARIO/index';
 import INICIO from './Components/INICIO/index';
 import MESAS from './Components/MESAS/index';
-import LISTAPEDIDOS from './Components/LISTAPEDIDOS//index';
+import LISTAPEDIDOS from './Components/LISTAPEDIDOS/index';
 import PEDIDOS from './Components/PEDIDOS/index';
 import FACTURACION from './Components/FACTURACION/index';
 import USERS from './Components/USERS/index';
