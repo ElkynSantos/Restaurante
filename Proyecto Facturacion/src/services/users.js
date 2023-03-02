@@ -25,7 +25,7 @@ export const editUser = (user) => {
 };
 
 export const editUserStatus = (DNI, status) => {
-    return fetch(`${import.meta.env.VITE_REACT_APP_API_URL}/users/user`, {
+    return fetch(`${import.meta.env.VITE_REACT_APP_API_URL}/users/status`, {
         method: 'PATCH',
         body: JSON.stringify({
             userDni: DNI,
