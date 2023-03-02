@@ -123,7 +123,7 @@ try{
     }
 
     const [newFactura] = await db.query(
-        'CALL new_factura(:p_RTN, :p_Nombre_Restaurante, :p_domicilio,:p_celular,:p_correo,:p_cai,:p_numero_factura,:p_descripcion_restaurante,:p_fecha_limite_emision,:p_rango_documentos,:p_nombre_cliente,:p_rtn_cliente,:p_fecha_creacion,:p_subtotal,:p_total,:p_tarjeta-efectivo,:p_cambio, :p_anular, :p_usuario_atiende)',
+        'CALL new_bill(:p_RTN, :p_Nombre_Restaurante, :p_domicilio,:p_celular,:p_correo,:p_cai,:p_numero_factura,:p_descripcion_restaurante,:p_fecha_limite_emision,:p_rango_documentos,:p_nombre_cliente,:p_rtn_cliente,:p_fecha_creacion,:p_subtotal,:p_total,:p_tarjeta-efectivo,:p_cambio, :p_anular, :p_usuario_atiende)',
         {
             replacements: {
                 p_RTN : Rtn, 
