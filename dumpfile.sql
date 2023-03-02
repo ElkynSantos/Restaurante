@@ -26,6 +26,8 @@ CREATE TABLE `categoria_permisos` (
   `id` int NOT NULL AUTO_INCREMENT,
   `id_categoria` int NOT NULL,
   `id_permisos` int NOT NULL,
+  `icono` varchar(100) DEFAULT NULL,
+  `id_permiso` int DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_idcategoria_idx` (`id_categoria`),
   KEY `fk_idpermisos_idx` (`id_permisos`),
@@ -225,6 +227,7 @@ CREATE TABLE `permisos` (
   `N_Permiso` varchar(80) NOT NULL,
   `Desc_Permiso` varchar(200) NOT NULL,
   `link` varchar(45) DEFAULT NULL,
+  `icono` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -685,7 +688,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `edit_product`(IN productId int, IN productCode VARCHAR(15), IN productName VARCHAR(80), IN productPrice DOUBLE, In taxRate INT, productStatus TINYINT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `edit_product`(IN productId int, IN productCode VARCHAR(15), IN productName VARCHAR(80), IN productPrice DOUBLE, In taxRate INT)
 BEGIN
   DECLARE productCount INT;
   DECLARE codeCount INT;
@@ -703,7 +706,7 @@ BEGIN
         SELECT 'El codigo_producto ya existe en otro producto' as msg, 0 as response;
     ELSE
         UPDATE productos
-        SET codigo_producto = productCode, nombre_producto = productName, precio_producto = productPrice, tax_rate = taxRate, status = productStatus
+        SET codigo_producto = productCode, nombre_producto = productName, precio_producto = productPrice, tax_rate = taxRate
         WHERE id= productId;
         SELECT 'El producto se ha actualizado correctamente' as msg, 1 as response;
     END IF;
@@ -1463,6 +1466,60 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `ObtenerRolYPermisos` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `ObtenerRolYPermisos`(IN p_Nom_Usuario varchar(30))
+BEGIN
+DECLARE v_Rol varchar(45);
+DECLARE v_Permisos JSON;
+
+SELECT r.Nomb_Rol INTO v_Rol
+FROM roles r
+JOIN usuarios u ON r.id = u.id_Rol
+WHERE u.Nom_Usuario = p_Nom_Usuario;
+
+SELECT JSON_ARRAYAGG(
+  JSON_OBJECT(
+    'Categoria', c.nombre,
+    'Icono', c.icono,
+    'Permisos', (
+      SELECT JSON_ARRAYAGG(
+        JSON_OBJECT(
+          'N_Permiso', p.N_Permiso,
+          'Desc_Permiso', p.Desc_Permiso,
+          'link', p.link,
+          'icono', p.icono
+        )
+      ) 
+      FROM permisos p
+      JOIN permisos_xcategorias pc ON p.id = pc.idpermiso
+      WHERE pc.idcategoria = c.id
+      AND p.id IN (
+        SELECT rp.id_permiso
+        FROM rol_xpermisos rp
+        JOIN roles r ON r.id = rp.id_rol
+        WHERE r.Nomb_Rol = v_Rol
+      )
+    )
+  )
+) INTO v_Permisos
+FROM categorias c;
+
+SELECT JSON_OBJECT('Rol', v_Rol, 'Categorias', v_Permisos) as ARRAY;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!50003 DROP PROCEDURE IF EXISTS `obtener_fila_con_array` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -1761,4 +1818,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-02-28 23:24:35
+-- Dump completed on 2023-03-01 18:26:48
