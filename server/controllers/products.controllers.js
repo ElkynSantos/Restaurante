@@ -73,10 +73,6 @@ const newProduct = async (req, res, next) => {
             return next(new AppError('Favor completar todos los campos', 400));
         }
 
-<<<<<<< HEAD
-        console.log('entrooo');
-=======
->>>>>>> origin/users
         const [newProduct] = await db.query(
             'CALL new_product(:productId, :productName, :productPrice, :taxId)',
             {
@@ -106,17 +102,20 @@ const newProduct = async (req, res, next) => {
 
 const editProduct = async (req, res, next) => {
     try {
-        const { productId, productCode, productName, productPrice } = req.body;
+        console.log('entro');
+        const { productId, productCode, productName, productPrice, taxRate } =
+            req.body;
 
         console.log(productId, productCode, productName, productPrice);
         const updatedProduct = await db.query(
-            'CALL edit_product(:productId, :productCode,  :productName,  :productPrice)',
+            'CALL edit_product(:productId, :productCode,  :productName, :productPrice, :taxRate)',
             {
                 replacements: {
                     productId: productId,
                     productCode: productCode,
                     productName: productName,
                     productPrice: productPrice,
+                    taxRate: taxRate,
                 },
             }
         );
@@ -142,7 +141,7 @@ const editProductStatus = async (req, res, next) => {
     try {
         const { productID, status } = req.body;
 
-        if (!productID || !status) {
+        if (!productID) {
             return next(new AppError(`No se permiten campos vacios`, 400));
         }
 

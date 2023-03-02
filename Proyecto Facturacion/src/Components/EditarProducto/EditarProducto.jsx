@@ -99,15 +99,19 @@ function EditarProducto() {
 
             try {
                 //console.log(form);
+
                 const data = await getproduct(codeold.codigo_producto);
+                console.log('entro');
                 console.log(data);
 
                 if (data.status == 'Ok') {
+                    console.log(data.products[0].id);
                     const data2 = await editar(
                         data.products[0].id,
                         form.codigo_producto,
                         form.nombre_producto,
-                        form.precio_producto
+                        form.precio_producto,
+                        form.tax_rate
                     );
 
                     console.log(data2);
@@ -204,18 +208,24 @@ function EditarProducto() {
                             </Form.Group>
                         </InputGroup>
                         <Form.Label className="text-center fw-semibold">
-                            Escoger Impuesto:
+                            Escoger el nuevo Impuesto:
                         </Form.Label>
                         <Form.Group>
                             <Form.Select
-                                value={dropdown[2]?.name}
                                 aria-label="Asignar impuesto"
-                                onChange={(e) =>
-                                    setField('impuesto', e.target.value)
-                                }
+                                onChange={(e) => {
+                                    setField('tax_rate', e.target.value);
+                                }}
                             >
+                                <option
+                                    value={data?.tax_rate}
+                                    selected
+                                    disabled
+                                >
+                                    {data?.name_tax || ' '}
+                                </option>
                                 {dropdown.map((option) => (
-                                    <option key={option.id}>
+                                    <option value={option.id}>
                                         {option.name}
                                     </option>
                                 ))}
