@@ -28,7 +28,7 @@ export async function Register(
     // console.log(placeofBirth);
     const options = {
         method: 'POST',
-        url: 'http://localhost:3000/users/',
+        url: `${import.meta.env.VITE_REACT_APP_API_URL}/users/`,
         data: {
             name,
             lastName,

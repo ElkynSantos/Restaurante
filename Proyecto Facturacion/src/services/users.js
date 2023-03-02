@@ -5,7 +5,7 @@ export const getAllUsers = () => {
 };
 
 export const getUser = (DNI) => {
-    return fetch('http://localhost:3000/users/user', {
+    return fetch(`${import.meta.env.VITE_REACT_APP_API_URL}/users/user`, {
         method: 'POST',
         body: JSON.stringify({ userID: DNI }),
         headers: {
@@ -15,7 +15,7 @@ export const getUser = (DNI) => {
 };
 
 export const editUser = (user) => {
-    return fetch('http://localhost:3000/users/user', {
+    return fetch(`${import.meta.env.VITE_REACT_APP_API_URL}/users/user`, {
         method: 'PATCH',
         body: JSON.stringify(user),
         headers: {
@@ -25,7 +25,7 @@ export const editUser = (user) => {
 };
 
 export const editUserStatus = (DNI, status) => {
-    return fetch('http://localhost:3000/users/status', {
+    return fetch(`${import.meta.env.VITE_REACT_APP_API_URL}/users/user`, {
         method: 'PATCH',
         body: JSON.stringify({
             userDni: DNI,

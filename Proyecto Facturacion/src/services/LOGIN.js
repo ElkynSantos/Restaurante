@@ -3,7 +3,7 @@ import axios from 'axios';
 export async function login(user, userPassword) {
     const options = {
         method: 'POST',
-        url: 'http://localhost:3000/auth/login',
+        url: `${import.meta.env.VITE_REACT_APP_API_URL}/auth/login`,
         data: {
             user,
             userPassword,
