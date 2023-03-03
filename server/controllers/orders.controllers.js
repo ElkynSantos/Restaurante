@@ -1,5 +1,6 @@
 import db from '../db.js';
 import AppError from '../utilities/app.error.js';
+import { comparePassword } from '../utilities/handle.bcrypt.js';
 
 const allReadyOrders = async (req, res, next) => {
     try {
@@ -117,7 +118,32 @@ const getOrder = (req, res) => {
 
 const updateOrder = async (req, res, next) => {
     try {
-        const { orderId, products } = req.body;
+        const { orderId, products, userId, userPassword } = req.body;
+
+        const [manager] = await db.query('CALL auth_admin(:userID)', {
+            replacements: {
+                userID: userId,
+            },
+        });
+
+        const rightPassword = await comparePassword(
+            userPassword,
+            manager.password
+        );
+
+        if (!rightPassword) {
+            return res.status(401).json({
+                status: 'fail',
+                msg: 'Contraseña invalida',
+            });
+        }
+
+        if (manager.rol !== 'Gerente') {
+            return res.status(401).json({
+                status: 'fail',
+                msg: 'Usuario no cuenta con los privilegios para editar pedidos',
+            });
+        }
 
         const [updatedOrder] = await db.query(
             'CALL edit_order_products(:order_id, :products_list)',
@@ -134,6 +160,7 @@ const updateOrder = async (req, res, next) => {
             msg: updatedOrder.msg,
         });
     } catch (error) {
+        console.log(error);
         return next(new AppError('No se ha podido editar la orden', 500));
     }
 };
