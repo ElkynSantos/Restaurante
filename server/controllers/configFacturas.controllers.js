@@ -3,9 +3,9 @@ import { integerSanitizer } from '../utilities/data.sanitizer.js';
 
 import db from '../db.js';
 
-const getFacturas = async(req,res,next)=>{
+const getConfigFacturas = async(req,res,next)=>{
     try {
-        const allFacturas = await db.query('CALL get_bills()');
+        const allFacturas = await db.query('CALL get_configFacturas()');
         return res.status(200).json({
             status: 'Ok',
             msg: 'Lista de todos las facturas',
@@ -16,7 +16,7 @@ const getFacturas = async(req,res,next)=>{
     }
 }
 
-const editFacturas =async (req,res,next)=>{
+const editConfigFacturas =async (req,res,next)=>{
 try {
     const {bb,xx,cc,aa} = req.body;
 
@@ -48,7 +48,7 @@ try {
 }
 }
 
-const newFactura =async (req,res,next) =>{
+const newConfigFactura =async (req,res,next) =>{
 try{
 
     const { 
@@ -124,7 +124,7 @@ try{
     }
 
     const [newFactura] = await db.query(
-        'CALL new_bill(:p_RTN, :p_Nombre_Restaurante, :p_domicilio,:p_celular,:p_correo,:p_cai,:p_numero_factura,:p_descripcion_restaurante,:p_fecha_limite_emision,:p_rango_documentos,:p_nombre_cliente,:p_rtn_cliente,:p_fecha_creacion,:p_subtotal,:p_total,:p_tarjeta_efectivo,:p_cambio, :p_anular, :p_usuario_atiende)',
+        'CALL new_configBill(:p_RTN, :p_Nombre_Restaurante, :p_domicilio,:p_celular,:p_correo,:p_cai,:p_numero_factura,:p_descripcion_restaurante,:p_fecha_limite_emision,:p_rango_documentos,:p_nombre_cliente,:p_rtn_cliente,:p_fecha_creacion,:p_subtotal,:p_total,:p_tarjeta_efectivo,:p_cambio, :p_anular, :p_usuario_atiende)',
         {
             replacements: {
                 p_RTN : integerSanitizer(Rtn), 
@@ -173,7 +173,7 @@ try{
 
 
 export {
-    getFacturas,
-    editFacturas,
-    newFactura 
+    getConfigFacturas,
+    editConfigFacturas,
+    newConfigFactura 
 }
