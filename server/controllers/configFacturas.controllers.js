@@ -5,10 +5,10 @@ import db from '../db.js';
 
 const getConfigFacturas = async(req,res,next)=>{
     try {
-        const allFacturas = await db.query('CALL get_configFacturas()');
+        const allFacturas = await db.query('CALL get_configBills()');
         return res.status(200).json({
             status: 'Ok',
-            msg: 'Lista de todos las facturas',
+            msg: 'Lista de todos los awewe',
             allFacturas,
         });
     } catch (error) {
@@ -61,16 +61,8 @@ try{
         numeroFactura,
         descripcionRestaurante, 
         fechaLimiteEmision,
-        rangoDocumentos,
-        nombreCliente,
-        RtnCliente,
-        fechaCreacion,
-        subtotal,
-        total,
-        tarjetaEfectivo,
-        cambio,
-        anular,
-        usuarioAtiende
+        rangoDocumentos
+        
 
     } = req.body;
 
@@ -85,16 +77,7 @@ try{
         numeroFactura,
         descripcionRestaurante, 
         fechaLimiteEmision,
-        rangoDocumentos,
-        nombreCliente,
-        RtnCliente,
-        fechaCreacion,
-        subtotal,
-        total,
-        tarjetaEfectivo,
-        cambio,
-        anular,
-        usuarioAtiende
+        rangoDocumentos
         );
 
        const emptyParams = Object.values({
@@ -107,16 +90,7 @@ try{
         numeroFactura,
         descripcionRestaurante, 
         fechaLimiteEmision,
-        rangoDocumentos,
-        nombreCliente,
-        RtnCliente,
-        fechaCreacion,
-        subtotal,
-        total,
-        tarjetaEfectivo,
-        cambio,
-        anular,
-        usuarioAtiende,
+        rangoDocumentos
         }).some((val) => !val);
 
     if (emptyParams) {
@@ -124,7 +98,7 @@ try{
     }
 
     const [newFactura] = await db.query(
-        'CALL new_configBill(:p_RTN, :p_Nombre_Restaurante, :p_domicilio,:p_celular,:p_correo,:p_cai,:p_numero_factura,:p_descripcion_restaurante,:p_fecha_limite_emision,:p_rango_documentos,:p_nombre_cliente,:p_rtn_cliente,:p_fecha_creacion,:p_subtotal,:p_total,:p_tarjeta_efectivo,:p_cambio, :p_anular, :p_usuario_atiende)',
+        'CALL new_configBill(:p_RTN, :p_Nombre_Restaurante, :p_domicilio,:p_celular,:p_correo,:p_cai,:p_numero_factura,:p_descripcion_restaurante,:p_fecha_limite_emision,:p_rango_documentos)',
         {
             replacements: {
                 p_RTN : integerSanitizer(Rtn), 
@@ -137,15 +111,7 @@ try{
                 p_descripcion_restaurante : descripcionRestaurante, 
                 p_fecha_limite_emision : fechaLimiteEmision, 
                 p_rango_documentos : integerSanitizer(rangoDocumentos), 
-                p_nombre_cliente : nombreCliente, 
-                p_rtn_cliente : RtnCliente, 
-                p_fecha_creacion : fechaCreacion, 
-                p_subtotal : subtotal, 
-                p_total : total, 
-                p_tarjeta_efectivo : tarjetaEfectivo, 
-                p_cambio : cambio,  
-                p_anular : anular,  
-                p_usuario_atiende : usuarioAtiende
+                
         
             },
         }

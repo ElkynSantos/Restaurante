@@ -52,16 +52,8 @@ const newFactura =async (req,res,next) =>{
 try{
 
     const { 
-        Rtn,
-        nombreRestaurante,
-        domicilio,
-        celular,
-        correo,
-        cai,
+       
         numeroFactura,
-        descripcionRestaurante, 
-        fechaLimiteEmision,
-        rangoDocumentos,
         nombreCliente,
         RtnCliente,
         fechaCreacion,
@@ -70,22 +62,17 @@ try{
         tarjetaEfectivo,
         cambio,
         anular,
+        pendiente,
+        pagado,
+        idConfiguracionFactura,
+        idOrden,
         usuarioAtiende
 
     } = req.body;
 
     console.log( 
 
-        Rtn,
-        nombreRestaurante,
-        domicilio,
-        celular,
-        correo,
-        cai,
         numeroFactura,
-        descripcionRestaurante, 
-        fechaLimiteEmision,
-        rangoDocumentos,
         nombreCliente,
         RtnCliente,
         fechaCreacion,
@@ -94,20 +81,16 @@ try{
         tarjetaEfectivo,
         cambio,
         anular,
+        pendiente,
+        pagado,
+        idConfiguracionFactura,
+        idOrden,
         usuarioAtiende
+
         );
 
        const emptyParams = Object.values({
-        Rtn,
-        nombreRestaurante,
-        domicilio,
-        celular,
-        correo,
-        cai,
         numeroFactura,
-        descripcionRestaurante, 
-        fechaLimiteEmision,
-        rangoDocumentos,
         nombreCliente,
         RtnCliente,
         fechaCreacion,
@@ -116,7 +99,12 @@ try{
         tarjetaEfectivo,
         cambio,
         anular,
-        usuarioAtiende,
+        pendiente,
+        pagado,
+        idConfiguracionFactura,
+        idOrden,
+        usuarioAtiende
+
         }).some((val) => !val);
 
     if (emptyParams) {
@@ -124,19 +112,11 @@ try{
     }
 
     const [newFactura] = await db.query(
-        'CALL new_bill(:p_RTN, :p_Nombre_Restaurante, :p_domicilio,:p_celular,:p_correo,:p_cai,:p_numero_factura,:p_descripcion_restaurante,:p_fecha_limite_emision,:p_rango_documentos,:p_nombre_cliente,:p_rtn_cliente,:p_fecha_creacion,:p_subtotal,:p_total,:p_tarjeta_efectivo,:p_cambio, :p_anular, :p_usuario_atiende)',
+        'CALL new_bill(:p_numero_factura,:p_nombre_cliente,:p_rtn_cliente,:p_fecha_creacion,:p_subtotal,:p_total,:p_tarjeta_efectivo,:p_cambio, :p_anular, :p_pendiente,:p_pagado,:p_id_configuracion_factura,:p_id_orden,:p_usuario_atiende)',
         {
             replacements: {
-                p_RTN : integerSanitizer(Rtn), 
-                p_Nombre_Restaurante : nombreRestaurante, 
-                p_domicilio : domicilio, 
-                p_celular : integerSanitizer(celular),
-                p_correo : correo, 
-                p_cai :integerSanitizer(cai), 
-                p_numero_factura : integerSanitizer(numeroFactura), 
-                p_descripcion_restaurante : descripcionRestaurante, 
-                p_fecha_limite_emision : fechaLimiteEmision, 
-                p_rango_documentos : integerSanitizer(rangoDocumentos), 
+     
+                p_numero_factura : numeroFactura,
                 p_nombre_cliente : nombreCliente, 
                 p_rtn_cliente : RtnCliente, 
                 p_fecha_creacion : fechaCreacion, 
@@ -145,6 +125,10 @@ try{
                 p_tarjeta_efectivo : tarjetaEfectivo, 
                 p_cambio : cambio,  
                 p_anular : anular,  
+                p_pendiente : pendiente,
+                p_pagado: pagado,
+                p_id_configuracion_factura:idConfiguracionFactura,
+                p_id_orden:idOrden,
                 p_usuario_atiende : usuarioAtiende
         
             },
