@@ -126,6 +126,13 @@ const updateOrder = async (req, res, next) => {
             },
         });
 
+        if (manager.status !== 1) {
+            return res.status(401).json({
+                status: 'fail',
+                msg: 'Usuario inactivo',
+            });
+        }
+
         const rightPassword = await comparePassword(
             userPassword,
             manager.password
