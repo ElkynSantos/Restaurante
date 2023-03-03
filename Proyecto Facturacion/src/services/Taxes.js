@@ -8,6 +8,7 @@ export async function CreateTax(taxName, taxPercentage) {
             taxName,
             taxPercentage,
         },
+        withCredentials: true,
     };
     const response = await axios.request(options);
 
@@ -15,9 +16,9 @@ export async function CreateTax(taxName, taxPercentage) {
 }
 
 export const agetAllTaxes = async () => {
-    return await fetch(`${import.meta.env.VITE_REACT_APP_API_URL}/taxes/`).then(
-        (response) => response.json()
-    );
+    return await fetch(`${import.meta.env.VITE_REACT_APP_API_URL}/taxes/`, {
+        credentials: 'include',
+    }).then((response) => response.json());
 };
 
 export const editTax = (tax) => {
@@ -27,6 +28,7 @@ export const editTax = (tax) => {
         headers: {
             'Content-Type': 'application/json',
         },
+        credentials: 'include',
     }).then((response) => response.json());
 };
 
@@ -40,5 +42,6 @@ export const deleteTax = (tax, status) => {
         headers: {
             'Content-Type': 'application/json',
         },
+        credentials: 'include',
     }).then((response) => response.json());
 };

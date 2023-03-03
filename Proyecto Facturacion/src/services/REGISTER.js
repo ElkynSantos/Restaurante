@@ -41,11 +41,10 @@ export async function Register(
             email,
             password,
         },
+        withCredentials: true,
     };
 
-    //console.log(options.data);
     const response = await axios.request(options);
-    // console.log(response);
 
     return response.data;
 }

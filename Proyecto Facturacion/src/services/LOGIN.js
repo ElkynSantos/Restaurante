@@ -8,6 +8,7 @@ export async function login(user, userPassword) {
             user,
             userPassword,
         },
+        withCredentials: true,
     };
     const response = await axios.request(options);
 

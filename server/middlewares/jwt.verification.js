@@ -5,24 +5,28 @@ import AppError from '../utilities/app.error.js';
 import db from '../db.js';
 
 const tokenVerification = async (req, res, next) => {
-    // ? Check if the token exists
-    let token;
-    if (
-        req.headers.authorization &&
-        req.headers.authorization.startsWith('Bearer')
-    ) {
-        token = req.headers.authorization.split(' ')[1];
-    }
+    // ? Check if the _token exists
+    // let _token;
+    // if (
+    //     req.headers.authorization &&
+    //     req.headers.authorization.startsWith('Bearer')
+    // ) {
+    //     _token = req.headers.authorization.split(' ')[1];
+    // }
 
-    if (!token) {
+    // console.log(req.cookies._token);
+
+    const { _token } = req.cookies;
+
+    if (!_token) {
         return next(new AppError('El usuario no ha ingresado', 401));
     }
 
-    // ? Validate if the token is valid
+    // ? Validate if the _token is valid
 
     try {
         const decoded = await promisify(jwt.verify)(
-            token,
+            _token,
             process.env.JWT_SECRET
         );
 
@@ -49,8 +53,8 @@ const tokenVerification = async (req, res, next) => {
     } catch (error) {
         let errorType =
             error.message == 'invalid signature'
-                ? 'Token Invalido'
-                : 'Token Vencido';
+                ? '_token Invalido'
+                : '_token Vencido';
         return next(new AppError(errorType, 401));
     }
 };

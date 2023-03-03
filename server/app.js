@@ -1,6 +1,7 @@
 import express from 'express';
 import morgan from 'morgan';
 import dotenv from 'dotenv';
+import cookieParser from 'cookie-parser';
 
 import authRoutes from './routes/auth.routes.js';
 import usersRoutes from './routes/users.routes.js';
@@ -18,6 +19,8 @@ import db from './db.js';
 
 dotenv.config();
 
+// ? COOKIES
+
 // ? DATABASE
 
 try {
@@ -29,7 +32,14 @@ try {
 
 // ? MIDDLEWARES
 const app = express();
-app.use(cors());
+app.use(cookieParser());
+app.use(
+    cors({
+        origin: 'http://localhost:5173',
+        credentials: true,
+    })
+);
+
 app.use(morgan('dev'));
 app.use(express.json());
 

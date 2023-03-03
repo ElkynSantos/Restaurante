@@ -1,7 +1,6 @@
 import axios from 'axios';
 
 export async function CreateProduct(productName, productPrice, productId) {
-    console.log(productPrice);
     const options = {
         method: 'POST',
         url: `${import.meta.env.VITE_REACT_APP_API_URL}/products/`,
@@ -10,6 +9,7 @@ export async function CreateProduct(productName, productPrice, productId) {
             productPrice,
             productId,
         },
+        withCredentials: true,
     };
     const response = await axios.request(options);
 
@@ -31,6 +31,7 @@ export async function editar(
             productName,
             productPrice,
         },
+        withCredentials: true,
     };
     const response = await axios.request(options);
 
@@ -46,6 +47,7 @@ export async function getproduct(product) {
         data: {
             product,
         },
+        withCredentials: true,
     };
     const response = await axios.request(options);
 
