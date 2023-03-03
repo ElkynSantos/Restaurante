@@ -53,8 +53,8 @@ const tokenVerification = async (req, res, next) => {
     } catch (error) {
         let errorType =
             error.message == 'invalid signature'
-                ? '_token Invalido'
-                : '_token Vencido';
+                ? 'Token Invalido'
+                : 'Token Vencido';
         return next(new AppError(errorType, 401));
     }
 };
