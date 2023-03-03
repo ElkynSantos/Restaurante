@@ -16,7 +16,7 @@ import {
     PersonPlusFill,
     Search,
     PencilFill,
-    Trash3Fill,
+    BookmarkDashFill,
     Display,
 } from 'react-bootstrap-icons';
 import Swal from 'sweetalert2';
@@ -38,6 +38,9 @@ const paginationComponentOptions = {
 function ROLES() {
     const dispatch = useDispatch();
     const [data, setData] = useState([]);
+    const [modalVisible, setModalVisible] = useState(false);
+    const show2 = useSelector((state) => state.createrol);
+    const show1 = useSelector((state) => state.editrol);
     // const users = useSelector((state) => state.users);
     const roles = useSelector((state) => state.roles);
     const handleClose = () => {
@@ -49,7 +52,6 @@ function ROLES() {
     };
 
     const handleShowEDIT = () => {
-        console.log('Prueba2');
         dispatch(showModalER());
     };
 
@@ -74,7 +76,62 @@ function ROLES() {
         };
 
         getAllRoles();
-    }, []);
+    }, [modalVisible, dispatch, show2, show1]);
+
+    const deshabilitar_habilitar = async (NRol, habil_deshabil) => {
+        try {
+            const response = await fetch(
+                'http://localhost:3000/roles/unable_enable_role',
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+
+                    body: JSON.stringify({ id_Rol: NRol }),
+                }
+            );
+            const data = await response.json();
+            console.log('==============JUAN ARIAS==================');
+
+            if (data.result[0].resultado.resultado) {
+                Swal.fire({
+                    position: 'top-center',
+                    icon: 'success',
+                    title: habil_deshabil
+                        ? 'Rol Deshabilitado'
+                        : 'Rol Habilitado',
+                    showConfirmButton: false,
+                    timer: 1500,
+                });
+            } else {
+                Swal.fire({
+                    position: 'top-center',
+                    icon: 'Oops...',
+                    title: 'No es posible deshabilitar un rol asignado a un usuario',
+                    showConfirmButton: false,
+                    timer: 1500,
+                });
+            }
+            if (modalVisible) {
+                setModalVisible(false);
+            } else {
+                setModalVisible(true);
+            }
+        } catch (error) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: error,
+            });
+        }
+    };
+
+    const handleDelete = (props, habil_deshabil) => {
+        // reale.stopPropagation();
+
+        deshabilitar_habilitar(props, habil_deshabil);
+    };
 
     const columns = [
         {
@@ -89,34 +146,81 @@ function ROLES() {
             name: 'Fecha de creación',
             selector: (row) => row.Fecha_Creacion,
         },
-        {
-            name: 'id categoría',
-            selector: (row) => row.id_categoria,
-        },
+
         {
             name: 'Acciones',
             selector: (row) => {
-                return (
-                    <Row>
-                        <Col>
-                            <button
-                                className="btn-transparent text-blue p-0"
-                                title="Editar"
-                                onClick={handleShowEDIT}
-                            >
-                                <PencilFill />
-                            </button>
-                        </Col>
-                        <Col>
-                            <button
-                                className="btn-transparent text-danger p-0"
-                                title="Eliminar"
-                            >
-                                <Trash3Fill />
-                            </button>
-                        </Col>
-                    </Row>
-                );
+                if (row.habilitado) {
+                    return (
+                        <Row>
+                            <Col>
+                                <button
+                                    className="btn-transparent text-blue p-0"
+                                    title="Editar"
+                                    onClick={() => {
+                                        localStorage.setItem(
+                                            'ROLaEDITAR',
+                                            row.id
+                                        );
+                                        localStorage.setItem(
+                                            'N_ROLaEDITAR',
+                                            row.Nomb_Rol
+                                        );
+                                        handleShowEDIT();
+                                    }}
+                                >
+                                    <PencilFill />
+                                </button>
+                            </Col>
+                            <Col>
+                                <button
+                                    className="btn-transparent text-success p-0"
+                                    title="Eliminar"
+                                    onClick={() =>
+                                        handleDelete(row.id, row.habilitado)
+                                    }
+                                >
+                                    <BookmarkDashFill />
+                                </button>
+                            </Col>
+                        </Row>
+                    );
+                } else {
+                    return (
+                        <Row>
+                            <Col>
+                                <button
+                                    className="btn-transparent text-blue p-0"
+                                    title="Editar"
+                                    onClick={() => {
+                                        localStorage.setItem(
+                                            'ROLaEDITAR',
+                                            row.id
+                                        );
+                                        localStorage.setItem(
+                                            'N_ROLaEDITAR',
+                                            row.Nomb_Rol
+                                        );
+                                        handleShowEDIT();
+                                    }}
+                                >
+                                    <PencilFill />
+                                </button>
+                            </Col>
+                            <Col>
+                                <button
+                                    className="btn-transparent text-danger p-0"
+                                    title="Eliminar"
+                                    onClick={() =>
+                                        handleDelete(row.id, row.habilitado)
+                                    }
+                                >
+                                    <BookmarkDashFill />
+                                </button>
+                            </Col>
+                        </Row>
+                    );
+                }
             },
         },
     ];

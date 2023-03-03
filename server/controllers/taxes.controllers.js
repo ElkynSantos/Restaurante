@@ -98,3 +98,5 @@ const deleteTax = async (req, res, next) => {
         return next(new AppError('Ups! Error en la base de datos', 500));
     }
 };
+
+export { getTaxes, addTax, editTax, deleteTax };

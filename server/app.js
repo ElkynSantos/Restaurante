@@ -42,7 +42,7 @@ app.use('/taxes', taxesRoutes);
 
 //app.use('/pedidos', pedidosRoutes);
 app.use('/products', productosRoutes);
-app.use('/roles', rolesRoutes);
+//app.use('/roles', rolesRoutes);
 app.all('*', (req, res, next) => {
     next(new AppError(`La ruta ${req.originalUrl} no existe`, 404));
 });
