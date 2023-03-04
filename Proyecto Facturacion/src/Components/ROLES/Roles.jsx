@@ -13,7 +13,7 @@ import {
 import DataTable from 'react-data-table-component';
 import { useSelector, useDispatch } from 'react-redux';
 import {
-    PersonPlusFill,
+    BsFillFileEarmarkPersonFill,
     Search,
     PencilFill,
     BookmarkDashFill,
@@ -258,8 +258,8 @@ function ROLES() {
                     </Col>
                     <Col md="auto">
                         <button className="btn-transparent h3 text-dark">
-                            <PersonPlusFill
-                                title="Agregar usuario"
+                            <BsFillFileEarmarkPersonFill
+                                title="Agregar Rol"
                                 onClick={() => {
                                     handleShow();
                                 }}
