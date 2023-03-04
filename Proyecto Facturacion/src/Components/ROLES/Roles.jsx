@@ -13,7 +13,7 @@ import {
 import DataTable from 'react-data-table-component';
 import { useSelector, useDispatch } from 'react-redux';
 import {
-    BsFillFileEarmarkPersonFill,
+    Clipboard2Plus,
     Search,
     PencilFill,
     BookmarkDashFill,
@@ -71,11 +71,11 @@ function ROLES() {
         const data = await response.json();
     };
 
-    const handleDelete = (props) => {
-        // reale.stopPropagation();
+    //const handleDelete = (props) => {
+    // reale.stopPropagation();
 
-        props.id;
-    };
+    //  props.id;
+    //};
 
     useEffect(() => {
         const getAllRoles = async () => {
@@ -198,7 +198,7 @@ function ROLES() {
                                         handleDelete(row.id, row.habilitado)
                                     }
                                 >
-                                    <BookmarkDashFill />
+                                    <Clipboard2Plus />
                                 </button>
                             </Col>
                         </Row>
