@@ -3,7 +3,7 @@ import AppError from '../utilities/app.error.js';
 
 const allReadyOrders = async (req, res, next) => {
     try {
-        const [order] = await db.query('call salvador3();');
+        const [order] = await db.query('call get_readyOrders();');
 
         if (order.orders === null) {
             res.status(200).json({
@@ -11,7 +11,6 @@ const allReadyOrders = async (req, res, next) => {
                 message: 'No hay pedidos activos por el momento',
             });
         }
-
         return res.json({
             order,
         });

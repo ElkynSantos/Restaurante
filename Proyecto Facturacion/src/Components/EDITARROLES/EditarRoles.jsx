@@ -13,14 +13,13 @@ import {
 } from 'react-bootstrap';
 import Swal from 'sweetalert2';
 
-import { Register } from '../../services/REGISTER';
+//import { Register } from '../../services/REGISTER';
 
 import { showModalER, closeModalER } from '../../features/editarRoles';
 import { useDispatch, useSelector } from 'react-redux';
 
 function Example() {
     const dispatch = useDispatch();
-    // const [show, setShow] = useState(false);
     const handleClose = () => {
         dispatch(closeModalER());
     };
@@ -110,9 +109,6 @@ function EDITARROL() {
             for (let i = 0; i < data.Permisos.length; i++) {
                 ArrayTemp.push(data.Permisos[i].id);
             }
-            console.log('PRUEBA!!!!!!!!!!!!!!');
-            console.log(ArrayTemp);
-
             setCheckedList(ArrayTemp);
         };
 
@@ -158,13 +154,13 @@ function EDITARROL() {
     for (let i = 0; i < DATA.length; i++) {
         listaPermisos.push({ id: DATA[i].id, value: DATA[i].N_Permiso });
     }
-
+    /*
     const setField = (field, value) => {
         setForm({
             ...form,
             [field]: value,
         });
-    };
+    };*/
     function findErrors() {
         const newErrors = {};
         return newErrors;
@@ -182,13 +178,9 @@ function EDITARROL() {
 
     async function handleSubmit(e) {
         e.preventDefault();
-        let newErrors = findErrors();
-        // console.log(newErrors);
 
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors);
-        } else {
-            console.log('FUNCIONA');
         }
     }
 

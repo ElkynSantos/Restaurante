@@ -19,13 +19,12 @@ import { useDispatch, useSelector } from 'react-redux';
 
 function Example() {
     const dispatch = useDispatch();
-    // const [show, setShow] = useState(false);
     const handleClose = () => {
         dispatch(closeModalCR());
     };
 
     const show2 = useSelector((state) => state.createrol);
-    console.log(show2);
+
     return (
         <>
             <Modal
@@ -64,17 +63,12 @@ function CREARROL() {
             await fetch('http://localhost:3000/roles/permits')
                 .then((response) => response.json())
                 .then((data) => {
-                    console.log('================================');
-                    console.log(data.allRoles);
-
-                    //   handleInitRoles(data.allRoles);
                     setPERMISOS(data.allRoles);
                 })
                 .catch((error) => {
                     console.error(error);
                 });
         };
-        console.log(PERMISOS);
         getAllPermisos();
     }, []);
 
@@ -98,21 +92,17 @@ function CREARROL() {
                 }
             );
             const data = await response.json();
-            const getAllPermisos = async () => {
+            /*  const getAllPermisos = async () => {
                 await fetch('http://localhost:3000/roles/permits')
                     .then((response) => response.json())
                     .then((data) => {
-                        console.log('================================');
-                        console.log(data.allRoles);
-
-                        //   handleInitRoles(data.allRoles);
                         setPERMISOS(data.allRoles);
                     })
                     .catch((error) => {
                         console.error(error);
                     });
             };
-            getAllPermisos();
+            getAllPermisos();*/
             Swal.fire({
                 position: 'top-center',
                 icon: 'success',
@@ -147,16 +137,10 @@ function CREARROL() {
     const handleSelect = (id) => {
         const value = id;
         const isChecked = event.target.checked;
-        console.log('Antes');
-        console.log(value);
         if (isChecked) {
-            //Add checked item into checkList
             checkedList.push(value);
             setCheckedList(checkedList);
-            console.log('======CHEQUIADOS======');
-            console.log(checkedList);
         } else {
-            //Remove unchecked item from checkList
             const filteredList = checkedList.filter((item) => item !== value);
             setCheckedList(filteredList);
         }
@@ -168,8 +152,6 @@ function CREARROL() {
 
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors);
-        } else {
-            console.log('FUNCIONA');
         }
     }
 

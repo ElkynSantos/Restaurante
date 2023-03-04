@@ -20,14 +20,11 @@ function LOGIN(props) {
         let { user, userpassword } = form;
 
         if ((!user && user !== '') || user == '') {
-            //En realidad es username
             newErrors.user = 'Espacio de Username Vacio !';
-            //email = "";
         }
-        // validate with regex
+
         if ((!userpassword && userpassword !== '') || userpassword == '') {
             newErrors.userpassword = 'Espacio de contrasena vacio !';
-            //password = "";
         }
 
         return newErrors;
@@ -39,11 +36,8 @@ function LOGIN(props) {
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors);
         } else {
-            //console.log(form.user);
-            //console.log(form.userpassword);
             try {
                 const data = await login(form.user, form.userpassword);
-                //console.log(data);
                 Swal.fire({
                     position: 'top-center',
                     icon: 'success',
@@ -51,7 +45,7 @@ function LOGIN(props) {
                     showConfirmButton: false,
                     timer: 1500,
                 });
-                //console.log(data.jwtToken.userExists.name);
+
                 localStorage.setItem('USERNAME', JSON.stringify(data.msg));
                 localStorage.setItem('USER', form.user);
 
@@ -68,8 +62,6 @@ function LOGIN(props) {
                 );
                 const Datos = await response2.json();
 
-                console.log('==============LOGIN==============');
-                console.log(Datos.RolesPermissions[0].ARRAY.Rol);
                 localStorage.setItem(
                     'ROL',
                     Datos.RolesPermissions[0].ARRAY.Rol

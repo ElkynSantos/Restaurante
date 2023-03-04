@@ -38,14 +38,13 @@ const paginationComponentOptions = {
 function ROLES() {
     const dispatch = useDispatch();
     const [data, setData] = useState([]);
-    const [modalVisible, setModalVisible] = useState(false);
+    const [ChangesUnEnabled, setChangesUnEnabled] = useState(false);
     const show2 = useSelector((state) => state.createrol);
     const show1 = useSelector((state) => state.editrol);
-    // const users = useSelector((state) => state.users);
-    const roles = useSelector((state) => state.roles);
-    const handleClose = () => {
-        dispatch(closeModalCR());
-    };
+    //const roles = useSelector((state) => state.roles);
+    //onst handleClose = () => {
+    //   dispatch(closeModalCR());
+    //};
 
     const handleShow = () => {
         dispatch(showModalCR());
@@ -58,24 +57,6 @@ function ROLES() {
     const handleInitRoles = (data) => {
         dispatch(initRoles(data));
     };
-
-    const eliminar = async (NRol) => {
-        const response = await fetch('http://localhost:3000/roles/DeleteRole', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-
-            body: JSON.stringify({ NombreRol: NRol }),
-        });
-        const data = await response.json();
-    };
-
-    //const handleDelete = (props) => {
-    // reale.stopPropagation();
-
-    //  props.id;
-    //};
 
     useEffect(() => {
         const getAllRoles = async () => {
@@ -94,7 +75,7 @@ function ROLES() {
         };
 
         getAllRoles();
-    }, [modalVisible, dispatch, show2, show1]);
+    }, [ChangesUnEnabled, dispatch, show2, show1]);
 
     const deshabilitar_habilitar = async (NRol, habil_deshabil) => {
         try {
@@ -110,7 +91,6 @@ function ROLES() {
                 }
             );
             const data = await response.json();
-            console.log('==============JUAN ARIAS==================');
 
             if (data.result[0].resultado.resultado) {
                 Swal.fire({
@@ -131,10 +111,10 @@ function ROLES() {
                     timer: 1500,
                 });
             }
-            if (modalVisible) {
-                setModalVisible(false);
+            if (ChangesUnEnabled) {
+                setChangesUnEnabled(false);
             } else {
-                setModalVisible(true);
+                setChangesUnEnabled(true);
             }
         } catch (error) {
             Swal.fire({
@@ -146,8 +126,6 @@ function ROLES() {
     };
 
     const handleDelete = (props, habil_deshabil) => {
-        // reale.stopPropagation();
-
         deshabilitar_habilitar(props, habil_deshabil);
     };
 
@@ -198,7 +176,7 @@ function ROLES() {
                                         handleDelete(row.id, row.habilitado)
                                     }
                                 >
-                                    <Clipboard2Plus />
+                                    <BookmarkDashFill />
                                 </button>
                             </Col>
                         </Row>
@@ -276,7 +254,7 @@ function ROLES() {
                     </Col>
                     <Col md="auto">
                         <button className="btn-transparent h3 text-dark">
-                            <BsFillFileEarmarkPersonFill
+                            <Clipboard2Plus
                                 title="Agregar Rol"
                                 onClick={() => {
                                     handleShow();
