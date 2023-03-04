@@ -169,10 +169,12 @@ CREATE TABLE `pedidos` (
   `idMeseros` int NOT NULL,
   `estadoFactura` tinyint(1) NOT NULL,
   `delivery` tinyint(1) NOT NULL,
+  `updatedAt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `createdAt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `idMesereos` (`idMeseros`),
   CONSTRAINT `pedidos_ibfk_1` FOREIGN KEY (`idMeseros`) REFERENCES `usuarios` (`id_Usuarios`)
-) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -181,7 +183,7 @@ CREATE TABLE `pedidos` (
 
 LOCK TABLES `pedidos` WRITE;
 /*!40000 ALTER TABLE `pedidos` DISABLE KEYS */;
-INSERT INTO `pedidos` VALUES (14,1,1,36,1,0),(15,1,1,36,1,0),(16,1,1,36,1,0),(17,1,1,36,1,0),(18,1,1,36,1,0),(19,1,1,36,1,0),(20,1,1,36,1,0),(21,1,1,36,1,0),(22,1,1,36,1,0),(24,1,1,37,1,0),(25,1,0,37,0,0),(26,1,0,37,1,0),(27,1,0,37,1,0),(28,1,0,37,1,0),(29,1,0,37,1,0),(30,1,0,37,1,0),(31,2,0,37,1,0),(32,2,0,37,1,0),(33,2,0,37,1,0),(34,2,0,37,1,0),(35,2,0,37,1,0),(36,2,0,37,0,0),(37,2,0,37,0,0),(38,2,0,37,0,0),(39,2,0,37,0,0),(40,2,0,37,0,0);
+INSERT INTO `pedidos` VALUES (14,1,1,36,1,0,'2023-03-04 13:57:27','2023-03-04 13:57:27'),(15,1,1,36,1,0,'2023-03-04 13:57:27','2023-03-04 13:57:27'),(16,1,1,36,1,0,'2023-03-04 13:57:27','2023-03-04 13:57:27'),(17,1,1,36,1,0,'2023-03-04 13:57:27','2023-03-04 13:57:27'),(18,1,1,36,1,0,'2023-03-04 13:57:27','2023-03-04 13:57:27'),(19,1,1,36,1,0,'2023-03-04 13:57:27','2023-03-04 13:57:27'),(20,1,1,36,1,0,'2023-03-04 13:57:27','2023-03-04 13:57:27'),(21,1,1,36,1,0,'2023-03-04 13:57:27','2023-03-04 13:57:27'),(22,1,1,36,1,0,'2023-03-04 13:57:27','2023-03-04 13:57:27'),(24,1,1,37,1,0,'2023-03-04 13:57:27','2023-03-04 13:57:27'),(25,1,1,37,1,0,'2023-03-04 17:15:17','2023-03-04 13:57:27'),(26,1,0,37,0,0,'2023-03-04 17:07:18','2023-03-04 13:57:27'),(27,1,0,37,0,0,'2023-03-04 17:07:18','2023-03-04 13:57:27'),(28,1,0,37,0,0,'2023-03-04 17:07:18','2023-03-04 13:57:27'),(29,1,0,37,0,0,'2023-03-04 17:07:18','2023-03-04 13:57:27'),(30,1,0,37,0,0,'2023-03-04 17:07:18','2023-03-04 13:57:27'),(31,2,0,37,0,0,'2023-03-04 17:07:18','2023-03-04 13:57:27'),(32,2,0,37,0,0,'2023-03-04 17:07:18','2023-03-04 13:57:27'),(33,2,0,37,0,0,'2023-03-04 17:07:18','2023-03-04 13:57:27'),(34,2,0,37,0,0,'2023-03-04 17:07:18','2023-03-04 13:57:27'),(35,2,0,37,0,0,'2023-03-04 17:07:18','2023-03-04 13:57:27'),(36,2,0,37,0,0,'2023-03-04 17:07:18','2023-03-04 13:57:27'),(37,2,0,37,0,0,'2023-03-04 17:07:18','2023-03-04 13:57:27'),(38,2,0,37,0,0,'2023-03-04 17:07:18','2023-03-04 13:57:27'),(39,2,0,37,0,0,'2023-03-04 17:07:18','2023-03-04 13:57:27'),(40,2,0,37,0,0,'2023-03-04 17:07:18','2023-03-04 13:57:27'),(41,2,0,37,0,0,'2023-03-04 17:07:18','2023-03-04 20:11:56'),(42,2,0,37,0,0,'2023-03-04 17:07:18','2023-03-04 20:12:19');
 /*!40000 ALTER TABLE `pedidos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -197,12 +199,14 @@ CREATE TABLE `pedidosproducto` (
   `idPedido` int NOT NULL,
   `idproducto` int NOT NULL,
   `cantidad` int NOT NULL,
+  `updatedAt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `createdAt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `fk_idProducto_idx` (`idproducto`),
   KEY `fk_idPedido_idx` (`idPedido`),
   CONSTRAINT `fk_idPedido` FOREIGN KEY (`idPedido`) REFERENCES `pedidos` (`id`),
   CONSTRAINT `fk_idProducto` FOREIGN KEY (`idproducto`) REFERENCES `productos` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=51 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=59 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -211,7 +215,7 @@ CREATE TABLE `pedidosproducto` (
 
 LOCK TABLES `pedidosproducto` WRITE;
 /*!40000 ALTER TABLE `pedidosproducto` DISABLE KEYS */;
-INSERT INTO `pedidosproducto` VALUES (1,25,1,2),(3,25,4,4),(4,26,1,2),(5,26,2,1),(6,26,4,3),(7,27,1,2),(8,27,2,1),(9,27,4,3),(10,28,1,2),(11,28,2,1),(12,28,4,3),(13,29,1,2),(14,29,2,1),(15,29,4,3),(16,30,1,2),(17,30,2,1),(18,30,4,3),(19,31,1,2),(20,31,2,2),(21,31,3,4),(22,32,1,2),(23,32,2,2),(24,32,3,4),(25,33,1,2),(26,33,2,2),(28,34,1,2),(29,34,2,2),(30,34,3,4),(31,35,1,2),(32,35,2,2),(33,35,3,4),(34,36,1,2),(35,36,2,2),(36,36,3,4),(37,37,1,2),(38,37,2,2),(39,37,3,4),(40,38,1,2),(41,38,2,2),(42,38,3,4),(43,39,1,2),(44,39,2,9),(45,39,3,1),(46,25,2,3),(47,40,1,2),(48,40,2,3),(49,40,3,4),(50,40,4,4);
+INSERT INTO `pedidosproducto` VALUES (1,25,1,2,'2023-03-04 14:20:59','2023-03-04 14:20:59'),(3,25,4,4,'2023-03-04 14:20:59','2023-03-04 14:20:59'),(4,26,1,2,'2023-03-04 14:20:59','2023-03-04 14:20:59'),(5,26,2,1,'2023-03-04 14:20:59','2023-03-04 14:20:59'),(6,26,4,3,'2023-03-04 14:20:59','2023-03-04 14:20:59'),(7,27,1,2,'2023-03-04 14:20:59','2023-03-04 14:20:59'),(8,27,2,1,'2023-03-04 14:20:59','2023-03-04 14:20:59'),(9,27,4,3,'2023-03-04 14:20:59','2023-03-04 14:20:59'),(10,28,1,2,'2023-03-04 14:20:59','2023-03-04 14:20:59'),(11,28,2,1,'2023-03-04 14:20:59','2023-03-04 14:20:59'),(12,28,4,3,'2023-03-04 14:20:59','2023-03-04 14:20:59'),(13,29,1,2,'2023-03-04 14:20:59','2023-03-04 14:20:59'),(14,29,2,1,'2023-03-04 14:20:59','2023-03-04 14:20:59'),(15,29,4,3,'2023-03-04 14:20:59','2023-03-04 14:20:59'),(16,30,1,2,'2023-03-04 14:20:59','2023-03-04 14:20:59'),(17,30,2,1,'2023-03-04 14:20:59','2023-03-04 14:20:59'),(18,30,4,3,'2023-03-04 14:20:59','2023-03-04 14:20:59'),(19,31,1,2,'2023-03-04 14:20:59','2023-03-04 14:20:59'),(20,31,2,2,'2023-03-04 14:20:59','2023-03-04 14:20:59'),(21,31,3,4,'2023-03-04 14:20:59','2023-03-04 14:20:59'),(22,32,1,2,'2023-03-04 14:20:59','2023-03-04 14:20:59'),(23,32,2,2,'2023-03-04 14:20:59','2023-03-04 14:20:59'),(24,32,3,4,'2023-03-04 14:20:59','2023-03-04 14:20:59'),(25,33,1,2,'2023-03-04 14:20:59','2023-03-04 14:20:59'),(26,33,2,2,'2023-03-04 14:20:59','2023-03-04 14:20:59'),(28,34,1,2,'2023-03-04 14:20:59','2023-03-04 14:20:59'),(29,34,2,2,'2023-03-04 14:20:59','2023-03-04 14:20:59'),(30,34,3,4,'2023-03-04 14:20:59','2023-03-04 14:20:59'),(31,35,1,2,'2023-03-04 14:20:59','2023-03-04 14:20:59'),(32,35,2,2,'2023-03-04 14:20:59','2023-03-04 14:20:59'),(33,35,3,4,'2023-03-04 14:20:59','2023-03-04 14:20:59'),(34,36,1,2,'2023-03-04 14:20:59','2023-03-04 14:20:59'),(35,36,2,2,'2023-03-04 14:20:59','2023-03-04 14:20:59'),(36,36,3,4,'2023-03-04 14:20:59','2023-03-04 14:20:59'),(37,37,1,2,'2023-03-04 14:20:59','2023-03-04 14:20:59'),(38,37,2,2,'2023-03-04 14:20:59','2023-03-04 14:20:59'),(39,37,3,4,'2023-03-04 14:20:59','2023-03-04 14:20:59'),(40,38,1,2,'2023-03-04 14:20:59','2023-03-04 14:20:59'),(41,38,2,2,'2023-03-04 14:20:59','2023-03-04 14:20:59'),(42,38,3,4,'2023-03-04 14:20:59','2023-03-04 14:20:59'),(43,39,1,2,'2023-03-04 14:20:59','2023-03-04 14:20:59'),(44,39,2,9,'2023-03-04 14:20:59','2023-03-04 14:20:59'),(45,39,3,1,'2023-03-04 14:20:59','2023-03-04 14:20:59'),(46,25,2,3,'2023-03-04 14:20:59','2023-03-04 14:20:59'),(47,40,1,2,'2023-03-04 14:20:59','2023-03-04 14:20:59'),(48,40,2,3,'2023-03-04 14:20:59','2023-03-04 14:20:59'),(49,40,3,4,'2023-03-04 14:20:59','2023-03-04 14:20:59'),(50,40,4,4,'2023-03-04 14:20:59','2023-03-04 14:20:59'),(51,41,1,2,'2023-03-04 14:20:59','2023-03-04 14:20:59'),(52,41,2,2,'2023-03-04 14:20:59','2023-03-04 14:20:59'),(53,41,3,4,'2023-03-04 14:20:59','2023-03-04 14:20:59'),(54,42,1,9,'2023-03-04 20:25:56','2023-03-04 14:20:59'),(55,42,2,9,'2023-03-04 20:24:45','2023-03-04 14:20:59'),(56,42,3,8,'2023-03-04 20:24:45','2023-03-04 14:20:59');
 /*!40000 ALTER TABLE `pedidosproducto` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -929,6 +933,82 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `get_all_orders` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_all_orders`(IN estadoCocina INT, IN estadoFactura INT)
+BEGIN
+    CREATE TEMPORARY TABLE IF NOT EXISTS t1 (
+        mesaID INT,
+        numero_pedido INT,
+        id_producto INT,
+        nombre_producto VARCHAR(255),
+        cantidad INT
+    );
+
+    INSERT INTO t1 (mesaID, numero_pedido, id_producto, nombre_producto, cantidad)
+    SELECT 
+        p.numeroMesa AS mesaID,
+        p.id AS numero_pedido,
+        pr.id AS id_producto,
+        pr.nombre_producto AS nombre_producto,
+        SUM(pp.cantidad) AS cantidad
+    FROM pedidosproducto pp
+    INNER JOIN pedidos p ON p.id = pp.idPedido
+    INNER JOIN productos pr ON pp.idProducto = pr.id
+    WHERE p.estadoCocina = estadoCocina AND p.estadoFactura = estadoFactura AND DATE(p.createdAt) = CURDATE()
+    GROUP BY p.numeroMesa, p.id, pp.idProducto;
+
+    CREATE TEMPORARY TABLE IF NOT EXISTS t2 (
+        mesaID INT,
+        numero_pedido INT,
+        productos JSON
+    );
+
+    INSERT INTO t2 (mesaID, numero_pedido, productos)
+    SELECT 
+        mesaID,
+        numero_pedido,
+        JSON_ARRAYAGG(
+            JSON_OBJECT(
+                'id_producto', id_producto,
+                'nombre_producto', nombre_producto,
+                'cantidad', cantidad
+            )
+        )
+    FROM t1
+    GROUP BY mesaID, numero_pedido;
+
+    SELECT 
+        JSON_ARRAYAGG(
+            JSON_OBJECT(
+                'mesaID', mesaID,
+                'numero_pedido', numero_pedido,
+                'productos', productos,
+                'estadoCocina', estadoCocina,
+                'estadoFactura', estadoFactura,
+                'createdAt', createdAt
+            )
+        ) AS orders
+    FROM t2
+    INNER JOIN pedidos ON t2.numero_pedido = pedidos.id
+    WHERE pedidos.estadoCocina = estadoCocina AND pedidos.estadoFactura = estadoFactura AND DATE(pedidos.createdAt) = CURDATE();
+
+    DROP TEMPORARY TABLE IF EXISTS t1;
+    DROP TEMPORARY TABLE IF EXISTS t2;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!50003 DROP PROCEDURE IF EXISTS `get_all_permits` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -1023,77 +1103,6 @@ BEGIN
 		FROM usuarios
 		INNER JOIN roles ON usuarios.id_Rol = roles.id;
 	END;
-END ;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!50003 DROP PROCEDURE IF EXISTS `get_completed_orders` */;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8mb4 */ ;
-/*!50003 SET character_set_results = utf8mb4 */ ;
-/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
-DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `get_completed_orders`()
-BEGIN
-    CREATE TEMPORARY TABLE IF NOT EXISTS t1 (
-        mesaID INT,
-        numero_pedido INT,
-        id_producto INT,
-        nombre_producto VARCHAR(255),
-        cantidad INT
-    );
-
-    INSERT INTO t1 (mesaID, numero_pedido, id_producto, nombre_producto, cantidad)
-    SELECT 
-        p.numeroMesa AS mesaID,
-        p.id AS numero_pedido,
-        pr.id AS id_producto,
-        pr.nombre_producto AS nombre_producto,
-        SUM(pp.cantidad) AS cantidad
-    FROM pedidosproducto pp
-    INNER JOIN pedidos p ON p.id = pp.idPedido
-    INNER JOIN productos pr ON pp.idProducto = pr.id
-    WHERE p.estadoCocina = 1
-    GROUP BY p.numeroMesa, p.id, pp.idProducto;
-
-    CREATE TEMPORARY TABLE IF NOT EXISTS t2 (
-        mesaID INT,
-        numero_pedido INT,
-        productos JSON
-    );
-
-    INSERT INTO t2 (mesaID, numero_pedido, productos)
-    SELECT 
-        mesaID,
-        numero_pedido,
-        JSON_ARRAYAGG(
-            JSON_OBJECT(
-                'id_producto', id_producto,
-                'nombre_producto', nombre_producto,
-                'cantidad', cantidad
-            )
-        )
-    FROM t1
-    GROUP BY mesaID, numero_pedido;
-
-    SELECT 
-        JSON_ARRAYAGG(
-            JSON_OBJECT(
-                'mesaID', mesaID,
-                'numero_pedido', numero_pedido,
-                'productos', productos
-            )
-        ) AS orders
-    FROM t2;
-
-    DROP TEMPORARY TABLE IF EXISTS t1;
-    DROP TEMPORARY TABLE IF EXISTS t2;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -1842,4 +1851,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-03-03 12:45:53
+-- Dump completed on 2023-03-04 17:20:32

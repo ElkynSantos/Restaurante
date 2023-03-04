@@ -2,15 +2,22 @@ import db from '../db.js';
 import AppError from '../utilities/app.error.js';
 import { comparePassword } from '../utilities/handle.bcrypt.js';
 
-const allReadyOrders = async (req, res, next) => {
+const allCompletedOrders = async (req, res, next) => {
     try {
-        const [order] = await db.query('call salvador3();');
+        const [order] = await db.query(
+            'CALL get_all_orders(:estadoCocina, :estadoFactura)',
+            {
+                replacements: {
+                    estadoCocina: 1,
+                    estadoFactura: 1,
+                },
+            }
+        );
 
         if (order.orders === null) {
-            res.status(200).json({
-                status: 'fail',
-                message: 'No hay pedidos activos por el momento',
-            });
+            return next(
+                new AppError(`No hay ordenes completadas en este momento`, 404)
+            );
         }
 
         return res.json({
@@ -28,7 +35,46 @@ const allReadyOrders = async (req, res, next) => {
 
 const allPendingOrders = async (req, res, next) => {
     try {
-        const [order] = await db.query('CALL get_active_orders();');
+        const [order] = await db.query(
+            'CALL get_all_orders(:estadoCocina, :estadoFactura)',
+            {
+                replacements: {
+                    estadoCocina: 0,
+                    estadoFactura: 0,
+                },
+            }
+        );
+
+        if (order.orders === null) {
+            return next(
+                new AppError(`No hay ordenes activas en este momento`, 404)
+            );
+        }
+
+        return res.json({
+            order,
+        });
+    } catch (error) {
+        return next(
+            new AppError(
+                `No se pueden mostrar las ordenes en este momento`,
+                500
+            )
+        );
+    }
+};
+
+const allCookedOrders = async (req, res, next) => {
+    try {
+        const [order] = await db.query(
+            'CALL get_all_orders(:estadoCocina, :estadoFactura)',
+            {
+                replacements: {
+                    estadoCocina: 1,
+                    estadoFactura: 0,
+                },
+            }
+        );
 
         if (order.orders === null) {
             return next(
@@ -180,7 +226,7 @@ const deleteOrder = (req, res) => {
 };
 
 export {
-    allReadyOrders,
+    allCompletedOrders,
     allPendingOrders,
     newOrder,
     getOrder,
@@ -188,4 +234,5 @@ export {
     deleteOrder,
     CompletedOrder,
     BackCompleteOrder,
+    allCookedOrders,
 };
