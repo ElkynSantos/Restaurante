@@ -470,7 +470,15 @@ CREATE TABLE `usuarios` (
 
 LOCK TABLES `usuarios` WRITE;
 /*!40000 ALTER TABLE `usuarios` DISABLE KEYS */;
+<<<<<<< HEAD
+<<<<<<< HEAD
+
+=======
 INSERT INTO `usuarios` VALUES (36,'Juan','Arias','csssc',2,'10332','M','1995-01-28','La Lima','9393','pruxc@gmsail.com','$2b$10$do1XmzgK43LXuvBbWCEt4.0HePOwQGvnCyHO/JuZyVzLheO5qhC8W','hrhJQYqw3V2p',1),(37,'Juan','Arias','cc',1,'1032','H','1995-01-28','La Lima','9393','pruxcssx@gmsail.com','$2b$10$AWvqkhWBWLMGn1O5tiiyVekoipGHwL44tvV/SUB/91Srkj3P5aPv.',NULL,1),(38,'Juan','Arias','JUAR5219',1,'01','H','1995-01-28','Choloma','9393','t@gmil.com','$2b$10$q8qZ8RusbxGiOw4msrFRnuNLdUKUONAUyH8yFAnC81XckbmH25ECG','kn2o6ZUqOlHC',1),(39,'Juan','Arias','JUAR9423',1,'1234567891234','H','1995-01-28','Choloma','9393','2ssa@gmail.com','$2b$10$JNbsbAoHb8TC.J66A/27cetmdnKXOrR4x7esmgjG/ve6t0K196Wt2','sUxNFGZvC7ht',1),(40,'Juan','Arias','JUAR5923',1,'1804200001272','H','1995-01-28','Choloma','9393','2ss@gmail.com','$2b$10$ybrwRnGnvgeNexFjkvlZkuWrQeTipRXQpGrIJPS7D090JxHBEt1Sq','wcJauDN08i1x',0),(42,'Juan','Arias','JUAR2823',2,'1804202001272','H','1995-01-28','Choloma','9393','2ssss@gmail.com','$2b$10$t7SDBCwYSSQHMykwYtCI.Ou3QGFds/1EbRiDeTNm9W0DU3zvBaL.6','OM9XXMnGMi0w',1),(43,'Juan','Arias','JUAR6823',1,'0502199600071','M','1998-02-01','San Pedro','98989898','jar@gmail.com','$2b$10$WPJAcJY5zqfG08/Itjii/.BD9uesTUCyAZDzp6rKfZyEJVFkn/WAK','plHvyAP58YgI',0);
+>>>>>>> origin/Users
+=======
+INSERT INTO `usuarios` VALUES (36,'Juan','Arias','csssc',2,'10332','M','1995-01-28','La Lima','9393','pruxc@gmsail.com','$2b$10$do1XmzgK43LXuvBbWCEt4.0HePOwQGvnCyHO/JuZyVzLheO5qhC8W','hrhJQYqw3V2p',1),(37,'Juan','Arias','cc',1,'1032','H','1995-01-28','La Lima','9393','pruxcssx@gmsail.com','$2b$10$AWvqkhWBWLMGn1O5tiiyVekoipGHwL44tvV/SUB/91Srkj3P5aPv.',NULL,1),(38,'Juan','Arias','JUAR5219',1,'01','H','1995-01-28','Choloma','9393','t@gmil.com','$2b$10$q8qZ8RusbxGiOw4msrFRnuNLdUKUONAUyH8yFAnC81XckbmH25ECG','kn2o6ZUqOlHC',1),(39,'Juan','Arias','JUAR9423',1,'1234567891234','H','1995-01-28','Choloma','9393','2ssa@gmail.com','$2b$10$JNbsbAoHb8TC.J66A/27cetmdnKXOrR4x7esmgjG/ve6t0K196Wt2','sUxNFGZvC7ht',1),(40,'Juan','Arias','JUAR5923',1,'1804200001272','H','1995-01-28','Choloma','9393','2ss@gmail.com','$2b$10$ybrwRnGnvgeNexFjkvlZkuWrQeTipRXQpGrIJPS7D090JxHBEt1Sq','wcJauDN08i1x',0),(42,'Juan','Arias','JUAR2823',2,'1804202001272','H','1995-01-28','Choloma','9393','2ssss@gmail.com','$2b$10$t7SDBCwYSSQHMykwYtCI.Ou3QGFds/1EbRiDeTNm9W0DU3zvBaL.6','OM9XXMnGMi0w',1),(43,'Juan','Arias','JUAR6823',1,'0502199600071','M','1998-02-01','San Pedro','98989898','jar@gmail.com','$2b$10$WPJAcJY5zqfG08/Itjii/.BD9uesTUCyAZDzp6rKfZyEJVFkn/WAK','plHvyAP58YgI',0);
+>>>>>>> origin/users
 /*!40000 ALTER TABLE `usuarios` ENABLE KEYS */;
 UNLOCK TABLES;
 

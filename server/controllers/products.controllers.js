@@ -90,6 +90,7 @@ const newProduct = async (req, res, next) => {
             msg: newProduct.msg,
         });
     } catch (error) {
+        console.log(error);
         return next(
             new AppError(
                 'Ha ocurrido algún error al crear el nuevo producto',
@@ -101,25 +102,19 @@ const newProduct = async (req, res, next) => {
 
 const editProduct = async (req, res, next) => {
     try {
-        const {
-            productId,
-            productCode,
-            productName,
-            productPrice,
-            taxId,
-            productStatus,
-        } = req.body;
+        console.log('entro');
+        const { productId, productCode, productName, productPrice, taxRate } =
+            req.body;
 
         const updatedProduct = await db.query(
-            'CALL edit_product(:productId, :productCode,  :productName,  :productPrice, :taxRate, :productStatus, )',
+            'CALL edit_product(:productId, :productCode,  :productName, :productPrice, :taxRate)',
             {
                 replacements: {
                     productId: productId,
                     productCode: productCode,
                     productName: productName,
                     productPrice: productPrice,
-                    taxRate: taxId,
-                    productStatus: productStatus,
+                    taxRate: taxRate,
                 },
             }
         );
@@ -145,7 +140,7 @@ const editProductStatus = async (req, res, next) => {
     try {
         const { productID, status } = req.body;
 
-        if (!productID || !status) {
+        if (!productID) {
             return next(new AppError(`No se permiten campos vacios`, 400));
         }
 
