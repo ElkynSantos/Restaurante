@@ -18,7 +18,7 @@ const EditFacturaModal = ({ show, handleClose, handleSave, factura }) => {
       vendedor,
       estado,
       total
-    };
+    };d
     handleSave(editedFactura);
     handleClose();
   };
