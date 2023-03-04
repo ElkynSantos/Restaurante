@@ -1,3 +1,6 @@
+//Para correr el código por ahorita meterse en el directorio del archivo en la terminal y usar node index.cjs.
+//El archivo se guarda en directorio raíz
+
 //Import de librería de easyinvoice
 var easyinvoice = require('easyinvoice');
 //import de librería fs de NodeJS para guardar archivo
