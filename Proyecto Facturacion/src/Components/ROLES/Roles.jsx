@@ -59,6 +59,24 @@ function ROLES() {
         dispatch(initRoles(data));
     };
 
+    const eliminar = async (NRol) => {
+        const response = await fetch('http://localhost:3000/roles/DeleteRole', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+
+            body: JSON.stringify({ NombreRol: NRol }),
+        });
+        const data = await response.json();
+    };
+
+    const handleDelete = (props) => {
+        // reale.stopPropagation();
+
+        props.id;
+    };
+
     useEffect(() => {
         const getAllRoles = async () => {
             await fetch('http://localhost:3000/roles')

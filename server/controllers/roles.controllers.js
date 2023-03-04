@@ -82,6 +82,49 @@ const CreateNewRole = async (req, res, next) => {
     }
 };
 
+const CreateNewRole = async (req, res, next) => {
+    try {
+        const { NombreRol } = req.body;
+
+        await db.query("CALL crear_rol('" + NombreRol + "', 1);");
+
+        return res.status(200).json({});
+    } catch (error) {
+        return next(new AppError('Ups! Error en la base de datos', 500));
+    }
+};
+
+const DeleteRole = async (req, res, next) => {
+    try {
+        const { NRol } = req.body;
+
+        await db.query('CALL eliminar_rol(' + NRol + ');');
+
+        return res.status(200).json('Rol Editado Correctamente');
+    } catch (error) {
+        return next(new AppError('Ups! Error en la base de datos', 500));
+    }
+};
+
+const CreateNewRole = async (req, res, next) => {
+    try {
+        const { NombreRol, ArrayPermisos } = req.body;
+
+        console.log('===========================LUGAR===========');
+        console.log(ArrayPermisos);
+
+        let permisos_str = ArrayPermisos.join();
+        let permisos = JSON.stringify(permisos_str);
+        await db.query(
+            'CALL crear_rol("' + NombreRol + '", "' + ArrayPermisos + '");'
+        );
+
+        return res.status(200).json('Se Creo el Rol');
+    } catch (error) {
+        return next(new AppError('Ups! Error en la base de datos', 500));
+    }
+};
+
 const getAllRoles = async (req, res, next) => {
     try {
         const allRoles = await db.query(`CALL get_all_roles()`);

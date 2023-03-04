@@ -5,22 +5,22 @@ import ROLES from './Components/ROLES/index';
 import CREARUSUARIO from './Components/CREARUSUARIO/index';
 import INICIO from './Components/INICIO/index';
 import MESAS from './Components/MESAS/index';
-import LISTAPEDIDOS from './Components/LISTAPEDIDOS//index';
+import LISTAPEDIDOS from './Components/LISTAPEDIDOS/index';
 import PEDIDOS from './Components/PEDIDOS/index';
 import FACTURACION from './Components/FACTURACION/index';
-import USERS from './Components/USERS/index';
+import USERS from './Components/USERS/index.js';
 import FormPassword from './Components/FormPassword/index';
 import Productos from './Components/CREARPRODUCTOS/index';
 import Recovery from './Components/Recovery/Recovery';
 import editarProductos from './Components/FormPassword/index';
 
-import LISTAFACTURACION from './Components/LISTAFACTURACION/index';
+import LISTAFACTURACION from './Components/LISTAFACTURACION/index.js';
 
 import './App.css';
 import { useDispatch, useSelector } from 'react-redux';
 
 import Email from './Components/EmailVerification/index';
-import IMPUESTO from './Components/IMPUESTOS';
+// import IMPUESTO from './Components/IMPUESTOS';
 import ECBMPUESTO from './Components/IMPUESTOSG';
 import RecuperarContraseña from './Components/RecoveryPassword/index';
 import FormPass from './Components/FormPassword/index';
@@ -33,6 +33,7 @@ function App() {
             <Routes>
                 <Route index element={<LOGIN />} />
                 <Route path="/Home" element={<INICIO />} />
+
                 <Route path="/Pedidos" element={<PEDIDOS />} />
                 <Route path="/ListaPedidos" element={<LISTAPEDIDOS />} />
                 <Route path="/mesas" element={<MESAS />} />
