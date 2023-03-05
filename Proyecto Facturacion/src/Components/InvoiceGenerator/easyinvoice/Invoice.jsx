@@ -1,6 +1,4 @@
-import React, { useEffect } from "react";
 import easyinvoice from "easyinvoice";
-import logoImage from '../easyinvoice/logo.png';
 import {
     Button,
     Col,
