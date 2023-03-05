@@ -20,6 +20,7 @@
         "react-bootstrap": "^2.7.0",
         "react-bootstrap-accordion": "^1.0.0",
         "react-bootstrap-icons": "^1.10.2",
+        "react-bootstrap-typeahead": "^6.0.2",
         "react-data-table-component": "^7.5.3",
         "react-dom": "^18.2.0",
         "react-icons": "^4.7.1",

@@ -14,6 +14,19 @@ const getAllProducts = async (req, res, next) => {
     }
 };
 
+const getAllActive_products = async (req, res, next) => {
+    try {
+        const allProducts = await db.query('CALL getallactive_products()');
+        return res.status(200).json({
+            status: 'Ok',
+            msg: 'Lista de todos los productos disponibles',
+            allProducts,
+        });
+    } catch (error) {
+        return next(new AppError('Ups! Error en la base de datos', 500));
+    }
+};
+
 const getSingleProduct = async (req, res, next) => {
     try {
         const { productId } = req.body;
@@ -171,4 +184,5 @@ export {
     editProduct,
     getSingleProduct,
     editProductStatus,
+    getAllActive_products,
 };

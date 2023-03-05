@@ -9,6 +9,7 @@ import {
     Form,
     InputGroup,
 } from 'react-bootstrap';
+
 import DataTable from 'react-data-table-component';
 import { useSelector, useDispatch } from 'react-redux';
 import {
@@ -57,8 +58,6 @@ function PRODUCTOT() {
             dispatch(guardar(dataproduct.products[0]));
             dispatch(showModalEP());
         });
-
-        console.log(valores);
     };
 
     const handleShowEP = () => {

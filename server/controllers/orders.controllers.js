@@ -51,7 +51,9 @@ const CompletedOrder = async (req, res, next) => {
     const { id } = req.body;
     try {
         await db.query(
-            'UPDATE db_rest.pedidos SET estadoCocina = 1 WHERE id = ' + id + ';'
+            'UPDATE bd_restaurante.pedidos SET estadoCocina = 1 WHERE id = ' +
+                id +
+                ';'
         );
 
         return res.json({});
@@ -69,7 +71,9 @@ const BackCompleteOrder = async (req, res, next) => {
     const { id } = req.body;
     try {
         await db.query(
-            'UPDATE db_rest.pedidos SET estadoCocina = 0 WHERE id = ' + id + ';'
+            'UPDATE bd_restaurante.pedidos SET estadoCocina = 0 WHERE id = ' +
+                id +
+                ';'
         );
 
         return res.json({});
