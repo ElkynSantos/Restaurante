@@ -8,7 +8,6 @@ import { editUser } from '../../services/users';
 import { editUser as editUserState } from '../../features/usersSlice';
 import { showModal, closeModal, setField } from '../../features/editUserSlice';
 
-
 function Example() {
     // const [show, setShow] = useState(true);
     // const handleClose = () => {
@@ -42,11 +41,15 @@ function Example() {
                     <CREARUSUARIO></CREARUSUARIO>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="danger" type="button" onClick={() => handleClose()}>
+                    <Button
+                        variant="danger"
+                        type="button"
+                        onClick={() => handleClose()}
+                    >
                         Salir
                     </Button>
 
-                    <Button className='bg-blue' form="test" type="submit">
+                    <Button className="bg-blue" form="test" type="submit">
                         Guardar cambios
                     </Button>
                 </Modal.Footer>
@@ -57,16 +60,31 @@ function Example() {
 
 function CREARUSUARIO() {
     const dispatch = useDispatch();
-    let {Birthday, DNI, Email, Name, LastName, Gender, Phone, PlaceofBirth, Rol, RolName, UserName, userIdDb, userStatus} = useSelector((state) => state.modalEditUser.currentUser);
+    const [DATA, setData] = useState([]);
+    let {
+        Birthday,
+        DNI,
+        Email,
+        Name,
+        LastName,
+        Gender,
+        Phone,
+        PlaceofBirth,
+        Rol,
+        RolName,
+        UserName,
+        userIdDb,
+        userStatus,
+    } = useSelector((state) => state.modalEditUser.currentUser);
     const [errors, setErrors] = useState({});
 
     const handleEditUser = (newDataUser) => {
-        dispatch(editUserState(newDataUser))
-    }
+        dispatch(editUserState(newDataUser));
+    };
 
     const handleSetField = (field, value) => {
-        dispatch(setField({field, value}));
-    }
+        dispatch(setField({ field, value }));
+    };
 
     function findErrors() {
         const newErrors = {};
@@ -99,6 +117,18 @@ function CREARUSUARIO() {
         return newErrors;
     }
 
+    useEffect(() => {
+        const getAllActiveRoles = async () => {
+            await fetch('http://localhost:3000/users/activeroles')
+                .then((response) => response.json())
+                .then((data) => {
+                    console.log(data), setData(data.allActiveRoles);
+                });
+        };
+
+        getAllActiveRoles();
+    }, []);
+
     async function handleSubmit(e) {
         e.preventDefault();
         let newErrors = findErrors();
@@ -119,10 +149,10 @@ function CREARUSUARIO() {
                 phone: Phone,
                 email: Email,
                 userIdDb,
-                userStatus
+                userStatus,
             })
                 .then((data) => {
-                    if(data.status == "Ok") {
+                    if (data.status == 'Ok') {
                         handleEditUser({
                             FullName: `${Name} ${LastName}`,
                             UserName,
@@ -133,23 +163,23 @@ function CREARUSUARIO() {
                             PlaceofBirth,
                             Phone,
                             Email,
-                            status: userStatus
-                        })
+                            status: userStatus,
+                        });
                         Swal.fire({
                             text: data.msg,
-                            icon: "success"
-                        })
+                            icon: 'success',
+                        });
                         return;
                     }
 
                     Swal.fire({
                         text: data.msg,
-                        icon: "error"
-                    })
+                        icon: 'error',
+                    });
                 })
                 .catch((error) => {
-                    console.error("Saracatunga:", error)
-                })
+                    console.error('Saracatunga:', error);
+                });
         }
     }
 
@@ -172,8 +202,10 @@ function CREARUSUARIO() {
                                 <Form.Control
                                     type="text"
                                     placeholder="Ingrese el nuevo nombre"
-                                    onChange={(e) => handleSetField('Name', e.target.value)}
-                                    value = {Name}
+                                    onChange={(e) =>
+                                        handleSetField('Name', e.target.value)
+                                    }
+                                    value={Name}
                                     required
                                     // isInvalid={!!errors.nombre}
                                 />
@@ -188,7 +220,10 @@ function CREARUSUARIO() {
                                     type="text"
                                     placeholder="Ingrese el nuevo apellido"
                                     onChange={(e) =>
-                                        handleSetField('LastName', e.target.value)
+                                        handleSetField(
+                                            'LastName',
+                                            e.target.value
+                                        )
                                     }
                                     value={LastName}
                                     required
@@ -207,24 +242,32 @@ function CREARUSUARIO() {
                                     type="text"
                                     placeholder="Ingrese el lugar"
                                     required
-                                    onChange={(e) => handleSetField('PlaceofBirth', e.target.value)}
+                                    onChange={(e) =>
+                                        handleSetField(
+                                            'PlaceofBirth',
+                                            e.target.value
+                                        )
+                                    }
                                     value={PlaceofBirth}
                                     //isInvalid={!!errors.email}
                                 />
                             </Form.Group>
                         </Col>
                         <Col>
-                            <Form.Label className="text-center fw-semibold">Género</Form.Label>
+                            <Form.Label className="text-center fw-semibold">
+                                Género
+                            </Form.Label>
                             <Form.Group>
-                                <Form.Select aria-label="Género" 
-                                    onChange={(e) => handleSetField('Gender', e.target.value)}
+                                <Form.Select
+                                    aria-label="Género"
+                                    onChange={(e) =>
+                                        handleSetField('Gender', e.target.value)
+                                    }
                                 >
                                     <option selected disabled value={Gender}>
                                         {Gender}
                                     </option>
-                                    <option value="X">
-                                        No definido
-                                    </option>
+                                    <option value="X">No definido</option>
                                     <option value="M">Masculino</option>
                                     <option value="F">Femenino</option>
                                 </Form.Select>
@@ -232,12 +275,19 @@ function CREARUSUARIO() {
                         </Col>
                         <Col>
                             <Form.Group>
-                                <Form.Label className="text-center fw-semibold">Fecha de nacimiento</Form.Label>
+                                <Form.Label className="text-center fw-semibold">
+                                    Fecha de nacimiento
+                                </Form.Label>
                                 <Form.Control
                                     type="date"
                                     placeholder="Ingresar fecha de nacimiento"
                                     required
-                                    onChange={(e) => handleSetField('Birthday', e.target.value)}
+                                    onChange={(e) =>
+                                        handleSetField(
+                                            'Birthday',
+                                            e.target.value
+                                        )
+                                    }
                                     value={Birthday}
                                     isInvalid={!!errors.fecha}
                                 ></Form.Control>
@@ -249,7 +299,7 @@ function CREARUSUARIO() {
                     </Row>
                     <Row>
                         <Col>
-                        <Form.Group className="mb-3">
+                            <Form.Group className="mb-3">
                                 <Form.Label className="text-center fw-semibold">
                                     DNI
                                 </Form.Label>
@@ -281,7 +331,9 @@ function CREARUSUARIO() {
                                             event.preventDefault();
                                         }
                                     }}
-                                    onChange={(e) => handleSetField('Phone', e.target.value)}
+                                    onChange={(e) =>
+                                        handleSetField('Phone', e.target.value)
+                                    }
                                     value={Phone}
                                 />
                             </Form.Group>
@@ -289,14 +341,19 @@ function CREARUSUARIO() {
                     </Row>
                     <Row>
                         <Col>
-                            <Form.Group className="mb-3" controlId="formBasicEmail">
+                            <Form.Group
+                                className="mb-3"
+                                controlId="formBasicEmail"
+                            >
                                 <Form.Label className="text-center fw-semibold">
                                     Nueva dirección de correo electrónico
                                 </Form.Label>
                                 <Form.Control
                                     type="email"
                                     placeholder="Ingrese correo personal"
-                                    onChange={(e) => handleSetField('Email', e.target.value)}
+                                    onChange={(e) =>
+                                        handleSetField('Email', e.target.value)
+                                    }
                                     value={Email}
                                     isInvalid={!!errors.email}
                                     required
@@ -310,16 +367,26 @@ function CREARUSUARIO() {
                             <Form.Label className="text-center fw-semibold">
                                 Nuevo rol que asignará al usuario
                             </Form.Label>
-                            <Form.Select aria-label="Rol"
+                            <Form.Select
+                                aria-label="Rol"
                                 onChange={(e) => {
-                                    handleSetField("RolName", e.target.options[e.target.selectedIndex].text)
-                                    handleSetField('Rol', e.target.value)
+                                    handleSetField(
+                                        'RolName',
+                                        e.target.options[e.target.selectedIndex]
+                                            .text
+                                    );
+                                    handleSetField('Rol', e.target.value);
                                 }}
                             >
-                                <option value={Rol} selected disabled>{RolName}</option>
-                                <option value="1">Administrador de sistema</option>
-                                <option value="2">Gerente</option>
-                                <option value="3">Facturador</option>
+                                <option value={Rol} selected disabled>
+                                    {RolName}
+                                </option>
+
+                                {DATA.map((option) => (
+                                    <option value={option.id}>
+                                        {option.Nomb_Rol}
+                                    </option>
+                                ))}
                             </Form.Select>
                             <Form.Group
                                 className="mb-3"

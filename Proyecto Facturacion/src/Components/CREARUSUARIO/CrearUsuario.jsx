@@ -1,16 +1,11 @@
 import React, { useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
-import {
-    Button,
-    Form,
-} from 'react-bootstrap';
-
+import { Button, Form } from 'react-bootstrap';
 
 function Example() {
     const [show, setShow] = useState(false);
 
     const handleClose = () => setShow(false);
- 
 
     return (
         <>
@@ -41,6 +36,7 @@ function Example() {
 }
 
 function CREARUSUARIO() {
+    const [DATA, setData] = useState([]);
     const [form, setForm] = useState({});
     const [errors, setErrors] = useState({});
     const setField = (field, value) => {
@@ -72,6 +68,18 @@ function CREARUSUARIO() {
             //LLAMEN A LA API
         }
     }
+
+    useEffect(() => {
+        const getAllActiveRoles = async () => {
+            await fetch('http://localhost:3000/users/activeroles')
+                .then((response) => response.json())
+                .then((data) => {
+                    console.log(data), setData(data.allActiveRoles);
+                });
+        };
+
+        getAllActiveRoles();
+    }, []);
 
     return (
         <div className="mb-3 mt-md-4">
@@ -148,9 +156,9 @@ function CREARUSUARIO() {
                         Rol que asignará al usuario
                     </Form.Label>
                     <Form.Select aria-label="Asignar impuesto">
-                        <option value="1">Administrador de sistema</option>
-                        <option value="2">Gerente</option>
-                        <option value="3">Facturador</option>
+                        {DATA.map((option) => (
+                            <option value={option.id}>{option.Nomb_Rol}</option>
+                        ))}
                     </Form.Select>
                     <Form.Group
                         className="mb-3"

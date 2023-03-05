@@ -25,6 +25,7 @@ import Swal from 'sweetalert2';
 
 import {
     initUsers,
+    initActiveRoles,
     addUser,
     changeUserStatus,
 } from '../../features/usersSlice';
@@ -34,7 +35,12 @@ import {
     showModal as showEditModal,
     closeModal as closeEditModal,
 } from '../../features/editUserSlice';
-import { getAllUsers, getUser, editUserStatus } from '../../services/users';
+import {
+    getAllUsers,
+    getAllActiveRoles,
+    getUser,
+    editUserStatus,
+} from '../../services/users';
 import BarraLateral from '../common/index';
 import CREARUSUARIO from '../CREARUSUARIO';
 
@@ -106,8 +112,11 @@ function USUARIOS() {
         dispatch(initUsers(data));
     };
 
+    const handleInitActiveRoles = (dataRoles) => {
+        dispatch(initActiveRoles(dataRoles));
+    };
+
     useEffect(() => {
-        // const userResp = await getUser(10332).then(() => )
         const response = Promise.all([getAllUsers()])
             .then((data) => {
                 handleInitUsers(data[0].allUsers);
@@ -119,8 +128,6 @@ function USUARIOS() {
                     icon: 'error',
                 });
             });
-
-        // getAllUsers();
     }, []);
 
     const columns = [

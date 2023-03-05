@@ -23,6 +23,21 @@ const allUsers = async (req, res, next) => {
     }
 };
 
+const getActiveRoles = async (req, res, next) => {
+    try {
+        const allActiveRoles = await db.query(
+            `CALL obtener_roles_habilitados()`
+        );
+
+        return res.status(200).json({
+            status: 'Ok',
+            allActiveRoles,
+        });
+    } catch (error) {
+        console.log(error);
+        return next(new AppError(`Ups! Error en la base de datos`, 500));
+    }
+};
 const createUser = async (req, res, next) => {
     //TODO: Parametros necesarios para crear un usuario
     try {
@@ -285,4 +300,5 @@ export {
     updateUser,
     editUserStaus,
     updatePassword,
+    getActiveRoles,
 };

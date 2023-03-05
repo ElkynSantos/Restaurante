@@ -4,6 +4,15 @@ export const getAllUsers = () => {
     }).then((response) => response.json());
 };
 
+export const getAllActiveRoles = () => {
+    return fetch(
+        `${import.meta.env.VITE_REACT_APP_API_URL}/users/activeroles`,
+        {
+            //   credentials: 'include',
+        }
+    ).then((response) => response.json());
+};
+
 export const getUser = (DNI) => {
     return fetch(`${import.meta.env.VITE_REACT_APP_API_URL}/users/user`, {
         method: 'POST',

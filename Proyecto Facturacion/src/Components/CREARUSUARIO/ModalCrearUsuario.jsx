@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import { Col, Button, Row, Form, CloseButton } from 'react-bootstrap';
 import Swal from 'sweetalert2';
@@ -58,6 +58,7 @@ function Example() {
 }
 
 function CREARUSUARIO() {
+    const [DATA, setData] = useState([]);
     const dispatch = useDispatch();
     const handleAddUser = (user) => {
         dispatch(addUser(user));
@@ -104,7 +105,17 @@ function CREARUSUARIO() {
         // console.log(newErrors.email);
         return newErrors;
     }
+    useEffect(() => {
+        const getAllActiveRoles = async () => {
+            await fetch('http://localhost:3000/users/activeroles')
+                .then((response) => response.json())
+                .then((data) => {
+                    console.log(data), setData(data.allActiveRoles);
+                });
+        };
 
+        getAllActiveRoles();
+    }, []);
     async function handleSubmit(e) {
         e.preventDefault();
         let newErrors = findErrors();
@@ -326,11 +337,11 @@ function CREARUSUARIO() {
                                     <option disabled selected value>
                                         Escoger Rol
                                     </option>
-                                    <option value="1">
-                                        Administrador de sistema
-                                    </option>
-                                    <option value="2">Gerente</option>
-                                    <option value="3">Facturador</option>
+                                    {DATA.map((option) => (
+                                        <option value={option.id}>
+                                            {option.Nomb_Rol}
+                                        </option>
+                                    ))}
                                 </Form.Select>
                             </Form.Group>
                         </Col>
