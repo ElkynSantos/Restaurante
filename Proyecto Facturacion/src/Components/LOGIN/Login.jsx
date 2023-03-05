@@ -53,6 +53,28 @@ function LOGIN(props) {
                 });
                 //console.log(data.jwtToken.userExists.name);
                 localStorage.setItem('USERNAME', JSON.stringify(data.msg));
+                localStorage.setItem('USER', form.user);
+
+                const response2 = await fetch(
+                    `http://localhost:3000/roles/RoleandPermissions`,
+                    {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+
+                        body: JSON.stringify({ User: form.user }),
+                    }
+                );
+                const Datos = await response2.json();
+
+                console.log('==============LOGIN==============');
+                console.log(Datos.RolesPermissions[0].ARRAY.Rol);
+                localStorage.setItem(
+                    'ROL',
+                    Datos.RolesPermissions[0].ARRAY.Rol
+                );
+
                 navigate('/home');
             } catch (error) {
                 Swal.fire({

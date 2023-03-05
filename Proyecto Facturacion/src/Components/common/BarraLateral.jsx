@@ -99,6 +99,9 @@ function Example() {
         },
     ];
 
+    const User = localStorage.getItem('USER');
+    const Rol = localStorage.getItem('ROL');
+
     return (
         <>
             <Navbar className="bg-blue" expand="lg">
@@ -121,8 +124,10 @@ function Example() {
                     </span>
                     <span className="profile-container">
                         <span className="profile-info text-white">
-                            <h6 className="profile-name">Usuario</h6>
-                            <h7 className="profile-rol">Rol</h7>
+                            <h6 className="profile-name">
+                                {User || 'Username'}
+                            </h6>
+                            <h7 className="profile-rol">{Rol || 'Rol'}</h7>
                         </span>
                         <span className="profile-image">
                             <a href="/profile" title="Ver perfil">
