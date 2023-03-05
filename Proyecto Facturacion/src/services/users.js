@@ -1,6 +1,6 @@
 export const getAllUsers = () => {
     return fetch(`${import.meta.env.VITE_REACT_APP_API_URL}/users`, {
-        credentials: 'include',
+        //   credentials: 'include',
     }).then((response) => response.json());
 };
 
@@ -11,7 +11,7 @@ export const getUser = (DNI) => {
         headers: {
             'Content-Type': 'application/json',
         },
-        credentials: 'include',
+        //   credentials: 'include',
     }).then((response) => response.json());
 };
 
@@ -22,7 +22,7 @@ export const editUser = (user) => {
         headers: {
             'Content-Type': 'application/json',
         },
-        credentials: 'include',
+        //  credentials: 'include',
     }).then((response) => response.json());
 };
 
@@ -36,6 +36,6 @@ export const editUserStatus = (DNI, status) => {
         headers: {
             'Content-Type': 'application/json',
         },
-        credentials: 'include',
+        //  credentials: 'include',
     }).then((response) => response.json());
 };

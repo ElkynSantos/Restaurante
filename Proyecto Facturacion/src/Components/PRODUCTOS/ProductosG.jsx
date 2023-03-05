@@ -15,7 +15,7 @@ import {
     PersonPlusFill,
     Search,
     PencilFill,
-    Trash3Fill,
+    Basket2,
     Display,
 } from 'react-bootstrap-icons';
 
@@ -163,35 +163,67 @@ function PRODUCTOT() {
         {
             name: 'Acciones',
             selector: (row) => {
-                return (
-                    <Row>
-                        <Col>
-                            <button
-                                className="btn-transparent text-blue p-0"
-                                title="Editar"
-                                onClick={() =>
-                                    handleShowEditModal(row.codigo_producto)
-                                }
-                            >
-                                <PencilFill />
-                            </button>
-                        </Col>
-                        <Col>
-                            <button
-                                className="btn-transparent text-danger p-0"
-                                title="Eliminar"
-                                onClick={() =>
-                                    handleDelete(
-                                        row.codigo_producto,
-                                        row.status
-                                    )
-                                }
-                            >
-                                <Trash3Fill />
-                            </button>
-                        </Col>
-                    </Row>
-                );
+                if (row.status) {
+                    return (
+                        <Row>
+                            <Col>
+                                <button
+                                    className="btn-transparent text-blue p-0"
+                                    title="Editar"
+                                    onClick={() =>
+                                        handleShowEditModal(row.codigo_producto)
+                                    }
+                                >
+                                    <PencilFill />
+                                </button>
+                            </Col>
+                            <Col>
+                                <button
+                                    className="btn-transparent text-danger p-0"
+                                    title="Habilitar/Deshabilitar"
+                                    onClick={() =>
+                                        handleDelete(
+                                            row.codigo_producto,
+                                            row.status
+                                        )
+                                    }
+                                >
+                                    <Basket2 />
+                                </button>
+                            </Col>
+                        </Row>
+                    );
+                } else {
+                    return (
+                        <Row>
+                            <Col>
+                                <button
+                                    className="btn-transparent text-blue p-0"
+                                    title="Editar"
+                                    onClick={() =>
+                                        handleShowEditModal(row.codigo_producto)
+                                    }
+                                >
+                                    <PencilFill />
+                                </button>
+                            </Col>
+                            <Col>
+                                <button
+                                    className="btn-transparent text-success p-0"
+                                    title="Habilitar/Deshabilitar"
+                                    onClick={() =>
+                                        handleDelete(
+                                            row.codigo_producto,
+                                            row.status
+                                        )
+                                    }
+                                >
+                                    <Basket2 />
+                                </button>
+                            </Col>
+                        </Row>
+                    );
+                }
             },
         },
     ];

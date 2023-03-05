@@ -126,7 +126,7 @@ const createUser = async (req, res, next) => {
 
 const getUser = async (req, res) => {
     const { userID } = req.body;
-    
+
     const [user] = await db.query('CALL get_user(:userID, :opt)', {
         replacements: {
             userID: userID,
@@ -176,7 +176,7 @@ const updateUser = async (req, res, next) => {
             phone,
             email,
         }).some((val) => !val);
-        
+
         if (emptyParams) {
             return next(
                 new AppError(`Por favor complete todos los campos`, 400)
@@ -221,9 +221,14 @@ const editUserStaus = async (req, res, next) => {
     try {
         const { opt, userDni } = req.body;
 
-        console.log("status-type", typeof opt, "userDni-type", typeof userDni);
-        console.log("status", opt, "userDni", userDni);
-        if (opt == null || opt == undefined || userDni == null || userDni == undefined) {
+        console.log('status-type', typeof opt, 'userDni-type', typeof userDni);
+        console.log('status', opt, 'userDni', userDni);
+        if (
+            opt == null ||
+            opt == undefined ||
+            userDni == null ||
+            userDni == undefined
+        ) {
             return next(new AppError(`No se permiten campos vacios`, 400));
         }
 

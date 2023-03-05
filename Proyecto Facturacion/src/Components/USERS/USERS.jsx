@@ -29,7 +29,11 @@ import {
     changeUserStatus,
 } from '../../features/usersSlice';
 import { showModal, closeModal } from '../../features/createUserSlice';
-import { setCurrentEditUser, showModal as showEditModal, closeModal as closeEditModal } from '../../features/editUserSlice';
+import {
+    setCurrentEditUser,
+    showModal as showEditModal,
+    closeModal as closeEditModal,
+} from '../../features/editUserSlice';
 import { getAllUsers, getUser, editUserStatus } from '../../services/users';
 import BarraLateral from '../common/index';
 import CREARUSUARIO from '../CREARUSUARIO';
@@ -51,7 +55,7 @@ function USUARIOS() {
             // console.log("userRespModal", dataUser)
             dispatch(setCurrentEditUser(dataUser.user));
             dispatch(showEditModal());
-        })
+        });
     };
 
     const handleClose = () => {
@@ -75,21 +79,22 @@ function USUARIOS() {
             confirmButtonText: 'Si',
         }).then(async (result) => {
             if (result.isConfirmed) {
-                await editUserStatus(DNI, status).then((data) => {
-                    if (data.status != 'Ok') {
-                        Swal.fire({
-                            text: data.message,
-                            icon: 'error',
-                        });
-                        return;
-                    }
+                await editUserStatus(DNI, status)
+                    .then((data) => {
+                        if (data.status != 'Ok') {
+                            Swal.fire({
+                                text: data.message,
+                                icon: 'error',
+                            });
+                            return;
+                        }
 
-                    dispatch(changeUserStatus(DNI));
-                    Swal.fire({
-                        text: data.msg,
-                        icon: 'success',
-                    });
-                })
+                        dispatch(changeUserStatus(DNI));
+                        Swal.fire({
+                            text: data.msg,
+                            icon: 'success',
+                        });
+                    })
                     .catch((error) => {
                         console.error(error);
                     });
@@ -103,19 +108,17 @@ function USUARIOS() {
 
     useEffect(() => {
         // const userResp = await getUser(10332).then(() => )
-        const response = Promise.all([
-            getAllUsers()
-        ])
+        const response = Promise.all([getAllUsers()])
             .then((data) => {
                 handleInitUsers(data[0].allUsers);
             })
             .catch((error) => {
                 console.log(error);
                 Swal.fire({
-                    text: "No se pudieron cargar los usuarios",
+                    text: 'No se pudieron cargar los usuarios',
                     icon: 'error',
                 });
-            })
+            });
 
         // getAllUsers();
     }, []);
@@ -180,15 +183,24 @@ function USUARIOS() {
                                     handleDelete(row.DNI, row.status)
                                 }
                             >
-                                {row.status == 1? <PersonFillSlash className="text-danger" title="Desactivar usuario"/>: <PersonCheckFill className="text-success" title="Activar usuario"/>}
-                                    
+                                {row.status == 0 ? (
+                                    <PersonFillSlash
+                                        className="text-danger"
+                                        title="Desactivar usuario"
+                                    />
+                                ) : (
+                                    <PersonCheckFill
+                                        className="text-success"
+                                        title="Activar usuario"
+                                    />
+                                )}
                             </button>
                         </Col>
                     </Row>
                 );
             },
-        }
-    ]
+        },
+    ];
 
     const customStyles = {
         headCells: {
@@ -215,12 +227,14 @@ function USUARIOS() {
     const [resetPaginationToggle, setResetPaginationToggle] = useState(false);
     const filteredItems = users.filter(
         (item) =>
-            item.UserName.toLowerCase().includes(filterText.toLowerCase()) || item.FullName.toLowerCase().includes(filterText.toLowerCase()) || item.DNI.includes(filterText)
+            item.UserName.toLowerCase().includes(filterText.toLowerCase()) ||
+            item.FullName.toLowerCase().includes(filterText.toLowerCase()) ||
+            item.DNI.includes(filterText)
     );
 
     return (
         <div>
-            <link rel="stylesheet" href="/css/tables.css"/>
+            <link rel="stylesheet" href="/css/tables.css" />
             <CREARUSUARIO />
             <EDITARUSUARIOS />
 
@@ -240,7 +254,10 @@ function USUARIOS() {
                     </Col>
                     <Col sm={4}>
                         <InputGroup>
-                            <FormControl placeholder='Buscar...' onChange={(e) => setFilterText(e.target.value)}/>
+                            <FormControl
+                                placeholder="Buscar..."
+                                onChange={(e) => setFilterText(e.target.value)}
+                            />
                             <InputGroup.Text>
                                 <Search />
                             </InputGroup.Text>
