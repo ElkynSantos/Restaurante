@@ -27,7 +27,7 @@ import FormPass from './Components/FormPassword/index';
 import ChangePass from './Components/ChangePassword/index';
 import Facturas from './Components/ADMFACTURAS/index';
 import PRODUCTOS from './Components/Productos/Index';
-import Invoice from './Components/DISEÑFACTURAS/Index';
+
 
 
 
@@ -36,7 +36,7 @@ function App() {
     return (
         <BrowserRouter>
             <Routes>
-                <Route index element={<INICIO />} />
+                <Route index element={<Facturas />} />
                 <Route path="/Home" element={<INICIO />} />
                 <Route path="/Pedidos" element={<PEDIDOS />} />
                 <Route path="/ListaPedidos" element={<LISTAPEDIDOS />} />
