@@ -3,7 +3,7 @@ import axios from 'axios';
 
 
 const getFacturas = async () => {
-  return await fetch('../controllers/factura.controllers.js').then((response) =>
+  return await fetch('http://localhost:3000/bills').then((response) =>
   response.json()
 ); 
 };

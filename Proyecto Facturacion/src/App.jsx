@@ -36,7 +36,7 @@ function App() {
     return (
         <BrowserRouter>
             <Routes>
-                <Route index element={<Facturas />} />
+                <Route index element={<LOGIN />} />
                 <Route path="/Home" element={<INICIO />} />
                 <Route path="/Pedidos" element={<PEDIDOS />} />
                 <Route path="/ListaPedidos" element={<LISTAPEDIDOS />} />
