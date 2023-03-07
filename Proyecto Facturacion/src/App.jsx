@@ -27,7 +27,7 @@ import FormPass from './Components/FormPassword/index';
 import ChangePass from './Components/ChangePassword/index';
 import Facturas from './Components/ADMFACTURAS/index';
 import PRODUCTOS from './Components/Productos/Index';
-
+import PrintFactura from './Components/APRINTFACTURA';
 
 
 
@@ -46,6 +46,7 @@ function App() {
                 <Route path={'/Productos'} element={<PRODUCTOS />} />
                 <Route path="/Recuperar" element={<FormPassword />} />
                 <Route path="/bills" element={<Facturas />} />
+                <Route path="/printbills" element={<PrintFactura />} />
                 <Route
                     path="/auth/reset-password/:token"
                     element={<Recovery />}
