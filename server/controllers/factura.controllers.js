@@ -18,13 +18,16 @@ const getFacturas = async(req,res,next)=>{
 
 const editFacturas =async (req,res,next)=>{
 try {
-    const {bb,xx,cc,aa} = req.body;
+    const {id,RTN_cliente,Nombre_cliente} = req.body;
 
+    console.log(id,RTN_cliente,Nombre_cliente);
     const updatedFactura = await db.query(
-        'CALL edit_bill(:xx, :xx,  :xx,  :xx)',
+        'CALL edit_bill(:p_id,:p_rtn_cliente, :p_nombre_cliente)',
         {
             replacements: {
-            
+            id : p_id,
+            RTN_cliente: p_rtn_cliente,
+            Nombre_cliente: p_nombre_cliente
             },
         }
     );
@@ -154,8 +157,7 @@ try{
 
 }
 
-
-
+ 
 export {
     getFacturas,
     editFacturas,
