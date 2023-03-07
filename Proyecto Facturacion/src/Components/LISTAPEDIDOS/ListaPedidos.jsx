@@ -93,8 +93,12 @@ function LISTAPEDIDOS() {
             await fetch('http://localhost:3000/orders/')
                 .then((response) => response.json())
                 .then((data1) => {
-                    console.log(data1.order.orders),
-                        setData(data1.order.orders);
+                    console.log(data1.status);
+
+                    if (data1.status != 'fail') {
+                        console.log(data1.order.orders),
+                            setData(data1.order.orders);
+                    }
                 });
         };
 
