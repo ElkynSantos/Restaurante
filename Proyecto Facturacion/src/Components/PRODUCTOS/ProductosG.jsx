@@ -162,7 +162,7 @@ function PRODUCTOT() {
         {
             name: 'Acciones',
             selector: (row) => {
-                if (row.status) {
+                if (row.status == 1) {
                     return (
                         <Row>
                             <Col>
@@ -178,7 +178,7 @@ function PRODUCTOT() {
                             </Col>
                             <Col>
                                 <button
-                                    className="btn-transparent text-danger p-0"
+                                    className="btn-transparent text-success p-0"
                                     title="Habilitar/Deshabilitar"
                                     onClick={() =>
                                         handleDelete(
@@ -208,7 +208,7 @@ function PRODUCTOT() {
                             </Col>
                             <Col>
                                 <button
-                                    className="btn-transparent text-success p-0"
+                                    className="btn-transparent text-danger p-0"
                                     title="Habilitar/Deshabilitar"
                                     onClick={() =>
                                         handleDelete(

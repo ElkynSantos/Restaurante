@@ -41,7 +41,14 @@ function EditarProducto() {
     useEffect(() => {
         const response = Promise.all([agetAllTaxes()])
             .then((data1) => {
-                setdropdown(data1[0].allTaxes);
+                const ActiveTaxes = [];
+                for (let i = 0; i < data1[0].allTaxes.length; i++) {
+                    if (data1[0].allTaxes[i].status == 1) {
+                        ActiveTaxes.push(data1[0].allTaxes[i]);
+                    }
+                }
+
+                setdropdown(ActiveTaxes);
             })
             .catch((error) => {
                 console.log(error);
