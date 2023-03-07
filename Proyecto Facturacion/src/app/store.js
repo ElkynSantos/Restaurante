@@ -10,6 +10,7 @@ import editUserSlice from '../features/editUserSlice';
 
 import createRolSlice from '../features/creacionRoles';
 import editrolslice from '../features/editarRoles';
+import pedidosSlice from '../features/pedidosSlice';
 
 export const store = configureStore({
     reducer: {
@@ -19,6 +20,7 @@ export const store = configureStore({
         products: ProductosSlice,
         CreateProduct: CreateProductSlice,
         sendeditableproduct: sendeditableproductSlice,
+        pedidos: pedidosSlice,
 
         modalEditUserState: editUserSlice,
         modalEditUser: editUserSlice,
