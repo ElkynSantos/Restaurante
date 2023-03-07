@@ -1,7 +1,6 @@
 import express from 'express';
 
 import {
-    allReadyOrders,
     allPendingOrders,
     newOrder,
     getOrder,
@@ -9,13 +8,15 @@ import {
     deleteOrder,
     CompletedOrder,
     BackCompleteOrder,
+    allCookedOrders,
+    allCompletedOrders,
 } from '../controllers/orders.controllers.js';
 
 const orderRoutes = express.Router();
 
-orderRoutes.route('/').get(allReadyOrders).post(newOrder);
-orderRoutes.route('/Pending').get(allPendingOrders);
-orderRoutes.route('/Listo').post(CompletedOrder);
+orderRoutes.route('/').get(allCompletedOrders).post(newOrder);
+orderRoutes.route('/pending').get(allPendingOrders);
+orderRoutes.route('/ready').post(CompletedOrder).get(allCookedOrders);
 orderRoutes
     .route('/:id')
     .get(getOrder)
