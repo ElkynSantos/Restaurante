@@ -35,80 +35,109 @@ function ECBMPUESTO() {
     };
 
     const handleEditImpuesto = async (taxNameParam, taxAmountParam) => {
-        await fetch('http://localhost:3000/taxes/', {
-            method: 'PATCH',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                taxId: impuestoEditando,
-                taxName: taxNameParam,
-                taxAmount: taxAmountParam,
-            }),
-        })
-            .then((response) => response.json())
-            .then((data) => {
-                console.log(data);
+        try {
+            await fetch('http://localhost:3000/taxes/', {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    taxId: impuestoEditando,
+                    taxName: taxNameParam,
+                    taxAmount: taxAmountParam,
+                }),
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    console.log(data);
 
-                Swal.fire({
-                    position: 'top-center',
-                    icon: 'success',
-                    title: data.msg,
-                    showConfirmButton: false,
-                    timer: 1500,
+                    Swal.fire({
+                        position: 'top-center',
+                        icon: 'success',
+                        title: data.msg,
+                        showConfirmButton: false,
+                        timer: 1500,
+                    });
                 });
+
+            await fetch('http://localhost:3000/taxes')
+                .then((response) => response.json())
+                .then((DATA) => {
+                    console.log(DATA.allTaxes);
+                    setImpuestos(DATA.allTaxes);
+                });
+
+            setNombreImpuesto('');
+            setPorcentajeImpuesto('');
+
+            //   const impuesto = impuestos[index];
+            //   setNombreImpuesto(impuesto.nombre);
+            //  setPorcentajeImpuesto(impuesto.porcentaje);
+            //   setImpuestoEditando(index);
+        } catch (error) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: error,
             });
-
-        await fetch('http://localhost:3000/taxes')
-            .then((response) => response.json())
-            .then((DATA) => {
-                console.log(DATA.allTaxes);
-                setImpuestos(DATA.allTaxes);
-            });
-
-        setNombreImpuesto('');
-        setPorcentajeImpuesto('');
-
-        //   const impuesto = impuestos[index];
-        //   setNombreImpuesto(impuesto.nombre);
-        //  setPorcentajeImpuesto(impuesto.porcentaje);
-        //   setImpuestoEditando(index);
+        }
     };
 
     const handleDeleteImpuesto = async (idImpuesto, status) => {
-        console.log('ID: ' + idImpuesto);
+        try {
+            console.log('ID: ' + idImpuesto);
 
-        await fetch('http://localhost:3000/taxes/', {
-            method: 'delete',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                taxId: idImpuesto,
-                taxStatus: status ? false : true,
-            }),
-        })
-            .then((response) => response.json())
-            .then((data) => {
-                console.log(data);
+            await fetch('http://localhost:3000/taxes/', {
+                method: 'delete',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    taxId: idImpuesto,
+                    taxStatus: status ? false : true,
+                }),
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    console.log(data);
 
-                Swal.fire({
-                    position: 'top-center',
-                    icon: 'success',
-                    title: data.msg,
-                    showConfirmButton: false,
-                    timer: 1500,
+                    if (
+                        data.msg ==
+                        'No es posible deshabilitar un impuesto en uso'
+                    ) {
+                        Swal.fire({
+                            position: 'top-center',
+                            icon: 'error',
+                            title: data.msg,
+                            showConfirmButton: false,
+                            timer: 2000,
+                        });
+                    } else {
+                        Swal.fire({
+                            position: 'top-center',
+                            icon: 'success',
+                            title: data.msg,
+                            showConfirmButton: false,
+                            timer: 1500,
+                        });
+                    }
                 });
-            });
 
-        await fetch('http://localhost:3000/taxes')
-            .then((response) => response.json())
-            .then((DATA) => {
-                console.log(DATA.allTaxes);
-                setImpuestos(DATA.allTaxes);
-            });
+            await fetch('http://localhost:3000/taxes')
+                .then((response) => response.json())
+                .then((DATA) => {
+                    console.log(DATA.allTaxes);
+                    setImpuestos(DATA.allTaxes);
+                });
 
-        //  setImpuestos(impuestos.filter((_, i) => i !== index));
+            //  setImpuestos(impuestos.filter((_, i) => i !== index));
+        } catch (error) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: error,
+            });
+        }
     };
     useEffect(() => {
         const getAllTaxes = async () => {
@@ -124,37 +153,45 @@ function ECBMPUESTO() {
     }, [nombreImpuesto, porcentajeImpuesto]);
 
     const handleAddImpuesto = async (taxNameParam, taxAmountParam) => {
-        await fetch('http://localhost:3000/taxes/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                taxDescription: taxNameParam,
-                taxAmount: taxAmountParam,
-            }),
-        })
-            .then((response) => response.json())
-            .then((data) => {
-                console.log(data);
+        try {
+            await fetch('http://localhost:3000/taxes/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    taxDescription: taxNameParam,
+                    taxAmount: taxAmountParam,
+                }),
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    console.log(data);
 
-                Swal.fire({
-                    position: 'top-center',
-                    icon: 'success',
-                    title: data.msg,
-                    showConfirmButton: false,
-                    timer: 1500,
+                    Swal.fire({
+                        position: 'top-center',
+                        icon: 'success',
+                        title: data.msg,
+                        showConfirmButton: false,
+                        timer: 1500,
+                    });
                 });
-            });
-        await fetch('http://localhost:3000/taxes')
-            .then((response) => response.json())
-            .then((DATA) => {
-                console.log(DATA.allTaxes);
-                setImpuestos(DATA.allTaxes);
-            });
+            await fetch('http://localhost:3000/taxes')
+                .then((response) => response.json())
+                .then((DATA) => {
+                    console.log(DATA.allTaxes);
+                    setImpuestos(DATA.allTaxes);
+                });
 
-        setNombreImpuesto('');
-        setPorcentajeImpuesto('');
+            setNombreImpuesto('');
+            setPorcentajeImpuesto('');
+        } catch (error) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: error,
+            });
+        }
     };
     return (
         <Container>
@@ -174,7 +211,7 @@ function ECBMPUESTO() {
                         {impuestos.map((impuesto, index) => (
                             <tr key={impuesto.id}>
                                 <td>{impuesto.name}</td>
-                                <td>{impuesto.amount}</td>
+                                <td>{impuesto.amount + '%'}</td>
                                 <td>
                                     <>
                                         <Button
@@ -210,6 +247,8 @@ function ECBMPUESTO() {
                                                                         .value
                                                                 )
                                                             }
+                                                            pattern="^[A-Za-z0-9]{1,10}$"
+                                                            title="El nombre del impuesto debe contener letras y números y no debe ser mayor a 10 caracteres."
                                                         />
                                                     </Form.Group>
                                                     <Form.Group>
@@ -293,6 +332,8 @@ function ECBMPUESTO() {
                             type="text"
                             value={nombreImpuesto}
                             onChange={(e) => setNombreImpuesto(e.target.value)}
+                            pattern="^[A-Za-z0-9]{1,10}$"
+                            title="El nombre del impuesto debe contener letras y números y no debe ser mayor a 10 caracteres."
                         />
                     </Form.Group>
                     <Form.Group>
@@ -335,19 +376,3 @@ function ECBMPUESTO() {
 }
 
 export default ECBMPUESTO;
-
-/*
-                                    <Button
-                                        variant="warning"
-                                        className="mr-2"
-                                        onClick={() =>
-                                            handleEditImpuesto(
-                                                impuesto.id,
-                                                nombreImpuesto,
-                                                porcentajeImpuesto
-                                            )
-                                        }
-                                    >
-                                        Editar
-                                    </Button>
-*/
