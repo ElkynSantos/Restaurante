@@ -258,10 +258,11 @@ function LISTAPEDIDOS() {
             },
 
             {
-                name: 'Añadir',
+                name: 'Listo',
 
                 cell: (props) => (
                     <Button
+                        variant="success"
                         onClick={() => Cocinado(props.numero_pedido)}
                         id={props.ID}
                     >
@@ -273,15 +274,6 @@ function LISTAPEDIDOS() {
 
         const columns2 = [
             {
-                name: 'N_Pedido',
-                selector: (row) => row.numero_pedido,
-            },
-
-            {
-                name: 'Mesa',
-                selector: (row) => row.mesaID,
-            },
-            {
                 name: 'Eliminar',
                 cell: (props) => (
                     <Button
@@ -292,6 +284,15 @@ function LISTAPEDIDOS() {
                         -
                     </Button>
                 ),
+            },
+            {
+                name: 'N_Pedido',
+                selector: (row) => row.numero_pedido,
+            },
+
+            {
+                name: 'Mesa',
+                selector: (row) => row.mesaID,
             },
         ];
 

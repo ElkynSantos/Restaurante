@@ -25,7 +25,12 @@ import ECBMPUESTO from './Components/IMPUESTOSG';
 import RecuperarContraseña from './Components/RecoveryPassword/index';
 import FormPass from './Components/FormPassword/index';
 import ChangePass from './Components/ChangePassword/index';
+import Facturas from './Components/ADMFACTURAS/index';
 import PRODUCTOS from './Components/Productos/Index';
+import PrintFactura from './Components/APRINTFACTURA';
+
+
+
 
 function App() {
     return (
@@ -40,6 +45,8 @@ function App() {
                 <Route path="/Users" element={<USERS />} />
                 <Route path={'/Productos'} element={<PRODUCTOS />} />
                 <Route path="/Recuperar" element={<FormPassword />} />
+                <Route path="/bills" element={<Facturas />} />
+                <Route path="/printbills" element={<PrintFactura />} />
                 <Route
                     path="/auth/reset-password/:token"
                     element={<Recovery />}
