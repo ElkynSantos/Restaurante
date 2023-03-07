@@ -14,7 +14,7 @@ export async function CreateTax(taxName, taxPercentage) {
     return response.data;
 }
 
-export const agetAllTaxes = async () => {
+export const getAllTaxes = async () => {
     return await fetch('http://localhost:3000/taxes').then((response) =>
         response.json()
     );

@@ -5,40 +5,91 @@ import Button from 'react-bootstrap/Button';
 import './Crear.css';
 import BarraLateral from '../common/index.js';
 import { Container } from 'react-bootstrap';
+import '../../features/taxesSlice';
+import { CreateTax, getAllTaxes, editTax, deleteTax } from '../../services/Taxes';
+import Swal from 'sweetalert2';
+
 function ECBMPUESTO() {
+    /*CreateTax('IVA', 16).then(response => {
+        console.log('El nuevo impuesto ha sido creado:', response);
+            }).catch(error => {
+        console.error('Error al crear el impuesto:', error);
+            });
+    
+    
+        getAllTaxes().then(response => {
+        console.log('Todos los impuestos:', response);
+        console.error('Error al obtener los impuestos:', error);
+        console.error('Error al obtener los impuestos:', error);
+            });
+    
+    
+    
+    
+        deleteTax(1, 1).then(response => {
+        console.log('El impuesto ha sido eliminado:', response);
+            }).catch(error => {
+        console.error('Error al eliminar el impuesto:', error);
+            });*/
+ 
     const [nombreImpuesto, setNombreImpuesto] = useState('');
     const [porcentajeImpuesto, setPorcentajeImpuesto] = useState('');
     const [impuestos, setImpuestos] = useState([]);
     const [impuestoEditando, setImpuestoEditando] = useState(null);
 
-    const handleAddImpuesto = (e) => {
+    const handleAddImpuesto = async (e) => {
         e.preventDefault();
         if (!nombreImpuesto || !porcentajeImpuesto) return; // restricción para valores vacíos
         if (impuestoEditando !== null) {
-            // editando un impuesto existente
-            setImpuestos(
+          console.log("entro")
+          await editTax({  taxName: nombreImpuesto, taxAmount: porcentajeImpuesto}).then(response => {
+
+
+            if(response.status = "Ok")
+            {
+              setImpuestos(
                 impuestos.map((impuesto, index) =>
-                    index === impuestoEditando
-                        ? {
-                              nombre: nombreImpuesto,
-                              porcentaje: porcentajeImpuesto,
-                          }
-                        : impuesto
+                  index === impuestoEditando ? { nombre: nombreImpuesto, porcentaje: porcentajeImpuesto } : impuesto
                 )
-            );
-            setNombreImpuesto('');
-            setPorcentajeImpuesto('');
-            setImpuestoEditando(null);
+              );
+              setNombreImpuesto('');
+              setPorcentajeImpuesto('');
+              setImpuestoEditando(null);
+    
+            Swal.fire({
+            text: "Se creo correctamente",
+            icon: "success"
+            })
+           return
+            }
+            Swal.fire({
+              text: response.msg,
+              icon: "error"
+            })}).catch(() => {
+                Swal.fire({
+                text: "ocurrio un error a la hora de editar",
+                icon: "error"
+            })})
+    
+          // editando un impuesto existente
+          
+    
         } else {
-            // agregando un nuevo impuesto
-            setImpuestos([
-                ...impuestos,
-                { nombre: nombreImpuesto, porcentaje: porcentajeImpuesto },
-            ]);
-            setNombreImpuesto('');
-            setPorcentajeImpuesto('');
+          console.log("en2tro")
+          // agregando un nuevo impuesto
+          
+          setImpuestos([...impuestos, {  nombre: nombreImpuesto, porcentaje: porcentajeImpuesto }]);
+          setNombreImpuesto('');
+          setPorcentajeImpuesto('');
         }
-    };
+      };
+
+
+
+
+
+
+
 
     const handleEditImpuesto = (index) => {
         const impuesto = impuestos[index];
@@ -47,8 +98,13 @@ function ECBMPUESTO() {
         setImpuestoEditando(index);
     };
 
-    const handleDeleteImpuesto = (index) => {
+
+// ARREGLAR DELETE IMPUESTO
+    const handleDeleteImpuesto = async  (index) => {
         setImpuestos(impuestos.filter((_, i) => i !== index));
+        console.log("entssssro")
+    
+    
     };
 
     return (
