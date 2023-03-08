@@ -8,7 +8,17 @@ const getFacturas = async () => {
 ); 
 };
 
-
+export const getFactura = (Numero_factura) => 
+{
+  console.log("gerardo"+Numero_factura);
+  return fetch('http://localhost:3000/bills/numFactura', {
+     method: "POST",
+     body: JSON.stringify({ Numero_factura: Numero_factura }),
+     headers: {
+        'Content-Type': 'application/json',
+     }
+  }).then(response => response.json())
+}
 
 const editFacturas = async (data) => {
   try {

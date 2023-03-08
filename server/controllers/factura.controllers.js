@@ -15,6 +15,30 @@ const getFacturas = async(req,res,next)=>{
         return next(new AppError('Ups! Error en la base de datos', 500));
     }
 }
+const getFactura = async (req, res) => 
+{
+    const { Numero_factura } = req.body;
+    console.log("11111111" + Numero_factura);
+    const [factura] = await db.query('CALL get_bill(:p_numeroFactura)', 
+    {
+        replacements: {
+             p_numeroFactura: Numero_factura,
+        },
+    });
+    console.log("aaaaaaaaaa" + Numero_factura);
+    if (factura.response === 0) {
+        return res.status(404).json({
+            status: 'fail',
+            msg: user.msg,
+        });
+    }
+
+    return res.status(200).json({
+        status: 'Ok',
+        factura,
+    });
+    
+}
 
 const editFacturas =async (req,res,next)=>{
 try {
@@ -161,5 +185,6 @@ try{
 export {
     getFacturas,
     editFacturas,
-    newFactura 
+    newFactura,
+    getFactura
 }

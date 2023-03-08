@@ -1,14 +1,17 @@
 import React, { useState,useEffect } from 'react';
 import { InputGroup, FormControl, Button, Table } from 'react-bootstrap';
 import { FaSearch, FaEdit, FaPrint, FaTrash } from 'react-icons/fa';
+import { getFactura} from '../../services/Factura';
 import axios from 'axios'
-
-
+import { setCurrentEditFactura, showModalFactura , closeModalFactura} from '../../features/editFacturaSlice';
+import EditRTNNAME from  '../editRTN&NAME';
+import { useSelector, useDispatch } from 'react-redux';
 
 import './Fact.css';
 
 
 function Facturas() {
+  const dispatch = useDispatch();
     const [facturas, setFacturas] = useState([]);
   
     useEffect(() => {
@@ -24,8 +27,20 @@ function Facturas() {
     }, []);
 
   const [searchTerm, setSearchTerm] = useState('');
-  const [showEditModal, setShowEditModal] = useState(false);
+  const [showEditModalFactura, setShowEditModalFactura] = useState(false);
   const [editFacturas, setEditFacturas] = useState(null);
+ 
+  const handleShowEditModal = async (Numero_factura) => 
+  {
+    console.log("sas" + Numero_factura)
+    await getFactura(Numero_factura).then((data) => 
+    {
+      //a
+        console.log("sase" + JSON.stringify(data))
+       dispatch(setCurrentEditFactura(data.factura));
+       dispatch(showModalFactura());
+    })
+};
 
   const handleSearch = () => {
     const results = facturas.filter((factura) => {
@@ -37,11 +52,11 @@ function Facturas() {
     setFacturas(results);
   };
 
-  const handleEditFactura = (noFactura) => {
+ /*  const handleEditFactura = (noFactura) => {
     const factura = facturas.find((f) => f.noFactura === noFactura);
     setEditFacturas(factura);
     setShowEditModal(true);
-  };
+  }; */
 
   const handlePrintFactura = (noFactura) => {
     console.log(`Imprimir factura ${noFactura}`);
@@ -55,6 +70,9 @@ function Facturas() {
   
 
   return (
+    <div> 
+      <EditRTNNAME/>
+   
     <div className="facturas">
       <h1>ADMINISTRAR FACTURAS</h1>
       <div className="busqueda">
@@ -109,7 +127,7 @@ function Facturas() {
       </td>
       <td>{factura.total}</td>
       <td className="acciones">
-        <Button variant="primary" onClick={() => handleEditFactura(factura.noFactura)}>
+        <Button variant="primary" onClick={() => handleShowEditModal(factura.Numero_factura)}>
           <FaEdit />
         </Button>{' '}
         <Button variant="info" onClick={() => handlePrintFactura(factura.noFactura)}>
@@ -123,13 +141,16 @@ function Facturas() {
   ))}
         </tbody>
         </Table>
-        {showEditModal && ( <EditFacturaModal factura={editFacturas} handleClose={() => setShowEditModal(false)}
-        />
-        )}
+
+    </div>
     </div>
     );
+    
 }
 
+/* {showEditModal && ( <EditFacturaModal factura={editFacturas} handleClose={() => setShowEditModal(false)}
+/>
+)} */
 export default Facturas;
 
 

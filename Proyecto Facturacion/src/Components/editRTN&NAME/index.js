@@ -1,3 +1,3 @@
-import editRTNNAME from "./editRtn&Name";
+import EditRTNNAME from "./editRtn&Name";
 
-export default editRTNNAME;
+export default EditRTNNAME;

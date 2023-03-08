@@ -6,34 +6,27 @@ import { Col, Button, Row, Form, CloseButton } from 'react-bootstrap';
 import Swal from 'sweetalert2';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { Register } from '../../services/REGISTER';
-import { addUser } from '../../features/usersSlice';
-import { showModal, closeModal } from '../../features/createUserSlice';
-
+//import { Register } from '../../services/REGISTER';
+//import { addUser } from '../../features/usersSlice';
+import { showModalFactura, closeModalFactura } from '../../features/editFacturaSlice';
 function Example() {
     const dispatch = useDispatch();
 
     // const [show, setShow] = useState(false);
     const handleClose = () => {
-        dispatch(closeModal());
+        dispatch(closeModalFactura());
     };
 
     const handleShow = () => {
-        dispatch(showModal());
+        dispatch(showModalFactura());
     };
-    
-    // const handleAddUser = (user) => {
-    //     dispatch(
-    //         addUser(user)
-    //     );
-    // };
 
-    const show2 = useSelector((state) => state.modalAddUserState);
-
+    const showF = useSelector((state) => state.editFactura);
+    console.log("show2:" + JSON.stringify(showF));
     return (
         <>
             <Modal
-                show={show2}
+                show={showF.modalState}
                 size="lg"
                 onHide={handleClose}
                 // class="modal-dialog modal-dialog-scrollable"
@@ -44,7 +37,7 @@ function Example() {
                     <CloseButton variant="white" onClick={handleClose} />
                 </Modal.Header>
                 <Modal.Body>
-                    <CREARUSUARIO></CREARUSUARIO>
+                    <EditRTN></EditRTN>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="danger" onClick={handleClose}>
@@ -60,11 +53,8 @@ function Example() {
     );
 }
 
-function CREARUSUARIO() {
+function EditRTN() {
     const dispatch = useDispatch();
-    const handleAddUser = (user) => {
-        dispatch(addUser(user));
-    };
 
     const [form, setForm] = useState({});
     const [errors, setErrors] = useState({});
