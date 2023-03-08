@@ -13,7 +13,8 @@ import './Fact.css';
 function Facturas() {
   const dispatch = useDispatch();
     const [facturas, setFacturas] = useState([]);
-  
+    const showF = useSelector((state) => state.editFactura).modalState;
+    console.log("modal:"+showF);
     useEffect(() => {
       async function fetchFacturas() {
         try {
@@ -24,7 +25,7 @@ function Facturas() {
         }
       }
       fetchFacturas();
-    }, []);
+    }, [showF]);
 
   const [searchTerm, setSearchTerm] = useState('');
   const [showEditModalFactura, setShowEditModalFactura] = useState(false);

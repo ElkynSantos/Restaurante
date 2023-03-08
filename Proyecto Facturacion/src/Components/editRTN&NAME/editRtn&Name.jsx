@@ -1,11 +1,11 @@
 
 
-import React, { useState } from 'react';
+import React, {  useEffect, useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import { Col, Button, Row, Form, CloseButton } from 'react-bootstrap';
 import Swal from 'sweetalert2';
 import { useDispatch, useSelector } from 'react-redux';
-
+import { editFacturas } from '../../services/Factura';
 //import { Register } from '../../services/REGISTER';
 //import { addUser } from '../../features/usersSlice';
 import { showModalFactura, closeModalFactura } from '../../features/editFacturaSlice';
@@ -55,8 +55,9 @@ function Example() {
 
 function EditRTN() {
     const dispatch = useDispatch();
-
+    const valoresF = useSelector((state) => state.editFactura);
     const [form, setForm] = useState({});
+    const [dataF, setDataF] = useState([]);
     const [errors, setErrors] = useState({});
 
     const setField = (field, value) => {
@@ -65,57 +66,38 @@ function EditRTN() {
             [field]: value,
         });
     };
+    useEffect(() => {
+        console.log(valoresF);
+        setDataF(valoresF.currentFactura);
+        setForm(valoresF.currentFactura);
+    }, [valoresF]);
 
 
-    async function handleSubmit(e) {
-        
-            //LLAMEN A LA API
-
-            try {
-                // let rol = parseInt(form.rol);
-                // let dni = parseInt(form.DNI);
-                // let numero = parseInt(form.numero);
-                // console.log(form.rol);
-                const data = await Register(
-                    form.nombre,
-                    
-                    form.DNI,
-                    
-                );
-
-                const { status, newUser } = data;
-                if (status == 'Ok') {
-                    handleAddUser({
-                        FullName: `${newUser.Nombre} ${newUser.Apellido}`,
-                        UserName: newUser.Nom_Usuario,
-                        Rol: newUser.id_rol,
-                        DNI: newUser.N_Identidad,
-                        Gender: newUser.Genero,
-                        Birthday: newUser.Fecha_Nacimiento,
-                        PlaceofBirth: newUser.Lugar_Nacimiento,
-                        Phone: newUser.N_Celular,
-                        Email: newUser.Correo,
-                        status: newUser.status,
-                    });
-
-                    Swal.fire({
-                        position: 'top-center',
-                        icon: 'success',
-                        title: 'Usuario Creado',
-                        showConfirmButton: false,
-                        timer: 1500,
-                    });
-                }
-            } catch (error) {
-                const { message } = error.response.data;
+    async function handleSubmit(e) 
+    {
+        e.preventDefault();
+            console.log(form);
+            try
+            {
+                const data = await editFacturas (dataF.id, form.RTN_cliente, form.Nombre_Cliente);
                 Swal.fire({
-                    icon: 'warning',
-                    title: 'No se pudo crear el usuario',
-                    text: message,
+                    position: 'top-center',
+                    icon: 'success',
+                    title: data.msg,
+                    showConfirmButton: false,
+                    timer: 1500,
                 });
             }
-        
-        // e.target.reset();
+            catch(error)
+            {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Hubo un problema al editar la factura',
+                });
+            }
+       
+        console.log("data:"+data);
     }
 
     return (
@@ -136,10 +118,11 @@ function EditRTN() {
                                     Nombre Completo
                                 </Form.Label>
                                 <Form.Control
+                                    defaultValue={dataF?.Nombre_Cliente || ''}
                                     type="text"
                                     placeholder="Ingrese el nombre"
                                     onChange={(e) =>
-                                        setField('nombre', e.target.value)
+                                        setField('Nombre_Cliente', e.target.value)
                                     }
                                     required
                                     // isInvalid={!!errors.nombre}
@@ -155,6 +138,7 @@ function EditRTN() {
                                     RTN
                                 </Form.Label>
                                 <Form.Control
+                                     defaultValue={dataF?.RTN_cliente || ''}
                                     type="text"
                                     placeholder="Número de RTN "
                                     required
@@ -166,7 +150,7 @@ function EditRTN() {
                                         }
                                     }}
                                     onChange={(e) =>
-                                        setField('numero', e.target.value)
+                                        setField('RTN_cliente', e.target.value)
                                     }
                                 />
                             </Form.Group>

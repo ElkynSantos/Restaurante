@@ -8,6 +8,6 @@ import {
 
 const facturasRoutes = express.Router();
 
-facturasRoutes.route('/').get(getFacturas).post(newFactura).put(editFacturas);
+facturasRoutes.route('/').get(getFacturas).post(newFactura).patch(editFacturas);
 facturasRoutes.route('/numFactura').post(getFactura);
 export default facturasRoutes;

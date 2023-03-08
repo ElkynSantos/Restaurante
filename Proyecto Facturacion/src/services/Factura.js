@@ -20,15 +20,23 @@ export const getFactura = (Numero_factura) =>
   }).then(response => response.json())
 }
 
-const editFacturas = async (data) => {
-  try {
-    const response = await axios.post('http://localhost:3000/editFacturas', data);
-    return response.data;
-  } catch (error) {
-    console.error(error);
-  }
-};
+export async function editFacturas(
+  id,RTN_cliente,Nombre_cliente
+) {
+  const options = {
+      method: 'PATCH',
+      url: 'http://localhost:3000/bills/',
+      data: {
+          id,
+          RTN_cliente,
+          Nombre_cliente
+  
+      },
+  };
+  const response = await axios.request(options);
 
+  return response.data;
+}
 
 const newFactura = async (data) => {
   try {
@@ -41,6 +49,5 @@ const newFactura = async (data) => {
 
 export {
   getFacturas,
-  editFacturas,
   newFactura,
 };
