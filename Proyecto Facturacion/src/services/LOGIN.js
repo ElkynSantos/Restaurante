@@ -11,6 +11,6 @@ export async function login(user, userPassword) {
         withCredentials: true,
     };
     const response = await axios.request(options);
-
+    
     return response.data;
 }

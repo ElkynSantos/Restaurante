@@ -330,18 +330,20 @@ function LISTAPEDIDOS() {
     }
 
     return (
-        <Container>
+        <div>
             <BarraLateral />
-            <h1>Lista PEDIDOS</h1>
+            <Container className='mt-5'>
+                <h1>Lista PEDIDOS</h1>
 
-            {FormtatoTabla}
-            {TablaFacturador}
+                {FormtatoTabla}
+                {TablaFacturador}
 
-            <Row>
-                <Col>{TablaCocinaIzquierda}</Col>;
-                <Col>{TablaCocinaDerecha}</Col>
-            </Row>
-        </Container>
+                <Row>
+                    <Col>{TablaCocinaIzquierda}</Col>;
+                    <Col>{TablaCocinaDerecha}</Col>
+                </Row>
+            </Container>
+        </div>
     );
 }
 

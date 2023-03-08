@@ -161,7 +161,7 @@ function ROLES() {
     return (
         <div>
             <CREARROL />
-            <EDITARROLES />;
+            <EDITARROLES />
             <BarraLateral />
             <Container className="mt-5 rounded bg-white pt-5 pb-5">
                 <Row>

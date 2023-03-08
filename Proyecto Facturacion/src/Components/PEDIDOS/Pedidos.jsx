@@ -353,99 +353,100 @@ function PEDIDOS() {
     }, [filterText, resetPaginationToggle]);
 
     return (
-        <Container>
+        <div>
             <BarraLateral />
+            <Container className='mt-5'>
+                <Form>
+                    <Row>
+                        <Col>
+                            <Button variant="secondary" size="lg">
+                                Atras
+                            </Button>
+                        </Col>
+                        <Col>
+                            <Button
+                                href="/ListaPedidos"
+                                variant="secondary"
+                                size="lg"
+                            >
+                                Mostrar Pedidos
+                            </Button>
+                        </Col>
+                    </Row>
+                </Form>
+                <h1>PEDIDOS</h1>
 
-            <Form>
                 <Row>
                     <Col>
-                        <Button variant="secondary" size="lg">
-                            Atras
-                        </Button>
+                        {' '}
+                        <DataTable
+                            title="Lista de Productos"
+                            columns={columns}
+                            // selectableRows
+
+                            onRowClicked={handleChange}
+                            //   data={DATO}
+
+                            data={filteredItems}
+                            pagination
+                            paginationResetDefaultPage={resetPaginationToggle} // optionally, a hook to reset pagination to page 1
+                            subHeader
+                            subHeaderComponent={subHeaderComponentMemo}
+                            persistTableHead
+                        />
                     </Col>
+
                     <Col>
-                        <Button
-                            href="/ListaPedidos"
-                            variant="secondary"
-                            size="lg"
-                        >
-                            Mostrar Pedidos
-                        </Button>
+                        <DataTable
+                            title="Orden"
+                            columns={columns2}
+                            data={AllSelectedRows}
+                            onRowClicked={handleChange2}
+                        />
+                        <div class="p-3 mb-2 bg-light text-dark">
+                            {' '}
+                            <div>
+                                <Row>
+                                    <Col>
+                                        {' '}
+                                        <h7>Mesa: {value}</h7>
+                                    </Col>
+                                    <Col>
+                                        <Dropdown>
+                                            <Dropdown.Toggle
+                                                variant="outline-primary"
+                                                id="dropdown-basic"
+                                            >
+                                                Seleccionar
+                                            </Dropdown.Toggle>
+
+                                            <Dropdown.Menu>
+                                                {DROPDOWN_Items}
+                                            </Dropdown.Menu>
+                                        </Dropdown>
+                                    </Col>
+                                </Row>
+                            </div>
+                            <p></p>
+                            <p></p>
+                            <Button href="/home" variant="outline-danger" size="lg">
+                                Cancelar
+                            </Button>{' '}
+                            <Button
+                                //       href="/ListaPedidos"
+                                variant="primary"
+                                size="lg"
+                                onClick={() => newOrder()}
+                                // href="\listaPedidos"
+                            >
+                                Facturar
+                            </Button>
+                            {handleChange2}
+                        </div>
                     </Col>
                 </Row>
-            </Form>
-            <h1>PEDIDOS</h1>
-
-            <Row>
-                <Col>
-                    {' '}
-                    <DataTable
-                        title="Lista de Productos"
-                        columns={columns}
-                        // selectableRows
-
-                        onRowClicked={handleChange}
-                        //   data={DATO}
-
-                        data={filteredItems}
-                        pagination
-                        paginationResetDefaultPage={resetPaginationToggle} // optionally, a hook to reset pagination to page 1
-                        subHeader
-                        subHeaderComponent={subHeaderComponentMemo}
-                        persistTableHead
-                    />
-                </Col>
-
-                <Col>
-                    <DataTable
-                        title="Orden"
-                        columns={columns2}
-                        data={AllSelectedRows}
-                        onRowClicked={handleChange2}
-                    />
-                    <div class="p-3 mb-2 bg-light text-dark">
-                        {' '}
-                        <div>
-                            <Row>
-                                <Col>
-                                    {' '}
-                                    <h7>Mesa: {value}</h7>
-                                </Col>
-                                <Col>
-                                    <Dropdown>
-                                        <Dropdown.Toggle
-                                            variant="outline-primary"
-                                            id="dropdown-basic"
-                                        >
-                                            Seleccionar
-                                        </Dropdown.Toggle>
-
-                                        <Dropdown.Menu>
-                                            {DROPDOWN_Items}
-                                        </Dropdown.Menu>
-                                    </Dropdown>
-                                </Col>
-                            </Row>
-                        </div>
-                        <p></p>
-                        <p></p>
-                        <Button href="/home" variant="outline-danger" size="lg">
-                            Cancelar
-                        </Button>{' '}
-                        <Button
-                            //       href="/ListaPedidos"
-                            variant="primary"
-                            size="lg"
-                            onClick={() => newOrder()}
-                            // href="\listaPedidos"
-                        >
-                            Facturar
-                        </Button>
-                        {handleChange2}
-                    </div>
-                </Col>
-            </Row>
-        </Container>
+            </Container>
+        </div>
     );
 }
 

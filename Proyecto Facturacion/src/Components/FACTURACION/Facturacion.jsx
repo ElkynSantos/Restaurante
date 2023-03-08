@@ -1,17 +1,19 @@
 import BarraLateral from '../common/index.js';
 
-import Container from 'react-bootstrap/Container';
+import { Container } from 'react-bootstrap';
 
 function FACTURACION() {
     return (
-        <Container>
+        <div>
             <BarraLateral />
-            <h1>Factura Generada</h1>
+            <Container className='mt-5'>
+                <h1>Factura Generada</h1>
 
-            <p></p>
+                <p></p>
 
-            <h4>Info Generada</h4>
-        </Container>
+                <h4>Info Generada</h4>
+            </Container>
+        </div>
     );
 }
 
