@@ -4,13 +4,23 @@ import { comparePassword } from '../utilities/handle.bcrypt.js';
 
 const allCompletedOrders = async (req, res, next) => {
     try {
-        const [order] = await db.query('call get_readyOrders();');
+        const order = await db.query('call get_readytoFactOrders;');
 
+        /*
+  'CALL get_all_orders(:estadoCocina, :estadoFactura)',
+            {
+                replacements: {
+                    estadoCocina: 1,
+                    estadoFactura: 1,
+                },
+            }
+        */
         if (order.orders === null) {
             return next(
                 new AppError(`No hay ordenes completadas en este momento`, 404)
             );
         }
+
         return res.json({
             order,
         });
@@ -26,17 +36,19 @@ const allCompletedOrders = async (req, res, next) => {
 
 const allPendingOrders = async (req, res, next) => {
     try {
-        const [order] = await db.query(
-            'CALL get_all_orders(:estadoCocina, :estadoFactura)',
-            {
-                replacements: {
-                    estadoCocina: 0,
-                    estadoFactura: 0,
-                },
-            }
-        );
+        const [order] = await db.query('call get_cookingOrders;');
 
-        if (order.orders === null) {
+        /*
+'call db_rest.get_all_orders(0, 0);', {
+            replacements: {
+                estadoCocina: 0,
+                estadoFactura: 0,
+            },
+        }
+*/
+
+        console.log(order);
+        if (order === null) {
             return next(
                 new AppError(`No hay ordenes activas en este momento`, 404)
             );
@@ -57,15 +69,16 @@ const allPendingOrders = async (req, res, next) => {
 
 const allCookedOrders = async (req, res, next) => {
     try {
-        const [order] = await db.query(
-            'CALL get_all_orders(:estadoCocina, :estadoFactura)',
+        const [order] = await db.query('call get_readyOrders;');
+        /*
+  'CALL get_all_orders(:estadoCocina, :estadoFactura)',
             {
                 replacements: {
                     estadoCocina: 1,
                     estadoFactura: 0,
                 },
             }
-        );
+        */
 
         if (order.orders === null) {
             return next(
@@ -88,11 +101,11 @@ const allCookedOrders = async (req, res, next) => {
 const CompletedOrder = async (req, res, next) => {
     const { id } = req.body;
     try {
-        await db.query(
-            'UPDATE bd_restaurante.pedidos SET estadoCocina = 1 WHERE id = ' +
-                id +
-                ';'
-        );
+        await db.query('call setOrderReady(:idParam);', {
+            replacements: {
+                idParam: id,
+            },
+        });
 
         return res.json({});
     } catch (error) {
@@ -108,11 +121,11 @@ const CompletedOrder = async (req, res, next) => {
 const BackCompleteOrder = async (req, res, next) => {
     const { id } = req.body;
     try {
-        await db.query(
-            'UPDATE bd_restaurante.pedidos SET estadoCocina = 0 WHERE id = ' +
-                id +
-                ';'
-        );
+        await db.query('call backOrderReady(:idParam);', {
+            replacements: {
+                idParam: id,
+            },
+        });
 
         return res.json({});
     } catch (error) {

@@ -138,6 +138,8 @@ function PEDIDOS() {
             });
         }
 
+        console.log(listaprod);
+
         await fetch('http://localhost:3000/orders/', {
             method: 'POST',
             headers: {

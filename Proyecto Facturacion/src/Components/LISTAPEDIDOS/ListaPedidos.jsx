@@ -8,6 +8,8 @@ import {
     Form,
     FormControl,
 } from 'react-bootstrap';
+
+import { PencilFill, BookmarkCheckFill } from 'react-bootstrap-icons';
 import { useState, useEffect, useMemo } from 'react';
 
 import Modal from 'react-bootstrap/Modal';
@@ -31,7 +33,9 @@ function LISTAPEDIDOS() {
     const [DATA, setData] = useState([]);
 
     const [dataPending, setDataPending] = useState([]);
+    const [SelectedRows, setSelectedRows] = useState([]);
 
+    const [PedidosaFacturar, setPedidosaFacturar] = useState([]);
     //HANDLERS
     const handleChangeFact = () => {
         if (facturador) {
@@ -41,9 +45,11 @@ function LISTAPEDIDOS() {
         }
     };
 
+    const handleFacturar = () => {};
+
     useEffect(() => {
         console.log(`Facturado ` + facturador);
-    });
+    }, []);
 
     const DevolverNoCocinado = async (idPedido) => {
         await fetch(`http://localhost:3000/orders/132`, {
@@ -57,7 +63,7 @@ function LISTAPEDIDOS() {
     };
 
     const Cocinado = async (idPedido) => {
-        await fetch(`http://localhost:3000/orders/Listo`, {
+        await fetch(`http://localhost:3000/orders/ready`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -77,24 +83,25 @@ function LISTAPEDIDOS() {
 
     useEffect(() => {
         const getAllPendingPedidos = async () => {
-            await fetch('http://localhost:3000/orders/Pending')
+            await fetch('http://localhost:3000/orders/pending')
                 .then((response) => response.json())
                 .then((dataPending) => {
+                    console.log('=========PENDING===========');
                     console.log(dataPending.order.orders),
                         setDataPending(dataPending.order.orders);
                 });
         };
 
         getAllPendingPedidos();
-    }, [DevolverNoCocinado]);
+    }, []);
 
     useEffect(() => {
         const getAllPedidos = async () => {
-            await fetch('http://localhost:3000/orders/')
+            await fetch('http://localhost:3000/orders/ready')
                 .then((response) => response.json())
                 .then((data1) => {
                     console.log(data1.status);
-
+                    console.log('=========ReadytoFact===========');
                     if (data1.status != 'fail') {
                         console.log(data1.order.orders),
                             setData(data1.order.orders);
@@ -103,7 +110,7 @@ function LISTAPEDIDOS() {
         };
 
         getAllPedidos();
-    }, [DevolverNoCocinado]);
+    }, []);
 
     //IFS
 
@@ -112,6 +119,19 @@ function LISTAPEDIDOS() {
     let TablaCocinaDerecha;
     let TablaCocinaIzquierda;
     if (facturador) {
+        const handleChange = ({ selectedRows }) => {
+            console.log(selectedRows);
+
+            const arraytemp = [];
+            for (let i = 0; i < selectedRows.length; i++) {
+                arraytemp.push(selectedRows[i].numero_pedido);
+            }
+
+            setSelectedRows(arraytemp);
+
+            console.log('Selected Rows: ', selectedRows);
+        };
+
         const data = [
             {
                 NPedido: 1,
@@ -146,51 +166,70 @@ function LISTAPEDIDOS() {
             },
 
             {
-                name: 'Eliminar',
-                cell: (props) => (
-                    <Button
-                        variant="danger"
-                        //    onClick={() => handleChange2(props)}
-                        id={props.ID}
-                    >
-                        Eliminar
-                    </Button>
-                ),
-            },
-            {
-                name: 'Editar',
-                cell: (props) => (
-                    <Button
-                        variant="primary"
-                        //    onClick={() => handleChange2(props)}
-                        id={props.ID}
-                    >
-                        Editar
-                    </Button>
-                ),
+                name: 'Fecha',
+                selector: (row) => row.fecha,
             },
 
             {
-                name: 'Facturar',
+                name: 'Acciones',
                 cell: (props) => (
-                    <Button
-                        variant="outline-success"
-                        //    onClick={() => handleChange2(props)}
-                        href="/ListaFacturacion"
-                        id={props.ID}
-                    >
-                        Facturar
-                    </Button>
+                    <Row>
+                        <Col>
+                            <button
+                                className="btn-transparent text-blue p-0"
+                                title="Editar"
+                            >
+                                <PencilFill />
+                            </button>
+                        </Col>
+                        <Col>
+                            <button
+                                className="btn-transparent text-success p-0"
+                                title="Facturar"
+                            >
+                                <BookmarkCheckFill />
+                            </button>
+                        </Col>
+                    </Row>
                 ),
             },
         ];
+
         FormtatoTabla = (
-            <Button
-                variant="outline-secondary"
-                onClick={() => handleChangeFact()}
-            >
-                Ver como Cocina
-            </Button>
+            <Container>
+                <Row>
+                    <Col>
+                        {' '}
+                        <Button
+                            variant="outline-secondary"
+                            onClick={() => handleChangeFact()}
+                        >
+                            Ver como Cocina
+                        </Button>
+                    </Col>
+                    <Col>2 of 2</Col>
+                </Row>
+                <Row>
+                    <Col>
+                        <h6>
+                            Pedidos Seleccionados: {SelectedRows.toString()}
+                        </h6>
+                    </Col>
+
+                    <Col>2 of 3</Col>
+
+                    <Col>
+                        {' '}
+                        <Button
+                            variant="outline-secondary"
+                            onClick={() => handleChangeFact()}
+                        >
+                            Facturar
+                        </Button>
+                    </Col>
+                </Row>
+                <p></p>
+            </Container>
         );
         const productos = [];
 
@@ -221,7 +260,9 @@ function LISTAPEDIDOS() {
                 columns={columns}
                 data={DATA}
                 expandableRows
+                selectableRows
                 expandableRowsComponent={ExpandedComponent}
+                onSelectedRowsChange={handleChange}
             />
         );
     } else {
@@ -262,7 +303,12 @@ function LISTAPEDIDOS() {
             },
 
             {
-                name: 'Listo',
+                name: 'Fecha',
+                selector: (row) => row.fecha,
+            },
+
+            {
+                name: 'Acciones',
 
                 cell: (props) => (
                     <Button
@@ -301,6 +347,7 @@ function LISTAPEDIDOS() {
         ];
 
         const ExpandedComponent = ({ data }) => {
+            console.log('==================PRODUCTOS==============');
             console.log(data.productos);
 
             let ContenidoPedido = '==========Pedido==========\n';
@@ -315,12 +362,15 @@ function LISTAPEDIDOS() {
             return <pre>{ContenidoPedido}</pre>;
         };
 
+        const rowPreExpanded = (row) => (row.all = true);
+
         TablaCocinaIzquierda = (
             <DataTable
                 columns={columns}
                 data={dataPending}
                 expandableRows
                 expandableRowsComponent={ExpandedComponent}
+                expandableRowExpanded={rowPreExpanded}
             />
         );
 

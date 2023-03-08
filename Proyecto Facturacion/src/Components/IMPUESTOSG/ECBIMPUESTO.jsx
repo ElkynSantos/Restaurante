@@ -238,6 +238,20 @@ function ECBMPUESTO() {
                                                         </Form.Label>
                                                         <Form.Control
                                                             type="text"
+                                                            required
+                                                            maxLength="15"
+                                                            minLength="15"
+                                                            onKeyPress={(
+                                                                event
+                                                            ) => {
+                                                                if (
+                                                                    !/^[a-zA-Z0-9]{1,15}$/.test(
+                                                                        event.key
+                                                                    )
+                                                                ) {
+                                                                    event.preventDefault();
+                                                                }
+                                                            }}
                                                             value={
                                                                 nombreImpuesto
                                                             }
@@ -247,8 +261,6 @@ function ECBMPUESTO() {
                                                                         .value
                                                                 )
                                                             }
-                                                            pattern="^[A-Za-z0-9]{1,10}$"
-                                                            title="El nombre del impuesto debe contener letras y números y no debe ser mayor a 10 caracteres."
                                                         />
                                                     </Form.Group>
                                                     <Form.Group>
@@ -258,6 +270,20 @@ function ECBMPUESTO() {
                                                         </Form.Label>
                                                         <Form.Control
                                                             type="text"
+                                                            required
+                                                            maxLength="2"
+                                                            minLength="2"
+                                                            onKeyPress={(
+                                                                event
+                                                            ) => {
+                                                                if (
+                                                                    !/^(100|[1-9][0-9]?|0[1-9])$/.test(
+                                                                        event.key
+                                                                    )
+                                                                ) {
+                                                                    event.preventDefault();
+                                                                }
+                                                            }}
                                                             value={
                                                                 porcentajeImpuesto
                                                             }
@@ -330,16 +356,34 @@ function ECBMPUESTO() {
                         <Form.Label>Nombre del impuesto</Form.Label>
                         <Form.Control
                             type="text"
+                            required
+                            maxLength="15"
+                            minLength="15"
+                            onKeyPress={(event) => {
+                                if (!/^[a-zA-Z0-9]{1,15}$/.test(event.key)) {
+                                    event.preventDefault();
+                                }
+                            }}
                             value={nombreImpuesto}
                             onChange={(e) => setNombreImpuesto(e.target.value)}
-                            pattern="^[A-Za-z0-9]{1,10}$"
-                            title="El nombre del impuesto debe contener letras y números y no debe ser mayor a 10 caracteres."
                         />
                     </Form.Group>
                     <Form.Group>
                         <Form.Label>Porcentaje del impuesto</Form.Label>
                         <Form.Control
                             type="text"
+                            required
+                            maxLength="2"
+                            minLength="2"
+                            onKeyPress={(event) => {
+                                if (
+                                    !/^(100|[1-9][0-9]?|0[1-9])$/.test(
+                                        event.key
+                                    )
+                                ) {
+                                    event.preventDefault();
+                                }
+                            }}
                             value={porcentajeImpuesto}
                             onChange={(e) =>
                                 setPorcentajeImpuesto(e.target.value)
