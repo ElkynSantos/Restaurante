@@ -28,7 +28,7 @@ import ChangePass from './Components/ChangePassword/index';
 import Facturas from './Components/ADMFACTURAS/index';
 import PRODUCTOS from './Components/Productos/Index';
 import PrintFactura from './Components/APRINTFACTURA';
-
+import EditarPerf from './Components/EDITARPERFIL';
 
 
 
@@ -36,7 +36,7 @@ function App() {
     return (
         <BrowserRouter>
             <Routes>
-                <Route index element={<LOGIN />} />
+                <Route index element={<INICIO />} />
                 <Route path="/Home" element={<INICIO />} />
                 <Route path="/Pedidos" element={<PEDIDOS />} />
                 <Route path="/ListaPedidos" element={<LISTAPEDIDOS />} />
@@ -47,6 +47,7 @@ function App() {
                 <Route path="/Recuperar" element={<FormPassword />} />
                 <Route path="/bills" element={<Facturas />} />
                 <Route path="/printbills" element={<PrintFactura />} />
+                <Route path="/editprofile" element={<EditarPerf />} />
                 <Route
                     path="/auth/reset-password/:token"
                     element={<Recovery />}
