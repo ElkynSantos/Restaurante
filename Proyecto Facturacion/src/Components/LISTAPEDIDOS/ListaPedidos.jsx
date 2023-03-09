@@ -42,12 +42,30 @@ function LISTAPEDIDOS() {
 
     const [PedidosaFacturar, setPedidosaFacturar] = useState([]);
     //HANDLERS
-    const handleChangeFact = () => {
-        if (facturador) {
-            setFacturador(false);
-        } else {
-            setFacturador(true);
-        }
+    const handleChangeFact = async () => {
+        /*  await fetch(`http://localhost:3000/bills`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+
+            body: JSON.stringify({
+                numeroFactura: 1,
+                nombreCliente: 'Josue',
+                RtnCliente: '0501200302608',
+                fechaCreacion: NOW(),
+                subtotal: 22,
+                total: 25,
+                tarjetaEfectivo: 0,
+                cambio: 20,
+                anular: 0,
+                pendiente: 0,
+                pagado: 0,
+                idConfiguracionFactura: 1,
+                idOrden: 2,
+                usuarioAtiende: 'JORO7226',
+            }),
+        });*/
     };
 
     const handleFacturar = () => {};
@@ -228,10 +246,10 @@ function LISTAPEDIDOS() {
                     <Col>
                         {' '}
                         <Button
-                            variant="outline-secondary"
+                            variant="outline-success"
                             onClick={() => handleChangeFact()}
                         >
-                            Facturar
+                            Facturar Seleccion
                         </Button>
                     </Col>
                 </Row>
