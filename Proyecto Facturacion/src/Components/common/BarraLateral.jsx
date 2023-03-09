@@ -7,106 +7,103 @@ import * as Icons from 'react-bootstrap-icons';
 import { BsHouseFill } from 'react-icons/bs';
 import { IoIosExit } from 'react-icons/io';
 import { IoRestaurantSharp } from 'react-icons/io5';
-
-import { getAllCategoriesByUser } from '../../services/roles';
-
 import CREARUSUARIO from '../CREARUSUARIO/index';
-import MESA from '../MESAS/Mesa';
-
 import './BarraLateral.css';
+
+import MESA from '../MESAS/Mesa';
 
 function Example() {
     const [show, setShow] = useState(false);
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
-
-    const [infoUser, setInfoUser] = useState([]);
-    const [categories, setCategories] = useState([]);
+    const [Categories, setCategories] = useState([]);
+    const [DATA, setData] = useState([]);
 
     useEffect(() => {
         const getAllRoles = async () => {
-            // await getAllCategoriesByUser("JUAR5219")
-            await getAllCategoriesByUser('JORO7226')
-                .then((infoUser) => {
-                    console.log('======PRUEBA 1=======');
-
-                    console.log(infoUser);
-                    setInfoUser({
-                        fullname: infoUser.Nombre,
-                        rol: infoUser.Rol,
-                    });
-                    setCategories(infoUser.Categorias);
-                })
-                .catch();
+            await fetch('http://localhost:3000/roles/RoleandPermissions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ User: localStorage.getItem('USER') }),
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    console.log(data.RolesPermissions[0].ARRAY);
+                    setCategories(data.RolesPermissions[0].ARRAY.Categorias);
+                    console.log('JUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAN');
+                    console.log(Categories);
+                });
         };
 
         getAllRoles();
     }, []);
 
-    // const categories = [
-    //     {
-    //         name: 'Configuración del sistema',
-    //         icon: 'Gear',
-    //         permissions: [
-    //             {
-    //                 name: 'Roles',
-    //                 url: '/roles',
-    //                 icon: 'BookmarkFill',
-    //             },
-    //             {
-    //                 name: 'Usuarios',
-    //                 url: '/Users',
-    //                 icon: 'PeopleFill',
-    //             },
-    //             {
-    //                 name: 'Recuperar Contraseña',
-    //                 url: '/Recuperar',
-    //                 icon: 'PeopleFill',
-    //             },
-    //         ],
-    //     },
-    //     {
-    //         name: 'Configuración del negocio',
-    //         icon: 'Shop',
-    //         permissions: [
-    //             {
-    //                 name: 'Impuestos',
-    //                 url: '/taxes',
-    //                 icon: 'Percent',
-    //             },
-    //             {
-    //                 name: 'Menú',
-    //                 url: '/products',
-    //                 icon: 'LayoutTextSidebar',
-    //             },
-    //             {
-    //                 name: 'Pedidos',
-    //                 url: '/orders',
-    //                 icon: 'ListCheck',
-    //             },
-    //             // {
-    //             //     name: "Facturas",
-    //             //     url: "/bills",
-    //             //     icon: "PeopleFill"
-    //             // }
-    //         ],
-    //     },
-    //     {
-    //         name: 'Reportes',
-    //         icon: 'BarChartLineFill',
-    //         permissions: [
-    //             {
-    //                 name: 'Reportes',
-    //                 url: '/reports',
-    //                 icon: 'FileEarmarkBarGraphFill',
-    //             },
-    //         ],
-    //     },
-    // ];
+    const optionsSidebar = [
+        {
+            Categoria: 'Configuración del sistema',
+            Icono: 'Gear',
+            Categorias: [
+                {
+                    N_Permiso: 'Roles',
+                    link: '/roles',
+                    icono: 'BookmarkFill',
+                },
+                {
+                    N_Permiso: 'Usuarios',
+                    link: '/Users',
+                    icono: 'PeopleFill',
+                },
+                {
+                    N_Permiso: 'Recuperar Contraseña',
+                    link: '/Recuperar',
+                    icono: 'PeopleFill',
+                },
+            ],
+        },
+        {
+            Categoria: 'Configuración del negocio',
+            Icono: 'Shop',
+            Categorias: [
+                {
+                    N_Permiso: 'Menú',
+                    link: '/productos',
+                    icono: 'LayoutTextSidebar',
+                },
+                {
+                    N_Permiso: 'Pedidos',
+                    link: '/Pedidos',
+                    icono: 'ListCheck',
+                },
+                {
+                    N_Permiso: 'Impuestos',
+                    link: '/Impuestos',
+                    icono: 'Percent',
+                },
+                // {
+                //     name: "Facturas",
+                //     url: "/bills",
+                //     icon: "PeopleFill"
+                // }
+            ],
+        },
+        {
+            Categoria: 'Reportes',
+            Icono: 'BarChartLineFill',
+            Categorias: [
+                {
+                    N_Permiso: 'Reportes',
+                    link: '/reports',
+                    icono: 'FileEarmarkBarGraphFill',
+                },
+            ],
+        },
+    ];
 
-    // console.log("INFOUSER:", infoUser);
-    // console.log("CAtegories:", categories);
+    const User = localStorage.getItem('USER');
+    const Rol = localStorage.getItem('ROL');
 
     return (
         <>
@@ -125,16 +122,15 @@ function Example() {
                                 id="nav-brand"
                                 src="/assets/images/logo.png"
                                 className="imagen"
-                                title="Volver al inicio"
                             ></img>
                         </a>
                     </span>
                     <span className="profile-container">
                         <span className="profile-info text-white">
-                            <h5 className="profile-name">
-                                {infoUser.fullname}
-                            </h5>
-                            <h6 className="profile-rol">{infoUser.rol}</h6>
+                            <h6 className="profile-name">
+                                {User || 'Username'}
+                            </h6>
+                            <h7 className="profile-rol">{Rol || 'Rol'}</h7>
                         </span>
                         <span className="profile-image">
                             <a href="/profile" title="Ver perfil">
@@ -153,25 +149,17 @@ function Example() {
                     closeVariant="white"
                 >
                     <Container fluid>
-                        <a href="/home">
-                            <img
-                                src="/assets/images/logo.png"
-                                className="imagen"
-                                title="Volver al inicio"
-                            ></img>
-                            {/* <img
-                                id="nav-brand"
-                                src="/assets/images/logo.png"
-                                className="imagen"
-                            ></img> */}
-                        </a>
+                        <img
+                            src="/assets/images/logo.png"
+                            className="imagen"
+                        ></img>
                     </Container>
                 </Offcanvas.Header>
                 <Offcanvas.Body>
                     <Container>
                         <div className="d-grid gap-2">
                             <Button href="/home" className="bg-blue" size="lg">
-                                <Icons.BsHouseFill></Icons.BsHouseFill>Inicio
+                                <BsHouseFill></BsHouseFill> Inicio
                             </Button>
                         </div>
                         <p></p>
@@ -182,8 +170,8 @@ function Example() {
                                     // <div>
                                     //     {infoUser.Categorias[0]}
                                     // </div>
-                                    categories ? (
-                                        categories.map((category, index) => {
+                                    Categories ? (
+                                        Categories.map((category, index) => {
                                             const {
                                                 [category.Icono]:
                                                     TempIconHeader,
