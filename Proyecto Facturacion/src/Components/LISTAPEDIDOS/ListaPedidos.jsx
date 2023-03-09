@@ -253,12 +253,14 @@ function LISTAPEDIDOS() {
             ContenidoPedido += '==========================';
             return <pre>{ContenidoPedido}</pre>;
         };
+
         // const ExpandedComponent = OrdenarPedido(data);
         // console.log(data[[0]].Pedido.Producto);
         TablaFacturador = (
             <DataTable
                 columns={columns}
                 data={DATA}
+                //   theme="solarized"
                 expandableRows
                 selectableRows
                 expandableRowsComponent={ExpandedComponent}
