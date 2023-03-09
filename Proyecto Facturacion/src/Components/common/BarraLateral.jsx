@@ -7,10 +7,13 @@ import * as Icons from 'react-bootstrap-icons';
 import { BsHouseFill } from 'react-icons/bs';
 import { IoIosExit } from 'react-icons/io';
 import { IoRestaurantSharp } from 'react-icons/io5';
-import CREARUSUARIO from '../CREARUSUARIO/index';
-import './BarraLateral.css';
 
+import { getAllCategoriesByUser } from '../../services/roles';
+
+import CREARUSUARIO from '../CREARUSUARIO/index';
 import MESA from '../MESAS/Mesa';
+
+import './BarraLateral.css';
 
 function Example() {
     const [show, setShow] = useState(false);
@@ -18,89 +21,92 @@ function Example() {
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
-    const [DATA, setData] = useState([]);
+    const [infoUser, setInfoUser] = useState([]);
+    const [categories, setCategories] = useState([]);
 
     useEffect(() => {
         const getAllRoles = async () => {
-            await fetch('http://localhost:3000/roles/ForBarralateral')
-                .then((response) => response.json())
-                .then((data) => {
-                    console.log('================================');
-                    console.log(data.allRoles);
+            // await getAllCategoriesByUser("JUAR5219")
+            await getAllCategoriesByUser('JORO7226')
+                .then((infoUser) => {
+                    console.log('======PRUEBA 1=======');
 
-                    setData(data.allRoles);
+                    console.log(infoUser);
+                    setInfoUser({
+                        fullname: infoUser.Nombre,
+                        rol: infoUser.Rol,
+                    });
+                    setCategories(infoUser.Categorias);
                 })
-                .catch((error) => {
-                    console.error(error);
-                });
+                .catch();
         };
 
         getAllRoles();
     }, []);
 
-    const optionsSidebar = [
-        {
-            name: 'Configuración del sistema',
-            icon: 'Gear',
-            permissions: [
-                {
-                    name: 'Roles',
-                    url: '/roles',
-                    icon: 'BookmarkFill',
-                },
-                {
-                    name: 'Usuarios',
-                    url: '/Users',
-                    icon: 'PeopleFill',
-                },
-                {
-                    name: 'Recuperar Contraseña',
-                    url: '/Recuperar',
-                    icon: 'PeopleFill',
-                },
-            ],
-        },
-        {
-            name: 'Configuración del negocio',
-            icon: 'Shop',
-            permissions: [
-                {
-                    name: 'Menú',
-                    url: '/productos',
-                    icon: 'LayoutTextSidebar',
-                },
-                {
-                    name: 'Pedidos',
-                    url: '/Pedidos',
-                    icon: 'ListCheck',
-                },
-                {
-                    name: 'Impuestos',
-                    url: '/Impuestos',
-                    icon: 'Percent',
-                },
-                // {
-                //     name: "Facturas",
-                //     url: "/bills",
-                //     icon: "PeopleFill"
-                // }
-            ],
-        },
-        {
-            name: 'Reportes',
-            icon: 'BarChartLineFill',
-            permissions: [
-                {
-                    name: 'Reportes',
-                    url: '/reports',
-                    icon: 'FileEarmarkBarGraphFill',
-                },
-            ],
-        },
-    ];
+    // const categories = [
+    //     {
+    //         name: 'Configuración del sistema',
+    //         icon: 'Gear',
+    //         permissions: [
+    //             {
+    //                 name: 'Roles',
+    //                 url: '/roles',
+    //                 icon: 'BookmarkFill',
+    //             },
+    //             {
+    //                 name: 'Usuarios',
+    //                 url: '/Users',
+    //                 icon: 'PeopleFill',
+    //             },
+    //             {
+    //                 name: 'Recuperar Contraseña',
+    //                 url: '/Recuperar',
+    //                 icon: 'PeopleFill',
+    //             },
+    //         ],
+    //     },
+    //     {
+    //         name: 'Configuración del negocio',
+    //         icon: 'Shop',
+    //         permissions: [
+    //             {
+    //                 name: 'Impuestos',
+    //                 url: '/taxes',
+    //                 icon: 'Percent',
+    //             },
+    //             {
+    //                 name: 'Menú',
+    //                 url: '/products',
+    //                 icon: 'LayoutTextSidebar',
+    //             },
+    //             {
+    //                 name: 'Pedidos',
+    //                 url: '/orders',
+    //                 icon: 'ListCheck',
+    //             },
+    //             // {
+    //             //     name: "Facturas",
+    //             //     url: "/bills",
+    //             //     icon: "PeopleFill"
+    //             // }
+    //         ],
+    //     },
+    //     {
+    //         name: 'Reportes',
+    //         icon: 'BarChartLineFill',
+    //         permissions: [
+    //             {
+    //                 name: 'Reportes',
+    //                 url: '/reports',
+    //                 icon: 'FileEarmarkBarGraphFill',
+    //             },
+    //         ],
+    //     },
+    // ];
 
-    const User = localStorage.getItem('USER');
-    const Rol = localStorage.getItem('ROL');
+    // console.log("INFOUSER:", infoUser);
+    // console.log("CAtegories:", categories);
 
     return (
         <>
@@ -119,15 +125,16 @@ function Example() {
                                 id="nav-brand"
                                 src="/assets/images/logo.png"
                                 className="imagen"
+                                title="Volver al inicio"
                             ></img>
                         </a>
                     </span>
                     <span className="profile-container">
                         <span className="profile-info text-white">
-                            <h6 className="profile-name">
-                                {User || 'Username'}
-                            </h6>
-                            <h7 className="profile-rol">{Rol || 'Rol'}</h7>
+                            <h5 className="profile-name">
+                                {infoUser.fullname}
+                            </h5>
+                            <h6 className="profile-rol">{infoUser.rol}</h6>
                         </span>
                         <span className="profile-image">
                             <a href="/profile" title="Ver perfil">
@@ -146,108 +153,93 @@ function Example() {
                     closeVariant="white"
                 >
                     <Container fluid>
-                        <img
-                            src="/assets/images/logo.png"
-                            className="imagen"
-                        ></img>
+                        <a href="/home">
+                            <img
+                                src="/assets/images/logo.png"
+                                className="imagen"
+                                title="Volver al inicio"
+                            ></img>
+                            {/* <img
+                                id="nav-brand"
+                                src="/assets/images/logo.png"
+                                className="imagen"
+                            ></img> */}
+                        </a>
                     </Container>
                 </Offcanvas.Header>
                 <Offcanvas.Body>
                     <Container>
                         <div className="d-grid gap-2">
                             <Button href="/home" className="bg-blue" size="lg">
-                                <BsHouseFill></BsHouseFill> Inicio
+                                <Icons.BsHouseFill></Icons.BsHouseFill>Inicio
                             </Button>
                         </div>
                         <p></p>
 
                         <div className="d-grid gap-2">
                             <Accordion defaultActiveKey="0">
-                                {optionsSidebar.map((category, index) => {
-                                    const { [category.icon]: TempIconHeader } =
-                                        Icons;
-                                    return (
-                                        <Accordion.Item
-                                            eventKey={index}
-                                            key={index}
-                                        >
-                                            <Accordion.Header>
-                                                <TempIconHeader />{' '}
-                                                {category.name}
-                                            </Accordion.Header>
-                                            <Accordion.Body>
-                                                {category.permissions.map(
-                                                    (permission, index) => {
-                                                        const {
-                                                            [permission.icon]:
-                                                                TempIcon,
-                                                        } = Icons;
-                                                        return (
-                                                            <div
-                                                                className="sidebar-item"
-                                                                key={index}
-                                                            >
-                                                                <TempIcon />
-                                                                <a
-                                                                    className="siidebar-link pl-1"
-                                                                    href={
-                                                                        permission.url
-                                                                    }
-                                                                >
-                                                                    {
-                                                                        permission.name
-                                                                    }
-                                                                </a>
-                                                            </div>
-                                                        );
-                                                    }
-                                                )}
-                                            </Accordion.Body>
-                                        </Accordion.Item>
-                                    );
-                                })}
-                                {/* <SidebarItems/> */}
-                                {/* <Accordion.Item eventKey="1">
-                                    <Accordion.Header>Accordion Item #2</Accordion.Header>
-                                    <Accordion.Body>
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                                    eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-                                    minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-                                    aliquip ex ea commodo consequat. Duis aute irure dolor in
-                                    reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-                                    pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-                                    culpa qui officia deserunt mollit anim id est laborum.
-                                    </Accordion.Body>
-                                </Accordion.Item> */}
+                                {
+                                    // <div>
+                                    //     {infoUser.Categorias[0]}
+                                    // </div>
+                                    categories ? (
+                                        categories.map((category, index) => {
+                                            const {
+                                                [category.Icono]:
+                                                    TempIconHeader,
+                                            } = Icons;
+                                            return category.Permisos ? (
+                                                <Accordion.Item
+                                                    eventKey={index}
+                                                    key={index}
+                                                >
+                                                    <Accordion.Header>
+                                                        <TempIconHeader />{' '}
+                                                        {category.Categoria}
+                                                    </Accordion.Header>
+                                                    <Accordion.Body>
+                                                        {category.Permisos.map(
+                                                            (
+                                                                permission,
+                                                                index
+                                                            ) => {
+                                                                const {
+                                                                    [permission.icono]:
+                                                                        TempIcon,
+                                                                } = Icons;
+                                                                return (
+                                                                    <div
+                                                                        className="sidebar-item"
+                                                                        key={
+                                                                            index
+                                                                        }
+                                                                    >
+                                                                        <TempIcon />
+                                                                        <a
+                                                                            className="siidebar-link pl-1"
+                                                                            href={
+                                                                                permission.link
+                                                                            }
+                                                                        >
+                                                                            {
+                                                                                permission.N_Permiso
+                                                                            }
+                                                                        </a>
+                                                                    </div>
+                                                                );
+                                                            }
+                                                        )}
+                                                    </Accordion.Body>
+                                                </Accordion.Item>
+                                            ) : (
+                                                ''
+                                            );
+                                        })
+                                    ) : (
+                                        <b>No se encontraron permisos</b>
+                                    )
+                                }
                             </Accordion>
-                            {/* <Button href="/home" className="bg-blue" size="lg">
-                                <BsHouseFill></BsHouseFill> Inicio
-                            </Button>
-                            <Button
-                                href="Pedidos"
-                                className="bg-blue"
-                                size="lg"
-                            >
-                                <IoRestaurantSharp></IoRestaurantSharp> Pedidos
-                            </Button>
-                            <Button href="Roles" className="bg-blue" size="lg">
-                                <BsFillBookmarkFill></BsFillBookmarkFill> Roles
-                            </Button>
-                            <Button href="/users" className="bg-blue" size="lg">
-                                <BsFillPersonPlusFill></BsFillPersonPlusFill>{' '}
-                                Usuarios
-                            </Button>
-                            <Button
-                                href="/Reportes "
-                                className="bg-blue"
-                                size="lg"
-                            >
-                                <BsFillFileEarmarkBarGraphFill></BsFillFileEarmarkBarGraphFill>{' '}
-                                Reportes
-                            </Button>
-                            <Button href="/" className="bg-blue" size="lg">
-                                <IoIosExit></IoIosExit> Salir
-                            </Button> */}
                         </div>
                     </Container>
                 </Offcanvas.Body>

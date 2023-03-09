@@ -201,7 +201,7 @@ function ECBMPUESTO() {
         <Container>
             <BarraLateral />
 
-            <div className="impuestos-table">
+            <div>
                 <h2>Lista de Impuestos</h2>
                 <Table striped bordered hover>
                     <thead>

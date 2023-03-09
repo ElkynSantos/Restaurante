@@ -144,7 +144,7 @@ const getUser = async (req, res) => {
 
     const [user] = await db.query('CALL get_user(:userID, :opt)', {
         replacements: {
-            userID: userID,
+            userID,
             opt: 1,
         },
     });

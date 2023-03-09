@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route, useParams } from 'react-router-dom';
+// import { useState, useEffect } from 'react';
 
 import LOGIN from './Components/LOGIN/index';
 import ROLES from './Components/ROLES/index';
@@ -19,6 +20,7 @@ import LISTAFACTURACION from './Components/LISTAFACTURACION/index.js';
 import './App.css';
 import { useDispatch, useSelector } from 'react-redux';
 
+import ProtectedRoute from './Components/ProtectedRoute';
 import Email from './Components/EmailVerification/index';
 // import IMPUESTO from './Components/IMPUESTOS';
 import ECBMPUESTO from './Components/IMPUESTOSG';
@@ -27,31 +29,134 @@ import FormPass from './Components/FormPassword/index';
 import ChangePass from './Components/ChangePassword/index';
 import PRODUCTOS from './Components/Productos/Index';
 
+// SERVICES
+import { getPermissionsByUser } from './services/roles';
+
+// let loggedUser;
+// let loggedUser = {
+//     id: 1,
+//     name: "John",
+//     permissions: ["quye"],
+//     roles: ["admin"],
+// }
+
 function App() {
+    
+
+    // console.log(!!permissions);
+    // console.log(permissions);
+    // console.log(!!permissions);
+    // console.log(permissions.includes("/users"));
+
     return (
         <BrowserRouter>
             <Routes>
-                <Route index element={<LOGIN />} />
-                <Route path="/Home" element={<INICIO />} />
-
-                <Route path="/Pedidos" element={<PEDIDOS />} />
-                <Route path="/ListaPedidos" element={<LISTAPEDIDOS />} />
-                <Route path="/mesas" element={<MESAS />} />
-                <Route path="/facturacion" element={<FACTURACION />} />
-                <Route path="/Users" element={<USERS />} />
-                <Route path={'/Productos'} element={<PRODUCTOS />} />
-                <Route path="/Recuperar" element={<FormPassword />} />
+                <Route 
+                    index 
+                    element={
+                        //<ProtectedRoute isAllowed={!loggedUser}>
+                            <LOGIN />
+                        //</ProtectedRoute>
+                    }
+                />
+                <Route 
+                    path="/password-recovery"
+                    element={
+                        <FormPassword />
+                    }
+                />
                 <Route
                     path="/auth/reset-password/:token"
                     element={<Recovery />}
                 />
-                <Route path="/editUser" element={<FormPassword />} />
-                <Route
-                    path="/ListaFacturacion"
-                    element={<LISTAFACTURACION />}
+
+                <Route 
+                    path="/home" 
+                    element={
+                        <INICIO />
+                    }
                 />
-                <Route path="/Impuestos" element={<ECBMPUESTO />} />
-                <Route path="/roles" element={<ROLES />} />
+
+                {/* CONFIGURACIÓN DEL SISTEMA */}
+                
+                <Route 
+                    path="/roles" 
+                    element={
+                        <ProtectedRoute>
+                            <ROLES />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/users"
+                    element={
+                        // <ProtectedRoute permissions={permissions}>
+                        <ProtectedRoute>
+                            <USERS />
+                        </ProtectedRoute>
+                    }
+                />
+
+                {/* CONFIGURACIÓN DEL NEGOCIO */}
+                <Route 
+                    path="/taxes" 
+                    element={
+                        <ProtectedRoute>
+                            <ECBMPUESTO />
+                        </ProtectedRoute>
+                    } 
+                />
+                <Route 
+                    path={'/products'} 
+                    element={
+                        <PRODUCTOS />
+                    } 
+                />
+                <Route 
+                    path="/orders" 
+                    element={
+                        // <ProtectedRoute isAllowed={!!permissions}>
+                        <ProtectedRoute>
+                            <PEDIDOS />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route 
+                    path="/orders-list" 
+                    element={
+                        // <ProtectedRoute isAllowed={!!permissions} >
+                        <ProtectedRoute>
+                           <LISTAPEDIDOS />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route 
+                    path="/tables" 
+                    element={
+                        // <ProtectedRoute isAllowed={!!permissions}>
+                        <ProtectedRoute>
+                            <USERS/>
+                            {/* <MESAS /> */}
+                        </ProtectedRoute>
+                    }
+                />
+                <Route 
+                    path="/invoicing" 
+                    element={
+                        // <ProtectedRoute isAllowed={!!permissions}>
+                        <ProtectedRoute>
+                            <FACTURACION />
+                        </ProtectedRoute>
+                    }
+                />
+                {/* <Route path="/users" element={<USERS />} /> */}
+                {/* <Route path="/editUser" element={<FormPassword />} /> */}
+                <Route
+                    path="/invoice-list"
+                    element={
+                        <LISTAFACTURACION />
+                    }
+                />
             </Routes>
         </BrowserRouter>
     );

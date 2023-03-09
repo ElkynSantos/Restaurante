@@ -108,6 +108,46 @@ const getAllRoles = async (req, res, next) => {
     }
 };
 
+const getAllCategoriesByUser = async (req, res, next) => {
+    try {
+        // let { username } = req.params;
+        let { currentUsername } = req;
+        console.log('uwu');
+        console.log('USEEEEER', currentUsername);
+        const allRoles = await db.query(
+            `CALL ObtenerRolYPermisos(:p_Nom_Usuario)`,
+            {
+                replacements: {
+                    p_Nom_Usuario: 'JORO7226',
+                },
+            }
+        );
+
+        return res.status(200).json(allRoles);
+    } catch (error) {
+        return next(new AppError('Ups! Error en la base de datos', 500));
+    }
+};
+
+const getPermissionsByUser = async (req, res, next) => {
+    try {
+        let { currentUsername } = req;
+
+        const permissions = await db.query(
+            `CALL get_permissions_by_user(:username)`,
+            {
+                replacements: {
+                    username: currentUsername,
+                },
+            }
+        );
+
+        return res.status(200).json(permissions[0].permissions);
+    } catch (error) {
+        return next(new AppError('Ups! Error en la base de datos', 500));
+    }
+};
+
 const getAllForBarralateral = async (req, res, next) => {
     try {
         const allRoles = await db.query(`CALL obtener_roles_con_permisos()`);
@@ -139,6 +179,8 @@ export {
     getAllRoles,
     getAllPermisos,
     getAllForBarralateral,
+    getAllCategoriesByUser,
+    getPermissionsByUser,
     setNewRoleandPermits,
     CreateNewRole,
     getUsers_RoleandPermissions,
