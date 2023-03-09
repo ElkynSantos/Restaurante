@@ -27,6 +27,7 @@ import ECBMPUESTO from './Components/IMPUESTOSG';
 import RecuperarContraseña from './Components/RecoveryPassword/index';
 import FormPass from './Components/FormPassword/index';
 import ChangePass from './Components/ChangePassword/index';
+import Facturas from './Components/ADMFACTURAS/index';
 import PRODUCTOS from './Components/Productos/Index';
 
 // SERVICES
@@ -39,10 +40,9 @@ import { getPermissionsByUser } from './services/roles';
 //     permissions: ["quye"],
 //     roles: ["admin"],
 // }
+import PrintFactura from './Components/APRINTFACTURA';
 
 function App() {
-    
-
     // console.log(!!permissions);
     // console.log(permissions);
     // console.log(!!permissions);
@@ -51,36 +51,26 @@ function App() {
     return (
         <BrowserRouter>
             <Routes>
-                <Route 
-                    index 
+                <Route
+                    index
                     element={
                         //<ProtectedRoute isAllowed={!loggedUser}>
-                            <LOGIN />
+                        <LOGIN />
                         //</ProtectedRoute>
                     }
                 />
-                <Route 
-                    path="/password-recovery"
-                    element={
-                        <FormPassword />
-                    }
-                />
+                <Route path="/password-recovery" element={<FormPassword />} />
                 <Route
                     path="/auth/reset-password/:token"
                     element={<Recovery />}
                 />
 
-                <Route 
-                    path="/home" 
-                    element={
-                        <INICIO />
-                    }
-                />
+                <Route path="/home" element={<INICIO />} />
 
                 {/* CONFIGURACIÓN DEL SISTEMA */}
-                
-                <Route 
-                    path="/roles" 
+
+                <Route
+                    path="/roles"
                     element={
                         <ProtectedRoute>
                             <ROLES />
@@ -98,22 +88,17 @@ function App() {
                 />
 
                 {/* CONFIGURACIÓN DEL NEGOCIO */}
-                <Route 
-                    path="/taxes" 
+                <Route
+                    path="/taxes"
                     element={
                         <ProtectedRoute>
                             <ECBMPUESTO />
                         </ProtectedRoute>
-                    } 
+                    }
                 />
-                <Route 
-                    path={'/products'} 
-                    element={
-                        <PRODUCTOS />
-                    } 
-                />
-                <Route 
-                    path="/orders" 
+                <Route path={'/products'} element={<PRODUCTOS />} />
+                <Route
+                    path="/orders"
                     element={
                         // <ProtectedRoute isAllowed={!!permissions}>
                         <ProtectedRoute>
@@ -121,27 +106,27 @@ function App() {
                         </ProtectedRoute>
                     }
                 />
-                <Route 
-                    path="/orders-list" 
+                <Route
+                    path="/orders-list"
                     element={
                         // <ProtectedRoute isAllowed={!!permissions} >
                         <ProtectedRoute>
-                           <LISTAPEDIDOS />
+                            <LISTAPEDIDOS />
                         </ProtectedRoute>
                     }
                 />
-                <Route 
-                    path="/tables" 
+                <Route
+                    path="/tables"
                     element={
                         // <ProtectedRoute isAllowed={!!permissions}>
                         <ProtectedRoute>
-                            <USERS/>
+                            <USERS />
                             {/* <MESAS /> */}
                         </ProtectedRoute>
                     }
                 />
-                <Route 
-                    path="/invoicing" 
+                <Route
+                    path="/invoicing"
                     element={
                         // <ProtectedRoute isAllowed={!!permissions}>
                         <ProtectedRoute>
@@ -151,12 +136,7 @@ function App() {
                 />
                 {/* <Route path="/users" element={<USERS />} /> */}
                 {/* <Route path="/editUser" element={<FormPassword />} /> */}
-                <Route
-                    path="/invoice-list"
-                    element={
-                        <LISTAFACTURACION />
-                    }
-                />
+                <Route path="/invoice-list" element={<LISTAFACTURACION />} />
             </Routes>
         </BrowserRouter>
     );

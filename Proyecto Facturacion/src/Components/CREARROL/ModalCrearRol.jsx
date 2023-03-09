@@ -119,6 +119,25 @@ function CREARROL() {
         }
     };
 
+    useEffect(() => {
+        const getAllPermisos = async () => {
+            await fetch('http://localhost:3000/roles/permits')
+                .then((response) => response.json())
+                .then((data) => {
+                    console.log('================================');
+                    console.log(data.allRoles);
+
+                    //   handleInitRoles(data.allRoles);
+                    setPERMISOS(data.allRoles);
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        };
+
+        getAllPermisos();
+    }, []);
+
     const listaPermisos = [];
     for (let i = 0; i < PERMISOS.length; i++) {
         listaPermisos.push(PERMISOS[i]);
@@ -134,6 +153,8 @@ function CREARROL() {
         const newErrors = {};
         return newErrors;
     }
+    const handleSelect = (id) => {
+        const value = id;
     const handleSelect = (id) => {
         const value = id;
         const isChecked = event.target.checked;

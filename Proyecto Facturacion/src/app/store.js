@@ -7,7 +7,7 @@ import ProductosSlice from '../features/Productos';
 import CreateProductSlice from '../features/CreateProduct';
 import sendeditableproductSlice from '../features/sendeditableproduct';
 import editUserSlice from '../features/editUserSlice';
-
+import editFacturaSlice from '../features/editFacturaSlice';
 import createRolSlice from '../features/creacionRoles';
 import editrolslice from '../features/editarRoles';
 import pedidosSlice from '../features/pedidosSlice';
@@ -21,6 +21,7 @@ export const store = configureStore({
         products: ProductosSlice,
         CreateProduct: CreateProductSlice,
         sendeditableproduct: sendeditableproductSlice,
+        editFactura: editFacturaSlice,
         pedidos: pedidosSlice,
 
         modalEditUserState: editUserSlice,

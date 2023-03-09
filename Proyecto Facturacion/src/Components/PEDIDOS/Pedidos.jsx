@@ -296,3 +296,108 @@ function PEDIDOS() {
 }
 
 export default PEDIDOS;
+
+/*
+  const [DATO, setData] = useState([]);
+
+    useEffect(() => {
+        const getAllProducts = async () => {
+            const url = 'http://localhost:3000/api/v1/orders';
+
+            const result = await axios.get(url);
+
+            console.log(result.data);
+            setData(result.data);
+        };
+
+        getAllProducts();
+    }, []);
+
+    console.log('DATOOOS: ' + DATO[0]);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  return (
+            <ul>
+                {data.map((item) => (
+                    <li key={item.id}>{item.name}</li>
+                ))}
+            </ul>
+        );
+*/
+
+/*
+
+
+
+
+
+
+
+
+
+
+
+ <>
+                <Modal
+                    size="lg"
+                    show={smShow}
+                    onHide={() => setSmShow(false)}
+                    aria-labelledby="example-modal-sizes-title"
+                >
+                    <Modal.Header closeButton>
+                        <Modal.Title id="example-modal-sizes-title">
+                            Seleccionar Mesa
+                        </Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <Row className="add-space">
+                            {array1.map((mesa) => (
+                                <Col lg>
+                                    <p>
+                                        <Card style={{ width: '18rem' }}>
+                                            <Card.Img
+                                                variant="top"
+                                                src="mesa.png"
+                                            />
+                                            <Card.Body>
+                                                <Card.Title>
+                                                    Mesa {mesa.numero}
+                                                </Card.Title>
+                                                <Card.Text>
+                                                    Disponible
+                                                </Card.Text>
+
+                                                <>
+                                                    <Button
+                                                        variant="primary"
+                                                        //    onClick={handleShow}
+                                                        href="/Pedidos"
+                                                    >
+                                                        Seleccionar
+                                                    </Button>
+                                                </>
+                                            </Card.Body>
+                                        </Card>
+                                    </p>
+                                </Col>
+                            ))}
+                        </Row>
+                    </Modal.Body>
+                </Modal>
+            </>
+
+
+
+*/
