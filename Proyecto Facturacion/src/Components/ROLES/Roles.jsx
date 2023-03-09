@@ -80,8 +80,8 @@ function ROLES() {
             await fetch('http://localhost:3000/roles')
                 .then((response) => response.json())
                 .then((data) => {
-                    console.log('================================');
-                    console.log(data.allRoles);
+                    // console.log('================================');
+                    // console.log(data.allRoles);
 
                     handleInitRoles(data.allRoles);
                     setData(data.allRoles);

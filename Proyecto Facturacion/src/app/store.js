@@ -1,5 +1,6 @@
 import { configureStore, applyMiddleware, compose } from '@reduxjs/toolkit';
 import thunk from 'redux-thunk';
+import loggedStatusSlice from '../features/loggedStatus';
 import usersSlice from '../features/usersSlice';
 import createUserSlice from '../features/createUserSlice';
 import EditarProductoSlice from '../features/EditarProducto';
@@ -13,6 +14,7 @@ import editrolslice from '../features/editarRoles';
 
 export const store = configureStore({
     reducer: {
+        loggedStatus: loggedStatusSlice,
         users: usersSlice,
         modalAddUserState: createUserSlice,
         EditarProducto: EditarProductoSlice,

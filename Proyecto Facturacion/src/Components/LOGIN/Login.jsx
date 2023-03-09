@@ -1,10 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { Col, Button, Row, Container, Card, Form } from 'react-bootstrap';
-import './LOGIN.css';
-import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { initSession } from '../../features/loggedStatus';
+import { Col, Button, Row, Container, Card, Form } from 'react-bootstrap';
+import Swal from 'sweetalert2';
+
+import './LOGIN.css';
 import { login } from '../../services/LOGIN';
+
 function LOGIN(props) {
+    const dispatch = useDispatch();
     const [form, setForm] = useState({});
 
     const [errors, setErrors] = useState({});
@@ -15,6 +20,7 @@ function LOGIN(props) {
             [field]: value,
         });
     };
+
     function findErrors() {
         const newErrors = {};
         let { user, userpassword } = form;
@@ -32,6 +38,7 @@ function LOGIN(props) {
 
         return newErrors;
     }
+
     async function handleSubmit(e) {
         e.preventDefault();
         let newErrors = findErrors();
@@ -39,19 +46,21 @@ function LOGIN(props) {
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors);
         } else {
-            //console.log(form.user);
-            //console.log(form.userpassword);
             try {
                 const data = await login(form.user, form.userpassword);
-                //console.log(data);
-                Swal.fire({
-                    position: 'top-center',
-                    icon: 'success',
-                    title: 'Bienvenido',
-                    showConfirmButton: false,
-                    timer: 1500,
-                });
-                //console.log(data.jwtToken.userExists.name);
+                console.log(data);
+
+                if(data.status == "Ok") {
+                    dispatch(initSession())
+                    Swal.fire({
+                        position: 'top-center',
+                        icon: 'success',
+                        title: 'Bienvenido',
+                        showConfirmButton: false,
+                        timer: 1500,
+                    });
+                }
+
                 localStorage.setItem('USERNAME', JSON.stringify(data.msg));
                 navigate('/home');
             } catch (error) {

@@ -17,9 +17,9 @@ import editarProductos from './Components/FormPassword/index';
 
 import LISTAFACTURACION from './Components/LISTAFACTURACION/index.js';
 
-import './App.css';
-import { useDispatch, useSelector } from 'react-redux';
+import { Provider, useDispatch, useSelector } from 'react-redux';
 
+import { store } from "./app/store.js"
 import ProtectedRoute from './Components/ProtectedRoute';
 import Email from './Components/EmailVerification/index';
 // import IMPUESTO from './Components/IMPUESTOS';
@@ -28,9 +28,7 @@ import RecuperarContraseña from './Components/RecoveryPassword/index';
 import FormPass from './Components/FormPassword/index';
 import ChangePass from './Components/ChangePassword/index';
 import PRODUCTOS from './Components/Productos/Index';
-
-// SERVICES
-import { getPermissionsByUser } from './services/roles';
+import './App.css';
 
 // let loggedUser;
 // let loggedUser = {
@@ -41,124 +39,120 @@ import { getPermissionsByUser } from './services/roles';
 // }
 
 function App() {
-    
-
-    // console.log(!!permissions);
-    // console.log(permissions);
-    // console.log(!!permissions);
-    // console.log(permissions.includes("/users"));
+    const loggedStatus = useSelector(state => state.loggedStatus);
 
     return (
-        <BrowserRouter>
-            <Routes>
-                <Route 
-                    index 
-                    element={
-                        //<ProtectedRoute isAllowed={!loggedUser}>
-                            <LOGIN />
-                        //</ProtectedRoute>
-                    }
-                />
-                <Route 
-                    path="/password-recovery"
-                    element={
-                        <FormPassword />
-                    }
-                />
-                <Route
-                    path="/auth/reset-password/:token"
-                    element={<Recovery />}
-                />
+        <Provider store={store}>
+            <BrowserRouter>
+                <Routes>
+                    <Route 
+                        index 
+                        element={
+                            <ProtectedRoute isAllowed={!loggedStatus} redirectTo="/home">
+                                <LOGIN />
+                            </ProtectedRoute>
+                        }
+                        />
+                    <Route 
+                        path="/password-recovery"
+                        element={
+                            <FormPassword />
+                        }
+                        />
+                    <Route
+                        path="/auth/reset-password/:token"
+                        element={<Recovery />}
+                        />
 
-                <Route 
-                    path="/home" 
-                    element={
-                        <INICIO />
-                    }
-                />
+                    <Route 
+                        path="/home" 
+                        element={
+                            <ProtectedRoute isAllowed={loggedStatus} redirectTo="/">
+                                <INICIO />
+                            </ProtectedRoute>
+                        }
+                        />
 
-                {/* CONFIGURACIÓN DEL SISTEMA */}
-                
-                <Route 
-                    path="/roles" 
-                    element={
-                        <ProtectedRoute>
-                            <ROLES />
-                        </ProtectedRoute>
-                    }
-                />
-                <Route
-                    path="/users"
-                    element={
-                        // <ProtectedRoute permissions={permissions}>
-                        <ProtectedRoute>
-                            <USERS />
-                        </ProtectedRoute>
-                    }
-                />
+                    {/* CONFIGURACIÓN DEL SISTEMA */}
+                    
+                    <Route 
+                        path="/roles" 
+                        element={
+                            <ProtectedRoute>
+                                <ROLES />
+                            </ProtectedRoute>
+                        }
+                        />
+                    <Route
+                        path="/users"
+                        element={
+                            // <ProtectedRoute permissions={permissions}>
+                            <ProtectedRoute isAllowed={loggedStatus}>
+                                <USERS />
+                            </ProtectedRoute>
+                        }
+                        />
 
-                {/* CONFIGURACIÓN DEL NEGOCIO */}
-                <Route 
-                    path="/taxes" 
-                    element={
-                        <ProtectedRoute>
-                            <ECBMPUESTO />
-                        </ProtectedRoute>
-                    } 
-                />
-                <Route 
-                    path={'/products'} 
-                    element={
-                        <PRODUCTOS />
-                    } 
-                />
-                <Route 
-                    path="/orders" 
-                    element={
-                        // <ProtectedRoute isAllowed={!!permissions}>
-                        <ProtectedRoute>
-                            <PEDIDOS />
-                        </ProtectedRoute>
-                    }
-                />
-                <Route 
-                    path="/orders-list" 
-                    element={
-                        // <ProtectedRoute isAllowed={!!permissions} >
-                        <ProtectedRoute>
-                           <LISTAPEDIDOS />
-                        </ProtectedRoute>
-                    }
-                />
-                <Route 
-                    path="/tables" 
-                    element={
-                        // <ProtectedRoute isAllowed={!!permissions}>
-                        <ProtectedRoute>
-                            <USERS/>
-                            {/* <MESAS /> */}
-                        </ProtectedRoute>
-                    }
-                />
-                <Route 
-                    path="/invoicing" 
-                    element={
-                        // <ProtectedRoute isAllowed={!!permissions}>
-                        <ProtectedRoute>
-                            <FACTURACION />
-                        </ProtectedRoute>
-                    }
-                />
-                {/* <Route path="/users" element={<USERS />} /> */}
-                {/* <Route path="/editUser" element={<FormPassword />} /> */}
-                <Route
-                    path="/invoice-list"
-                    element={
-                        <LISTAFACTURACION />
-                    }
-                />
-            </Routes>
-        </BrowserRouter>
+                    {/* CONFIGURACIÓN DEL NEGOCIO */}
+                    <Route 
+                        path="/taxes" 
+                        element={
+                            <ProtectedRoute isAllowed={loggedStatus}>
+                                <ECBMPUESTO />
+                            </ProtectedRoute>
+                        } 
+                        />
+                    <Route 
+                        path={'/products'} 
+                        element={
+                            <ProtectedRoute isAllowed={loggedStatus}>
+                                <PRODUCTOS />
+                            </ProtectedRoute>
+                        } 
+                        />
+                    <Route 
+                        path="/orders" 
+                        element={
+                            <ProtectedRoute isAllowed={loggedStatus}>
+                                <PEDIDOS />
+                            </ProtectedRoute>
+                        }
+                        />
+                    <Route 
+                        path="/orders-list" 
+                        element={
+                            <ProtectedRoute isAllowed={loggedStatus}>
+                                <LISTAPEDIDOS />
+                            </ProtectedRoute>
+                        }
+                        />
+                    <Route 
+                        path="/tables" 
+                        element={
+                            <ProtectedRoute isAllowed={loggedStatus}>
+                                <MESAS />
+                            </ProtectedRoute>
+                        }
+                        />
+                    <Route 
+                        path="/invoicing" 
+                        element={
+                            <ProtectedRoute isAllowed={loggedStatus}>
+                                <FACTURACION />
+                            </ProtectedRoute>
+                        }
+                        />
+                    <Route
+                        path="/invoice-list"
+                        element={
+                            <ProtectedRoute isAllowed={loggedStatus}>
+                                <LISTAFACTURACION />
+                            </ProtectedRoute>
+                        }
+                        />
+                </Routes>
+            </BrowserRouter>
+        </Provider>
     );
 }
 

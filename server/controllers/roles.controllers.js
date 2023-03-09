@@ -63,8 +63,6 @@ const getAllCategoriesByUser = async (req, res, next) => {
     try {
         // let { username } = req.params;
         let { currentUsername } = req;
-        console.log("uwu");
-        console.log("USEEEEER", currentUsername);
         const allRoles = await db.query(`CALL ObtenerRolYPermisos(:p_Nom_Usuario)`, {
             replacements: {
                 p_Nom_Usuario: currentUsername

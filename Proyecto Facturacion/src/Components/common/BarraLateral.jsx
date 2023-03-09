@@ -2,11 +2,14 @@ import React, { useState, useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import Navbar from 'react-bootstrap/Navbar';
-import { Container, Accordion } from 'react-bootstrap';
+import { Container, Accordion, Dropdown, DropdownButton } from 'react-bootstrap';
 import * as Icons from 'react-bootstrap-icons';
 import { BsHouseFill } from 'react-icons/bs';
 import { IoIosExit } from 'react-icons/io';
 import { IoRestaurantSharp } from 'react-icons/io5';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { deleteSession } from '../../features/loggedStatus';
 
 import { getAllCategoriesByUser } from '../../services/roles';
 
@@ -14,21 +17,41 @@ import CREARUSUARIO from '../CREARUSUARIO/index';
 import MESA from '../MESAS/Mesa';
 
 import './BarraLateral.css';
+import Swal from 'sweetalert2';
 
 function Example() {
+    const dispatch = useDispatch();
     const [show, setShow] = useState(false);
-
+    const [infoUser, setInfoUser] = useState([]);
+    const [categories, setCategories] = useState([]);
+    
+    const navigate = useNavigate();
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
-    const [infoUser, setInfoUser] = useState([]);
-    const [categories, setCategories] = useState([]);
+    const handleLogout = () => {
+        dispatch(deleteSession());
+        console.log("after dispatch");
+        navigate("/");
+    }
 
     useEffect(() => {
         const getAllRoles = async () => {
-            // await getAllCategoriesByUser("JUAR5219")
             await getAllCategoriesByUser()
                 .then(infoUser => {
+                    if(infoUser.status == "fail") {
+                        if(infoUser.message == "Token Vencido") {
+                            Swal.fire({
+                                title: "¡Token Inválido!",
+                                text: "Su token ha expirado o no es válido",
+                                icon: "error"
+                            })
+                                .then(() => {
+                                    handleLogout();
+                                })
+                            
+                        }
+                    }
                     setInfoUser({fullname: infoUser.Nombre, rol: infoUser.Rol});
                     setCategories(infoUser.Categorias);
                 })
@@ -129,9 +152,22 @@ function Example() {
                             <h6 className="profile-rol">{infoUser.rol}</h6>
                         </span>
                         <span className="profile-image">
-                            <a href="/profile" title="Ver perfil">
-                                <Icons.PersonCircle className="fs-1 text-center text-white"></Icons.PersonCircle>
-                            </a>
+                            <Dropdown title="Opciones de usuario" className='border-none'>
+                                <Dropdown.Toggle className='bg-transparent border-none'>
+                                    <Icons.PersonCircle className="fs-1 text-center text-white"/>
+                                </Dropdown.Toggle>
+                                <Dropdown.Menu align="end">
+                                    <Dropdown.Item eventKey="1" className='d-flex align-items-center' href='/profile'>
+                                        <Icons.PersonSquare className='me-2'/> Ver perfil
+                                    </Dropdown.Item>
+                                    <Dropdown.Item eventKey="2" className='d-flex align-items-center' href='/password-recovery'>
+                                        <Icons.PersonFillLock className='me-2'/> Cambiar contraseña
+                                    </Dropdown.Item>
+                                    <Dropdown.Item eventKey="3" className='d-flex align-items-center' onClick={handleLogout}>
+                                        <Icons.ArrowBarRight className='me-2'/> Cerrar sesión
+                                    </Dropdown.Item>
+                                </Dropdown.Menu>
+                            </Dropdown>
                         </span>
                     </span>
                     {/* <p>Garifunas Food</p> */}
@@ -145,17 +181,12 @@ function Example() {
                     closeVariant="white"
                 >
                     <Container fluid>
-                        <a href="/home">
+                        <a onClick={() => navigate("/home")}>
                             <img
                                 src="/assets/images/logo.png"
                                 className="imagen"
                                 title='Volver al inicio'
                             ></img>
-                            {/* <img
-                                id="nav-brand"
-                                src="/assets/images/logo.png"
-                                className="imagen"
-                            ></img> */}
                         </a>
                     </Container>
                 </Offcanvas.Header>
@@ -171,12 +202,9 @@ function Example() {
                         <div className="d-grid gap-2">
                             <Accordion defaultActiveKey="0">
                                 {
-                                    // <div>
-                                    //     {infoUser.Categorias[0]}
-                                    // </div>
                                     categories
                                         ?categories.map((category, index) => {
-                                            const { [category.Icono]: TempIconHeader } = Icons;
+                                            const { [category.Icono? category.Icono: "ExclamationOctagonFill"]: TempIconHeader } = Icons;
                                             return (
                                                 category.Permisos?
                                                     <Accordion.Item
@@ -191,7 +219,7 @@ function Example() {
                                                             {category.Permisos.map(
                                                                 (permission, index) => {
                                                                     const {
-                                                                        [permission.icono]:
+                                                                        [permission.icono? permission.icono: "ExclamationCircleFill"]:
                                                                             TempIcon,
                                                                     } = Icons;
                                                                     return (
@@ -226,10 +254,6 @@ function Example() {
                     </Container>
                 </Offcanvas.Body>
                 <div className="offcanvas-footer bg-blue">
-                    <a className="bg-transparent rounded text-white" href="/">
-                        Cerrar sesión{' '}
-                        <Icons.ArrowBarRight className="fs-3"></Icons.ArrowBarRight>
-                    </a>
                 </div>
             </Offcanvas>
         </>
