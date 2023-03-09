@@ -9,7 +9,12 @@ import {
     FormControl,
 } from 'react-bootstrap';
 
-import { PencilFill, BookmarkCheckFill } from 'react-bootstrap-icons';
+import {
+    PencilFill,
+    BookmarkCheckFill,
+    ArrowRightCircle,
+    ArrowLeftCircle,
+} from 'react-bootstrap-icons';
 import { useState, useEffect, useMemo } from 'react';
 
 import Modal from 'react-bootstrap/Modal';
@@ -320,7 +325,7 @@ function LISTAPEDIDOS() {
                         onClick={() => Cocinado(props.numero_pedido)}
                         id={props.ID}
                     >
-                        +
+                        <ArrowRightCircle></ArrowRightCircle>
                     </Button>
                 ),
             },
@@ -335,7 +340,7 @@ function LISTAPEDIDOS() {
                         onClick={() => DevolverNoCocinado(props.numero_pedido)}
                         id={props.ID}
                     >
-                        -
+                        <ArrowLeftCircle></ArrowLeftCircle>
                     </Button>
                 ),
             },
