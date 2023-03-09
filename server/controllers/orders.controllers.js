@@ -48,7 +48,7 @@ const allPendingOrders = async (req, res, next) => {
 */
 
         console.log(order);
-        if (order === null) {
+        if (order.orders === null) {
             return next(
                 new AppError(`No hay ordenes activas en este momento`, 404)
             );

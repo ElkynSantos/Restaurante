@@ -60,7 +60,7 @@ function CREARROL() {
 
     useEffect(() => {
         const getAllPermisos = async () => {
-            await fetch('http://localhost:3000/roles/permits')
+            await fetch('http://localhost:3000/roles/permissions')
                 .then((response) => response.json())
                 .then((data) => {
                     setPERMISOS(data.allRoles);

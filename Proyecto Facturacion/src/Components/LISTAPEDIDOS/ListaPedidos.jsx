@@ -93,7 +93,7 @@ function LISTAPEDIDOS() {
         };
 
         getAllPendingPedidos();
-    }, []);
+    });
 
     useEffect(() => {
         const getAllPedidos = async () => {
@@ -110,7 +110,7 @@ function LISTAPEDIDOS() {
         };
 
         getAllPedidos();
-    }, []);
+    }, [dataPending]);
 
     //IFS
 
@@ -176,25 +176,27 @@ function LISTAPEDIDOS() {
                     <Row>
                         <Col>
                             <button
-                                className="btn-transparent text-blue p-0"
-                                title="Editar"
-                            >
-                                <PencilFill />
-                            </button>
-                        </Col>
-                        <Col>
-                            <button
                                 className="btn-transparent text-success p-0"
                                 title="Facturar"
                             >
                                 <BookmarkCheckFill />
+                                Facturar
                             </button>
                         </Col>
                     </Row>
                 ),
             },
         ];
-
+        /*
+ <Col>
+                            <button
+                                className="btn-transparent text-blue p-0"
+                                title="Editar"
+                            >
+                                <PencilFill />
+                            </button>
+                        </Col>
+*/
         FormtatoTabla = (
             <Container>
                 <Row>
@@ -389,7 +391,7 @@ function LISTAPEDIDOS() {
     return (
         <div>
             <BarraLateral />
-            <Container className='mt-5'>
+            <Container className="mt-5">
                 <h1>Lista PEDIDOS</h1>
 
                 {FormtatoTabla}

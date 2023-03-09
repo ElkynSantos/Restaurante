@@ -56,16 +56,10 @@ function BasicExample() {
     const [errors, setErrors] = useState({});
 
     const [dropdown, setdropdown] = useState([]);
-    const setField = (field, value) => {
-        setForm({
-            ...form,
-            [field]: value,
-        });
-    };
 
     useEffect(() => {
         const response = Promise.all([agetAllTaxes()])
-            .then((data) => {
+            .then((data1) => {
                 const ActiveTaxes = [];
                 for (let i = 0; i < data1[0].allTaxes.length; i++) {
                     if (data1[0].allTaxes[i].status == 1) {
@@ -78,11 +72,18 @@ function BasicExample() {
             .catch((error) => {
                 console.log(error);
                 Swal.fire({
-                    text: 'No se pudieron cargar los usuarios',
+                    text: 'No se pudieron cargar los impuestos',
                     icon: 'error',
                 });
             });
     }, []);
+
+    const setField = (field, value) => {
+        setForm({
+            ...form,
+            [field]: value,
+        });
+    };
 
     function findErrors() {
         const newErrors = {};
