@@ -10,6 +10,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { deleteTax, editTax } from '../../services/Taxes';
 import axios from 'axios';
 import Modal from 'react-bootstrap/Modal';
+
+import InputGroup from 'react-bootstrap/InputGroup';
 function ECBMPUESTO() {
     const [show, setShow] = useState(false);
 
@@ -20,7 +22,9 @@ function ECBMPUESTO() {
 
     const handleShow = () => setShow(true);
 
-    const handleEditClick = (id) => {
+    const handleEditClick = (id, name, percent) => {
+        setNombreImpuesto(name);
+        setPorcentajeImpuesto(percent);
         handleShow();
         setImpuestoEditando(id);
 
@@ -218,7 +222,11 @@ function ECBMPUESTO() {
                                             variant="warning"
                                             className="mr-2"
                                             onClick={() =>
-                                                handleEditClick(impuesto.id)
+                                                handleEditClick(
+                                                    impuesto.id,
+                                                    impuesto.name,
+                                                    impuesto.amount
+                                                )
                                             }
                                         >
                                             Editar
@@ -236,16 +244,17 @@ function ECBMPUESTO() {
                                                         <Form.Label>
                                                             Nombre del impuesto
                                                         </Form.Label>
+
                                                         <Form.Control
                                                             type="text"
                                                             required
-                                                            maxLength="15"
-                                                            minLength="15"
+                                                            maxLength="10"
+                                                            minLength="10"
                                                             onKeyPress={(
                                                                 event
                                                             ) => {
                                                                 if (
-                                                                    !/^[a-zA-Z0-9]{1,15}$/.test(
+                                                                    !/^[a-zA-Z0-9]{1,10}$/.test(
                                                                         event.key
                                                                     )
                                                                 ) {
@@ -268,32 +277,39 @@ function ECBMPUESTO() {
                                                             Porcentaje del
                                                             impuesto
                                                         </Form.Label>
-                                                        <Form.Control
-                                                            type="text"
-                                                            required
-                                                            maxLength="2"
-                                                            minLength="2"
-                                                            onKeyPress={(
-                                                                event
-                                                            ) => {
-                                                                if (
-                                                                    !/^(100|[1-9][0-9]?|0[1-9])$/.test(
-                                                                        event.key
-                                                                    )
-                                                                ) {
-                                                                    event.preventDefault();
+
+                                                        <InputGroup className="mb-3">
+                                                            <Form.Control
+                                                                type="text"
+                                                                required
+                                                                maxLength="2"
+                                                                minLength="2"
+                                                                onKeyPress={(
+                                                                    event
+                                                                ) => {
+                                                                    if (
+                                                                        !/^(100|[1-9][0-9]?|0[1-9])$/.test(
+                                                                            event.key
+                                                                        )
+                                                                    ) {
+                                                                        event.preventDefault();
+                                                                    }
+                                                                }}
+                                                                value={
+                                                                    porcentajeImpuesto
                                                                 }
-                                                            }}
-                                                            value={
-                                                                porcentajeImpuesto
-                                                            }
-                                                            onChange={(e) =>
-                                                                setPorcentajeImpuesto(
-                                                                    e.target
-                                                                        .value
-                                                                )
-                                                            }
-                                                        />
+                                                                onChange={(e) =>
+                                                                    setPorcentajeImpuesto(
+                                                                        e.target
+                                                                            .value
+                                                                    )
+                                                                }
+                                                            />
+
+                                                            <InputGroup.Text id="basic-addon2">
+                                                                %
+                                                            </InputGroup.Text>
+                                                        </InputGroup>
                                                     </Form.Group>
                                                 </Form>
                                             </Modal.Body>
@@ -357,10 +373,10 @@ function ECBMPUESTO() {
                         <Form.Control
                             type="text"
                             required
-                            maxLength="15"
-                            minLength="15"
+                            maxLength="10"
+                            minLength="10"
                             onKeyPress={(event) => {
-                                if (!/^[a-zA-Z0-9]{1,15}$/.test(event.key)) {
+                                if (!/^[a-zA-Z0-9]{1,10}$/.test(event.key)) {
                                     event.preventDefault();
                                 }
                             }}
@@ -370,25 +386,32 @@ function ECBMPUESTO() {
                     </Form.Group>
                     <Form.Group>
                         <Form.Label>Porcentaje del impuesto</Form.Label>
-                        <Form.Control
-                            type="text"
-                            required
-                            maxLength="2"
-                            minLength="2"
-                            onKeyPress={(event) => {
-                                if (
-                                    !/^(100|[1-9][0-9]?|0[1-9])$/.test(
-                                        event.key
-                                    )
-                                ) {
-                                    event.preventDefault();
+
+                        <InputGroup className="mb-3">
+                            <Form.Control
+                                type="text"
+                                required
+                                maxLength="2"
+                                minLength="2"
+                                onKeyPress={(event) => {
+                                    if (
+                                        !/^(100|[1-9][0-9]?|0[1-9])$/.test(
+                                            event.key
+                                        )
+                                    ) {
+                                        event.preventDefault();
+                                    }
+                                }}
+                                value={porcentajeImpuesto}
+                                onChange={(e) =>
+                                    setPorcentajeImpuesto(e.target.value)
                                 }
-                            }}
-                            value={porcentajeImpuesto}
-                            onChange={(e) =>
-                                setPorcentajeImpuesto(e.target.value)
-                            }
-                        />
+                            />
+
+                            <InputGroup.Text id="basic-addon2">
+                                %
+                            </InputGroup.Text>
+                        </InputGroup>
                     </Form.Group>
                     <Button
                         variant="primary"
