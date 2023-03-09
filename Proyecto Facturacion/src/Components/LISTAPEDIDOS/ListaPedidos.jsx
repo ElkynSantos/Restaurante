@@ -42,8 +42,27 @@ function LISTAPEDIDOS() {
 
     const [PedidosaFacturar, setPedidosaFacturar] = useState([]);
     //HANDLERS
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            console.log('This will run every second!');
+
+            const Cocinado = async (idPedido) => {
+                await fetch(`http://localhost:3000/orders/ready`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+
+                    body: JSON.stringify({ id: idPedido }),
+                });
+            };
+        }, 5000);
+        return () => clearInterval(interval);
+    }, []);
+
     const handleChangeFact = async () => {
-        /*  await fetch(`http://localhost:3000/bills`, {
+        await fetch(`http://localhost:3000/bills`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -53,7 +72,7 @@ function LISTAPEDIDOS() {
                 numeroFactura: 1,
                 nombreCliente: 'Josue',
                 RtnCliente: '0501200302608',
-                fechaCreacion: NOW(),
+                fechaCreacion: '2002-06-03',
                 subtotal: 22,
                 total: 25,
                 tarjetaEfectivo: 0,
@@ -65,7 +84,7 @@ function LISTAPEDIDOS() {
                 idOrden: 2,
                 usuarioAtiende: 'JORO7226',
             }),
-        });*/
+        });
     };
 
     const handleFacturar = () => {};
@@ -76,17 +95,6 @@ function LISTAPEDIDOS() {
 
     const DevolverNoCocinado = async (idPedido) => {
         await fetch(`http://localhost:3000/orders/132`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-
-            body: JSON.stringify({ id: idPedido }),
-        });
-    };
-
-    const Cocinado = async (idPedido) => {
-        await fetch(`http://localhost:3000/orders/ready`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -116,7 +124,7 @@ function LISTAPEDIDOS() {
         };
 
         getAllPendingPedidos();
-    });
+    }, []);
 
     useEffect(() => {
         const getAllPedidos = async () => {
@@ -133,7 +141,7 @@ function LISTAPEDIDOS() {
         };
 
         getAllPedidos();
-    }, [dataPending]);
+    }, []);
 
     //IFS
 

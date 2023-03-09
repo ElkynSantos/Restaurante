@@ -39,7 +39,7 @@ function COCINA() {
 
     const [dataPending, setDataPending] = useState([]);
     const [SelectedRows, setSelectedRows] = useState([]);
-
+    const [HANDLER, setHANDLER] = useState([]);
     const [PedidosaFacturar, setPedidosaFacturar] = useState([]);
     //HANDLERS
     const handleChangeFact = () => {
@@ -52,10 +52,6 @@ function COCINA() {
 
     const handleFacturar = () => {};
 
-    useEffect(() => {
-        console.log(`Facturado ` + facturador);
-    }, []);
-
     const DevolverNoCocinado = async (idPedido) => {
         await fetch(`http://localhost:3000/orders/132`, {
             method: 'POST',
@@ -65,6 +61,12 @@ function COCINA() {
 
             body: JSON.stringify({ id: idPedido }),
         });
+
+        if (HANDLER) {
+            setHANDLER(false);
+        } else {
+            setHANDLER(true);
+        }
     };
 
     const Cocinado = async (idPedido) => {
@@ -76,17 +78,16 @@ function COCINA() {
 
             body: JSON.stringify({ id: idPedido }),
         });
-    };
-
-    const getProductos = async () => {
-        await fetch('http://localhost:3000/orders/')
-            .then((response) => response.json())
-            .then((data) => {
-                console.log(data);
-            });
+        if (HANDLER) {
+            setHANDLER(false);
+        } else {
+            setHANDLER(true);
+        }
     };
 
     useEffect(() => {
+        console.log(`Facturado ` + facturador);
+
         const getAllPendingPedidos = async () => {
             try {
                 await fetch('http://localhost:3000/orders/pending')
@@ -103,9 +104,6 @@ function COCINA() {
         };
 
         getAllPendingPedidos();
-    });
-
-    useEffect(() => {
         const getAllPedidos = async () => {
             try {
                 await fetch('http://localhost:3000/orders/ready')
@@ -124,7 +122,7 @@ function COCINA() {
         };
 
         getAllPedidos();
-    }, [dataPending]);
+    }, [HANDLER]);
 
     //IFS
 
