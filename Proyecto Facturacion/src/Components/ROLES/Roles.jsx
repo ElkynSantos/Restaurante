@@ -242,6 +242,16 @@ function ROLES() {
         },
     };
 
+    const [filterText, setFilterText] = useState('');
+    const handleFilterChange = (e) => {
+        setFilterText(e.target.value);
+        // aquí puedes llamar a una función que utiliza el valor de filterText para hacer un filtro
+    };
+
+    const filteredItems = data.filter((item) =>
+        item.Nomb_Rol.toLowerCase().includes(filterText.toLowerCase())
+    );
+
     return (
         <div>
             <CREARROL />
@@ -264,7 +274,11 @@ function ROLES() {
                     </Col>
                     <Col sm={4}>
                         <InputGroup>
-                            <Form.Control aria-label="Dollar amount (with dot and two decimal places)" />
+                            <Form.Control
+                                aria-label="Dollar amount (with dot and two decimal places)"
+                                onChange={handleFilterChange}
+                                value={filterText}
+                            />
                             <InputGroup.Text>
                                 <Search />
                             </InputGroup.Text>
@@ -274,7 +288,7 @@ function ROLES() {
                 <DataTable
                     className="mt-3"
                     columns={columns}
-                    data={data}
+                    data={filteredItems}
                     customStyles={customStyles}
                     noDataComponent={
                         <div className="p-4">No se encontraron roles</div>

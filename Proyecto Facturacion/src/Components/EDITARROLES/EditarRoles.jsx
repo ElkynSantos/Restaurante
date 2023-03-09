@@ -139,7 +139,7 @@ function EDITARROL() {
                 icon: 'success',
                 title: data,
                 showConfirmButton: false,
-                timer: 1500,
+                timer: 500,
             });
         } catch (error) {
             Swal.fire({
