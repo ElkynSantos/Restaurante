@@ -128,7 +128,7 @@ function USUARIOS() {
                     icon: 'error',
                 });
             });
-    }, []);
+    }, [modalState]);
 
     const columns = [
         {
@@ -190,16 +190,15 @@ function USUARIOS() {
                                     handleDelete(row.DNI, row.status)
                                 }
                             >
-                                {/* {row.status == 1? <PersonFillSlash className="text-danger" title="Desactivar usuario"/>: <PersonCheckFill className="text-success" title="Activar usuario"/>} */}
-                                {row.status != 1 ? (
+                                {row.status == 0 ? (
                                     <PersonFillSlash
                                         className="text-danger"
-                                        title="Activar usuario"
+                                        title="Desactivar usuario"
                                     />
                                 ) : (
                                     <PersonCheckFill
                                         className="text-success"
-                                        title="Desactivar usuario"
+                                        title="Activar usuario"
                                     />
                                 )}
                             </button>

@@ -7,6 +7,7 @@ import CREARUSUARIO from './Components/CREARUSUARIO/index';
 import INICIO from './Components/INICIO/index';
 import MESAS from './Components/MESAS/index';
 import LISTAPEDIDOS from './Components/LISTAPEDIDOS/index';
+import COCINA from './Components/Cocina REPAIR/index';
 import PEDIDOS from './Components/PEDIDOS/index';
 import FACTURACION from './Components/FACTURACION/index';
 import USERS from './Components/USERS/index.js';
@@ -86,6 +87,9 @@ function App() {
                         </ProtectedRoute>
                     }
                 />
+                <Route path="/bills" element={<Facturas />} />
+                <Route path="/printbills" element={<PrintFactura />} />
+                <Route path="/kitchen" element={<COCINA />} />
 
                 {/* CONFIGURACIÓN DEL NEGOCIO */}
                 <Route

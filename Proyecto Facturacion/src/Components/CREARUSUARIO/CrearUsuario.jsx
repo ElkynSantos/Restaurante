@@ -157,7 +157,9 @@ function CREARUSUARIO() {
                     </Form.Label>
                     <Form.Select aria-label="Asignar impuesto">
                         {DATA.map((option) => (
-                            <option value={option.id}>{option.Nomb_Rol}</option>
+                            <option value={option.id}>
+                                {(e) => setField('email', e.target.value)}
+                            </option>
                         ))}
                     </Form.Select>
                     <Form.Group

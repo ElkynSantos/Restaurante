@@ -2,7 +2,47 @@ import AppError from '../utilities/app.error.js';
 
 import db from '../db.js';
 
-const setNewRoles = async (req, res, next) => {
+const getUsers_RoleandPermissions = async (req, res, next) => {
+    try {
+        const { User } = req.body;
+
+        const RolesPermissions = await db.query(
+            'CALL ObtenerRolYPermisos("' + User + '");'
+        );
+
+        return res.status(200).json({ RolesPermissions });
+    } catch (error) {
+        return next(new AppError('Ups! Error en la base de datos', 500));
+    }
+};
+
+const unable_enable_role = async (req, res, next) => {
+    try {
+        const { id_Rol } = req.body;
+
+        const result = await db.query('CALL UnEnableRol(' + id_Rol + ' );');
+
+        return res.status(200).json({ result });
+    } catch (error) {
+        return next(new AppError('Ups! Error en la base de datos', 500));
+    }
+};
+
+const getPermisosdeRol = async (req, res, next) => {
+    try {
+        const { idrol } = req.body;
+
+        const Permisos = await db.query(
+            'CALL obtenerPermisosde_rol("' + idrol + '");'
+        );
+
+        return res.status(200).json({ Permisos });
+    } catch (error) {
+        return next(new AppError('Ups! Error en la base de datos', 500));
+    }
+};
+
+const setNewRoleandPermits = async (req, res, next) => {
     try {
         const { idrol, NuevoNombre, ArrayPermisos } = req.body;
         const permisosString = ArrayPermisos.join(',');

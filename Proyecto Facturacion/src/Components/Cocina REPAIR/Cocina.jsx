@@ -32,7 +32,7 @@ function OrdenarPedido(arrayPedido) {
     return Formato;
 }
 
-function LISTAPEDIDOS() {
+function COCINA() {
     const [smShow, setSmShow] = useState(false);
     const [facturador, setFacturador] = useState(true);
     const [DATA, setData] = useState([]);
@@ -88,13 +88,18 @@ function LISTAPEDIDOS() {
 
     useEffect(() => {
         const getAllPendingPedidos = async () => {
-            await fetch('http://localhost:3000/orders/pending')
-                .then((response) => response.json())
-                .then((dataPending) => {
-                    console.log('=========PENDING===========');
-                    console.log(dataPending.order.orders),
+            try {
+                await fetch('http://localhost:3000/orders/pending')
+                    .then((response) => response.json())
+                    .then((dataPending) => {
+                        console.log('=========PENDING===========');
+
+                        console.log(dataPending.order.orders);
                         setDataPending(dataPending.order.orders);
-                });
+                    });
+            } catch (error) {
+                setDataPending([]);
+            }
         };
 
         getAllPendingPedidos();
@@ -102,16 +107,20 @@ function LISTAPEDIDOS() {
 
     useEffect(() => {
         const getAllPedidos = async () => {
-            await fetch('http://localhost:3000/orders/ready')
-                .then((response) => response.json())
-                .then((data1) => {
-                    console.log(data1.status);
-                    console.log('=========ReadytoFact===========');
-                    if (data1.status != 'fail') {
-                        console.log(data1.order.orders),
-                            setData(data1.order.orders);
-                    }
-                });
+            try {
+                await fetch('http://localhost:3000/orders/ready')
+                    .then((response) => response.json())
+                    .then((data1) => {
+                        console.log(data1.status);
+                        console.log('=========ReadytoFact===========');
+                        if (data1.status != 'fail') {
+                            console.log(data1.order.orders),
+                                setData(data1.order.orders);
+                        }
+                    });
+            } catch (error) {
+                setData([]);
+            }
         };
 
         getAllPedidos();
@@ -123,7 +132,7 @@ function LISTAPEDIDOS() {
     let TablaFacturador;
     let TablaCocinaDerecha;
     let TablaCocinaIzquierda;
-    if (true) {
+    if (false) {
         const handleChange = ({ selectedRows }) => {
             console.log(selectedRows);
 
@@ -207,14 +216,14 @@ function LISTAPEDIDOS() {
                 <Row>
                     <Col>
                         {' '}
-                        {/*   <Button
+                        <Button
                             variant="outline-secondary"
                             onClick={() => handleChangeFact()}
                         >
                             Ver como Cocina
-        </Button>*/}
+                        </Button>
                     </Col>
-                    <Col></Col>
+                    <Col>2 of 2</Col>
                 </Row>
                 <Row>
                     <Col>
@@ -223,7 +232,7 @@ function LISTAPEDIDOS() {
                         </h6>
                     </Col>
 
-                    <Col></Col>
+                    <Col>2 of 3</Col>
 
                     <Col>
                         {' '}
@@ -397,9 +406,8 @@ function LISTAPEDIDOS() {
         <div>
             <BarraLateral />
             <Container className="mt-5">
-                <h1>Lista PEDIDOS</h1>
+                <h1>Cocina</h1>
 
-                {FormtatoTabla}
                 {TablaFacturador}
 
                 <Row>
@@ -411,4 +419,4 @@ function LISTAPEDIDOS() {
     );
 }
 
-export default LISTAPEDIDOS;
+export default COCINA;

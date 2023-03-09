@@ -215,7 +215,7 @@ function PEDIDOS() {
         <Container>
             <BarraLateral />
             <PedidosModal />
-            <Form>
+            {/* <Form>
                 <Row>
                     <Col>
                         <Button variant="secondary" size="lg">
@@ -233,6 +233,7 @@ function PEDIDOS() {
                     </Col>
                 </Row>
             </Form>
+    */}
             <h1>PEDIDOS</h1>
 
             <Row>
