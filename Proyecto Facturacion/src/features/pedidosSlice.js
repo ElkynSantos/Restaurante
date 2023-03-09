@@ -42,8 +42,13 @@ export const pedidosSlice = createSlice({
                 state.value[index].cant_producto = parseInt(quantity);
             }
         },
+
+        clear: (state) => {
+            state.value = [];
+        },
     },
 });
 
-export const { addproduct, removeproduct, sumQuantity } = pedidosSlice.actions;
+export const { addproduct, removeproduct, sumQuantity, clear } =
+    pedidosSlice.actions;
 export default pedidosSlice.reducer;

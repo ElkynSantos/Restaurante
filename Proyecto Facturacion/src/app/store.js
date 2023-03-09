@@ -11,6 +11,7 @@ import editUserSlice from '../features/editUserSlice';
 import createRolSlice from '../features/creacionRoles';
 import editrolslice from '../features/editarRoles';
 import pedidosSlice from '../features/pedidosSlice';
+import ModalPedidosSlice from '../features/ModalPedidosSlice';
 
 export const store = configureStore({
     reducer: {
@@ -26,6 +27,7 @@ export const store = configureStore({
         modalEditUser: editUserSlice,
         createrol: createRolSlice,
         editrol: editrolslice,
+        ModalPedidos: ModalPedidosSlice,
     },
     middleware: [thunk],
 });
