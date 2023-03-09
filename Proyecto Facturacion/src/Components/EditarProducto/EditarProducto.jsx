@@ -108,8 +108,6 @@ function EditarProducto() {
                 //console.log(form);
 
                 const data = await getproduct(codeold.codigo_producto);
-                console.log('entro');
-                console.log(data);
 
                 if (data.status == 'Ok') {
                     console.log(data.products[0].id);

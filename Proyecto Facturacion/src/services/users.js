@@ -31,7 +31,7 @@ export const editUser = (user) => {
         headers: {
             'Content-Type': 'application/json',
         },
-        //  credentials: 'include',
+        credentials: 'include',
     }).then((response) => response.json());
 };
 
@@ -45,6 +45,6 @@ export const editUserStatus = (DNI, status) => {
         headers: {
             'Content-Type': 'application/json',
         },
-        //  credentials: 'include',
+        credentials: 'include',
     }).then((response) => response.json());
 };

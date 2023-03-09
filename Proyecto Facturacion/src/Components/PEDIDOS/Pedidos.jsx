@@ -9,7 +9,7 @@ import {
     FormControl,
     InputGroup,
 } from 'react-bootstrap';
-
+import PedidosModal from '../pedidosmodal/pedidos.jsx';
 import { Typeahead } from 'react-bootstrap-typeahead';
 import Swal from 'sweetalert2';
 import { useState, useEffect, useMemo } from 'react';
@@ -24,6 +24,7 @@ import {
     sumQuantity,
 } from '../../features/pedidosSlice';
 import { useSelector, useDispatch } from 'react-redux';
+import { showModalPedidos } from '../../features/ModalPedidosSlice.js';
 function PEDIDOS() {
     const [smShow, setSmShow] = useState(true);
 
@@ -63,20 +64,23 @@ function PEDIDOS() {
     };
 
     //INICIAR MESAS HARCODEADO
-    let DROPDOWN_Items = [];
-    var array1 = [];
-    for (let i = 0; i < 12; i++) {
-        array1.push({ numero: i + 1, estado: false });
-        DROPDOWN_Items[i] = (
-            <Dropdown.Item eventKey={i + 1} onClick={() => handleMesas(i + 1)}>
-                {i + 1}
-            </Dropdown.Item>
-        );
-    }
 
     const handleChange2 = (props) => {
         console.log(props);
         dispatch(removeproduct(props.id));
+    };
+    const handleChangeModal = () => {
+        if (pedidos1.length > 0) {
+            dispatch(showModalPedidos());
+        } else {
+            Swal.fire({
+                position: 'top-center',
+                icon: 'error',
+                title: 'No hay productos',
+                showConfirmButton: false,
+                timer: 1500,
+            });
+        }
     };
 
     const changeC = (row, cantidad2) => {
@@ -195,8 +199,6 @@ function PEDIDOS() {
         setSelectedProduct(selected[0]);
     };
 
-    console.log(selectedProduct);
-
     const handleAddClick = async () => {
         if (selectedProduct) {
             let string = selectedProduct;
@@ -212,7 +214,7 @@ function PEDIDOS() {
     return (
         <Container>
             <BarraLateral />
-
+            <PedidosModal />
             <Form>
                 <Row>
                     <Col>
@@ -275,28 +277,6 @@ function PEDIDOS() {
 
                 <div class="p-3 mb-2 bg-light text-dark">
                     {' '}
-                    <div>
-                        <Row>
-                            <Col>
-                                {' '}
-                                <h7>Mesa: {value}</h7>
-                            </Col>
-                            <Col>
-                                <Dropdown>
-                                    <Dropdown.Toggle
-                                        variant="outline-primary"
-                                        id="dropdown-basic"
-                                    >
-                                        Seleccionar
-                                    </Dropdown.Toggle>
-
-                                    <Dropdown.Menu>
-                                        {DROPDOWN_Items}
-                                    </Dropdown.Menu>
-                                </Dropdown>
-                            </Col>
-                        </Row>
-                    </div>
                     <p></p>
                     <p></p>
                     <Button href="/home" variant="outline-danger" size="lg">
@@ -305,7 +285,7 @@ function PEDIDOS() {
                     <Button
                         variant="primary"
                         size="lg"
-                        onClick={() => newOrder()}
+                        onClick={handleChangeModal}
                     >
                         Crear Pedido
                     </Button>

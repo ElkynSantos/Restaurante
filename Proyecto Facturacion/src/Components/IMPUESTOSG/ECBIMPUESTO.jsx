@@ -443,19 +443,3 @@ function ECBMPUESTO() {
 }
 
 export default ECBMPUESTO;
-
-/*
-                                    <Button
-                                        variant="warning"
-                                        className="mr-2"
-                                        onClick={() =>
-                                            handleEditImpuesto(
-                                                impuesto.id,
-                                                nombreImpuesto,
-                                                porcentajeImpuesto
-                                            )
-                                        }
-                                    >
-                                        Editar
-                                    </Button>
-*/
