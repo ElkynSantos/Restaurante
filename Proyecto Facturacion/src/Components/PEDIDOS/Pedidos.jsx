@@ -107,7 +107,7 @@ function PEDIDOS() {
             cell: (row) => (
                 <Form.Control
                     type="number"
-                    min="0"
+                    min="1"
                     required
                     defaultValue={1}
                     value={row.cantidad}
@@ -124,54 +124,6 @@ function PEDIDOS() {
             ),
         },
     ];
-
-    const newOrder = async () => {
-        let listaprod = [];
-        for (let i = 0; i < pedidos1.length; i++) {
-            const producto = await getproduct(
-                pedidos1[i].codigo_producto
-            ).catch((error) => {
-                console.error(error);
-            });
-
-            console.log(producto);
-            console.log(pedidos1[i].cant_producto);
-            listaprod.push({
-                idProducto: producto.products[0].id,
-                cantidad: pedidos1[i].cant_producto,
-            });
-        }
-
-        console.log(listaprod);
-
-        await fetch('http://localhost:3000/orders/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                tableId: value,
-                waiterId: 37,
-                products: listaprod,
-                delivery: 0,
-            }),
-        })
-            .then((response) => response.json())
-            .then((data) => {
-                console.log(data);
-
-                Swal.fire({
-                    position: 'top-center',
-                    icon: 'success',
-                    title: data.msg,
-                    showConfirmButton: false,
-                    timer: 1500,
-                });
-            });
-
-        setSelectedRows([]);
-        setValue('(Seleccionar Mesa)');
-    };
 
     useEffect(() => {
         const getAllProducts = async () => {

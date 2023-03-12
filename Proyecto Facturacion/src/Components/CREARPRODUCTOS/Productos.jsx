@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { CreateProduct } from '../../services/Product';
 import Swal from 'sweetalert2';
 import { agetAllTaxes } from '../../services/Taxes';
+import { fetchProducts } from '../../features/Productos';
 
 function modalCrearP() {
     const dispatch = useDispatch();
@@ -52,6 +53,7 @@ function modalCrearP() {
 }
 
 function BasicExample() {
+    const dispatch = useDispatch();
     const [form, setForm] = useState({});
     const [errors, setErrors] = useState({});
 
@@ -134,6 +136,7 @@ function BasicExample() {
                         text: data.msg,
                     });
                 } else {
+                    dispatch(fetchProducts());
                     Swal.fire({
                         position: 'top-center',
                         icon: 'success',

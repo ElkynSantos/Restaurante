@@ -105,7 +105,7 @@ function ROLES() {
             } else {
                 Swal.fire({
                     position: 'top-center',
-                    icon: 'Oops...',
+                    icon: 'error',
                     title: 'No es posible deshabilitar un rol asignado a un usuario',
                     showConfirmButton: false,
                     timer: 1500,

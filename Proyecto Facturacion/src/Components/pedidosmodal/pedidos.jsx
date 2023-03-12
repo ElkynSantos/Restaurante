@@ -141,21 +141,7 @@ function PedidosModal() {
                 </Modal.Header>
                 <Modal.Body>
                     <Container>
-                        <DataTable
-                            title="Productos de la orden"
-                            className="mt-3"
-                            columns={columns}
-                            data={pedidos1}
-                            noDataComponent={
-                                <div className="p-4">
-                                    No se encontraron productos
-                                </div>
-                            }
-                            pagination
-                            selectableRowsSingle
-                        />
-
-                        <Col align="end">
+                        <Col align="start">
                             <Dropdown
                                 variant="outline-primary"
                                 id="dropdown-basic"
@@ -178,6 +164,19 @@ function PedidosModal() {
                             </Dropdown>
                             <h7>Mesa: {value}</h7>
                         </Col>
+                        <DataTable
+                            title="Productos de la orden"
+                            className="mt-3"
+                            columns={columns}
+                            data={pedidos1}
+                            noDataComponent={
+                                <div className="p-4">
+                                    No se encontraron productos
+                                </div>
+                            }
+                            pagination
+                            selectableRowsSingle
+                        />
                     </Container>
                 </Modal.Body>
                 <Modal.Footer>
