@@ -47,7 +47,16 @@ const newFactura = async (data) => {
   }
 };
 
+const anularFactura = async (data) => {
+  try {
+    const response = await axios.patch('http://localhost:3000/bills/anular', data);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }
+};
 export {
   getFacturas,
   newFactura,
+  anularFactura
 };

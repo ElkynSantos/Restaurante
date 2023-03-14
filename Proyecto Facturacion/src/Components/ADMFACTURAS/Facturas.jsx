@@ -111,7 +111,7 @@ function Facturas() {
             <th>Subtotal</th>
             <th>Total</th>
             <th>Usuario que atiende</th>
-            <th>Anular</th>
+            <th>Anulada</th>
           </tr>
         </thead>
         <tbody>
@@ -161,9 +161,7 @@ function Facturas() {
     
 }
 
-/* {showEditModal && ( <EditFacturaModal factura={editFacturas} handleClose={() => setShowEditModal(false)}
-/>
-)} */
+
 export default Facturas;
 
 
