@@ -75,6 +75,10 @@ try {
 }
 }
 
+const anularFactura = async (req,res,next)=>{
+    const anularFactura = await db.query
+}
+
 const newFactura =async (req,res,next) =>{
 try{
 
