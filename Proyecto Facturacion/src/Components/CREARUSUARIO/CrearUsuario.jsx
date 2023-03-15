@@ -39,12 +39,14 @@ function CREARUSUARIO() {
     const [DATA, setData] = useState([]);
     const [form, setForm] = useState({});
     const [errors, setErrors] = useState({});
+
     const setField = (field, value) => {
         setForm({
             ...form,
             [field]: value,
         });
     };
+
     function findErrors() {
         const newErrors = {};
         let { email, password } = form;
@@ -58,6 +60,7 @@ function CREARUSUARIO() {
         console.log(newErrors.password);
         return newErrors;
     }
+
     async function handleSubmit(e) {
         e.preventDefault();
         let newErrors = findErrors();
@@ -68,7 +71,7 @@ function CREARUSUARIO() {
             //LLAMEN A LA API
         }
     }
-
+    /*
     useEffect(() => {
         const getAllActiveRoles = async () => {
             await fetch('http://localhost:3000/users/activeroles')
@@ -79,6 +82,22 @@ function CREARUSUARIO() {
         };
 
         getAllActiveRoles();
+    }, []);
+
+*/
+
+    useEffect(() => {
+        const response = Promise.all([getAllActiveRoles()])
+            .then((data) => {
+                handleInitUsers(data.allActiveRoles);
+            })
+            .catch((error) => {
+                console.log(error);
+                Swal.fire({
+                    text: 'No se pudieron cargar los usuarios',
+                    icon: 'error',
+                });
+            });
     }, []);
 
     return (

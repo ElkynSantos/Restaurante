@@ -48,3 +48,30 @@ export const editUserStatus = (DNI, status) => {
         credentials: 'include',
     }).then((response) => response.json());
 };
+
+/*
+export const getAllActiveRoles = () => {
+
+ 
+        return fetch('http://localhost:3000/users/activeroles')
+            .then((response) => response.json())
+        
+    };
+
+*/
+
+/*
+    return fetch(`${import.meta.env.VITE_REACT_APP_API_URL}/users/status`, {
+        method: 'PATCH',
+        body: JSON.stringify({
+            userDni: DNI,
+            opt: status == 1 ? 0 : 1,
+        }),
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+    }).then((response) => response.json());
+
+
+*/

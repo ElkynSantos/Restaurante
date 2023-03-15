@@ -8,18 +8,29 @@ import {
     Form,
     FormControl,
 } from 'react-bootstrap';
-
+import { useSelector, useDispatch } from 'react-redux';
 import {
     PencilFill,
     BookmarkCheckFill,
     ArrowRightCircle,
     ArrowLeftCircle,
 } from 'react-bootstrap-icons';
-import { useState, useEffect, useMemo } from 'react';
+
+import { useState, useEffect, useMemo, useRef } from 'react';
 
 import Modal from 'react-bootstrap/Modal';
 import DataTable from 'react-data-table-component';
 
+import {
+    showbillconfirmslice,
+    closebillconfirmslice,
+} from '../../features/billconfirmslice';
+
+import { updatepedidoseleccionados } from '../../features/pedidoseleccionados';
+
+import Swal from 'sweetalert2';
+import CREARFACTURA from '../CrearFactura/index';
+import CONFIRMBILL from '../ConfirmarPedidosTotal/index';
 function OrdenarPedido(arrayPedido) {
     let Formato = '';
     for (let i = 0; i < arrayPedido.Pedido.length(); i++) {
@@ -33,6 +44,8 @@ function OrdenarPedido(arrayPedido) {
 }
 
 function LISTAPEDIDOS() {
+    const dispatch = useDispatch();
+    const miTablaRef = useRef(null);
     const [smShow, setSmShow] = useState(false);
     const [facturador, setFacturador] = useState(true);
     const [DATA, setData] = useState([]);
@@ -41,8 +54,29 @@ function LISTAPEDIDOS() {
     const [SelectedRows, setSelectedRows] = useState([]);
 
     const [PedidosaFacturar, setPedidosaFacturar] = useState([]);
-    //HANDLERS
+    const show2 = useSelector((state) => state.createbill);
 
+    const handleCloseCBill = () => {
+        dispatch(closebillconfirmslice());
+        //  deseleccionarFilas;
+    };
+
+    const handleShowCBill = () => {
+        console.log('handleShowCBill');
+        dispatch(showbillconfirmslice());
+        //  deseleccionarFilas;
+        console.log(show2);
+    };
+
+    const updatePedidos = (data) => {
+        console.log('handleShowCBill');
+        dispatch(updatepedidoseleccionados(data));
+
+        console.log(show2);
+    };
+
+    //HANDLERS
+    /*
     useEffect(() => {
         const interval = setInterval(() => {
             console.log('This will run every second!');
@@ -59,39 +93,54 @@ function LISTAPEDIDOS() {
             };
         }, 5000);
         return () => clearInterval(interval);
-    }, []);
+    }, []);*/
 
     const handleChangeFact = async () => {
-        await fetch(`http://localhost:3000/bills`, {
+        if (SelectedRows.length === 0) {
+            Swal.fire({
+                position: 'top-center',
+                icon: 'error',
+                title: 'Favor debe seleccionar un pedidos',
+                showConfirmButton: false,
+                timer: 1500,
+            });
+
+            return;
+        }
+        updatePedidos(SelectedRows);
+        //  updatePedidos(row.numero_pedido);
+        handleShowCBill();
+
+        /*
+
+        const hoy = new Date().toISOString().split('T')[0];
+        console.log(hoy);
+        await fetch(`http://localhost:3000/bills/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
 
             body: JSON.stringify({
-                numeroFactura: 1,
+                numeroFactura: '100',
                 nombreCliente: 'Josue',
                 RtnCliente: '0501200302608',
-                fechaCreacion: '2002-06-03',
-                subtotal: 22,
-                total: 25,
+                fechaCreacion: hoy,
+                subtotal: 22.0,
+                total: 25.0,
                 tarjetaEfectivo: 0,
-                cambio: 20,
+                cambio: 20.0,
                 anular: 0,
-                pendiente: 0,
-                pagado: 0,
+                pendiente: 0, //
+                pagado: 0, //
                 idConfiguracionFactura: 1,
-                idOrden: 2,
+                listapedidos: '46',
                 usuarioAtiende: 'JORO7226',
             }),
-        });
+        });*/
     };
 
     const handleFacturar = () => {};
-
-    useEffect(() => {
-        console.log(`Facturado ` + facturador);
-    }, []);
 
     const DevolverNoCocinado = async (idPedido) => {
         await fetch(`http://localhost:3000/orders/132`, {
@@ -104,14 +153,14 @@ function LISTAPEDIDOS() {
         });
     };
 
-    const getProductos = async () => {
+    /*  const getProductos = async () => {
         await fetch('http://localhost:3000/orders/')
             .then((response) => response.json())
             .then((data) => {
                 console.log(data);
             });
-    };
-
+    };*/
+    /*
     useEffect(() => {
         const getAllPendingPedidos = async () => {
             await fetch('http://localhost:3000/orders/pending')
@@ -125,7 +174,37 @@ function LISTAPEDIDOS() {
 
         getAllPendingPedidos();
     }, []);
+*/
 
+    useEffect(() => {
+        const interval = setInterval(() => {
+            console.log('This will run every second!');
+
+            const getAllPedidos = async () => {
+                try {
+                    await fetch('http://localhost:3000/orders/ready')
+                        .then((response) => response.json())
+                        .then((data1) => {
+                            console.log(data1.status);
+                            console.log('=========ReadytoFact===========');
+                            if (data1.status != 'fail') {
+                                console.log(data1.order.orders),
+                                    setData(data1.order.orders);
+                            } else {
+                                setData([]);
+                            }
+                        });
+                } catch (error) {
+                    setData([]);
+                }
+            };
+
+            getAllPedidos();
+        }, 5000);
+        return () => clearInterval(interval);
+    }, []);
+
+    /*
     useEffect(() => {
         const getAllPedidos = async () => {
             await fetch('http://localhost:3000/orders/ready')
@@ -141,84 +220,67 @@ function LISTAPEDIDOS() {
         };
 
         getAllPedidos();
-    }, []);
-
-    //IFS
+    }, []);*/
 
     let FormtatoTabla;
     let TablaFacturador;
     let TablaCocinaDerecha;
     let TablaCocinaIzquierda;
-    if (true) {
-        const handleChange = ({ selectedRows }) => {
-            console.log(selectedRows);
 
-            const arraytemp = [];
-            for (let i = 0; i < selectedRows.length; i++) {
-                arraytemp.push(selectedRows[i].numero_pedido);
-            }
+    const handleChange = ({ selectedRows }) => {
+        console.log(selectedRows);
 
-            setSelectedRows(arraytemp);
+        const arraytemp = [];
+        for (let i = 0; i < selectedRows.length; i++) {
+            arraytemp.push(selectedRows[i].numero_pedido);
+        }
 
-            console.log('Selected Rows: ', selectedRows);
-        };
+        setSelectedRows(arraytemp);
 
-        const data = [
-            {
-                NPedido: 1,
-                Cliente: 'Josue',
-                Fecha: 'Hoy',
-                Pedido: [
-                    { Producto: 'Pollo', Cantidad: 1 },
-                    { Producto: 'Pepsi', Cantidad: 2 },
-                ],
-            },
-            {
-                NPedido: 2,
-                Cliente: 'Juan',
-                Fecha: 'Hoy se fia',
-                Pedido: [
-                    { Producto: 'Pollo', Cantidad: 1 },
-                    { Producto: 'Coca', Cantidad: 14 },
-                ],
-            },
-        ];
+        console.log('Selected Rows: ', selectedRows);
+    };
 
-        //INFO COLUMNAS
-        const columns = [
-            {
-                name: 'N_Pedido',
-                selector: (row) => row.numero_pedido,
-            },
+    const columns = [
+        {
+            name: 'N_Pedido',
+            selector: (row) => row.numero_pedido,
+        },
 
-            {
-                name: 'Mesa',
-                selector: (row) => row.mesaID,
-            },
+        {
+            name: 'Mesa',
+            selector: (row) => row.mesaID,
+        },
 
-            {
-                name: 'Fecha',
-                selector: (row) => row.fecha,
-            },
+        {
+            name: 'Fecha',
+            selector: (row) => row.fecha,
+        },
 
-            {
-                name: 'Acciones',
-                cell: (props) => (
-                    <Row>
-                        <Col>
-                            <button
-                                className="btn-transparent text-success p-0"
-                                title="Facturar"
-                            >
-                                <BookmarkCheckFill />
-                                Facturar
-                            </button>
-                        </Col>
-                    </Row>
-                ),
-            },
-        ];
-        /*
+        {
+            name: 'Acciones',
+            cell: (row) => (
+                <Row>
+                    <Col>
+                        <button
+                            className="btn-transparent text-success p-0"
+                            title="Facturar"
+                            onClick={() => {
+                                console.log('SelectedRows');
+                                console.log(SelectedRows);
+                                //updatePedidos(SelectedRows);
+                                updatePedidos(row.numero_pedido);
+                                handleShowCBill();
+                            }}
+                        >
+                            <BookmarkCheckFill />
+                            Facturar
+                        </button>
+                    </Col>
+                </Row>
+            ),
+        },
+    ];
+    /*
  <Col>
                             <button
                                 className="btn-transparent text-blue p-0"
@@ -228,205 +290,97 @@ function LISTAPEDIDOS() {
                             </button>
                         </Col>
 */
-        FormtatoTabla = (
-            <Container>
-                <Row>
-                    <Col>
-                        {' '}
-                        {/*   <Button
+    FormtatoTabla = (
+        <Container>
+            <Row>
+                <Col>
+                    {' '}
+                    {/*   <Button
                             variant="outline-secondary"
                             onClick={() => handleChangeFact()}
                         >
                             Ver como Cocina
         </Button>*/}
-                    </Col>
-                    <Col></Col>
-                </Row>
-                <Row>
-                    <Col>
-                        <h6>
-                            Pedidos Seleccionados: {SelectedRows.toString()}
-                        </h6>
-                    </Col>
+                </Col>
+                <Col></Col>
+            </Row>
+            <Row>
+                <Col>
+                    <h6>Pedidos Seleccionados: {SelectedRows.toString()}</h6>
+                </Col>
 
-                    <Col></Col>
+                <Col></Col>
 
-                    <Col>
-                        {' '}
-                        <Button
-                            variant="outline-success"
-                            onClick={() => handleChangeFact()}
-                        >
-                            Facturar Seleccion
-                        </Button>
-                    </Col>
-                </Row>
-                <p></p>
-            </Container>
-        );
-        const productos = [];
+                <Col>
+                    {' '}
+                    <Button
+                        variant="outline-success"
+                        onClick={() => handleChangeFact()}
+                    >
+                        Facturar Seleccion
+                    </Button>
+                </Col>
+            </Row>
+            <p></p>
+        </Container>
+    );
+    const productos = [];
 
-        DATA.forEach((order) => {
-            order.productos.forEach((producto) => {
-                productos.push(producto);
-            });
+    DATA.forEach((order) => {
+        order.productos.forEach((producto) => {
+            productos.push(producto);
         });
+    });
 
-        const ExpandedComponent = ({ data }) => {
-            console.log(data.productos);
+    const ExpandedComponent = ({ data }) => {
+        console.log(data.productos);
 
-            let ContenidoPedido = '==========Pedido==========\n';
-            for (let i = 0; i < data.productos.length; i++) {
-                ContenidoPedido +=
-                    data.productos[i].nombre_producto +
-                    '-' +
-                    data.productos[i].cantidad +
-                    '\n';
-            }
-            ContenidoPedido += '==========================';
-            return <pre>{ContenidoPedido}</pre>;
-        };
+        let ContenidoPedido = '==========Pedido==========\n';
+        for (let i = 0; i < data.productos.length; i++) {
+            ContenidoPedido +=
+                data.productos[i].nombre_producto +
+                '-' +
+                data.productos[i].cantidad +
+                '\n';
+        }
+        ContenidoPedido += '==========================';
+        return <pre>{ContenidoPedido}</pre>;
+    };
 
-        // const ExpandedComponent = OrdenarPedido(data);
-        // console.log(data[[0]].Pedido.Producto);
-        TablaFacturador = (
-            <DataTable
-                columns={columns}
-                data={DATA}
-                //   theme="solarized"
-                expandableRows
-                selectableRows
-                expandableRowsComponent={ExpandedComponent}
-                onSelectedRowsChange={handleChange}
-            />
-        );
-    } else {
-        FormtatoTabla = (
-            <Button
-                variant="outline-secondary"
-                onClick={() => handleChangeFact()}
-            >
-                Ver como Facturador
-            </Button>
-        );
+    const deseleccionarFilas = () => {
+        // const dataTable = miTablaRef.current;
+        miTablaRef.current.toggleAllRowsSelected(false);
+    };
 
-        const data = [
-            {
-                NPedido: 1,
-                Cliente: 'Josue',
-                Fecha: 'Hoy',
-                Pedido: ['Pollo', 'Papas', 'Coca'],
-            },
-            {
-                NPedido: 2,
-                Cliente: 'Juan',
-                Fecha: 'Hoy se fia',
-                Pedido: ['Pollo', 'Papas', 'Coca (En litros)'],
-            },
-        ];
+    // const ExpandedComponent = OrdenarPedido(data);
+    // console.log(data[[0]].Pedido.Producto);
 
-        //INFO COLUMNAS
-        const columns = [
-            {
-                name: 'N_Pedido',
-                selector: (row) => row.numero_pedido,
-            },
-
-            {
-                name: 'Mesa',
-                selector: (row) => row.mesaID,
-            },
-
-            {
-                name: 'Fecha',
-                selector: (row) => row.fecha,
-            },
-
-            {
-                name: 'Acciones',
-
-                cell: (props) => (
-                    <Button
-                        variant="success"
-                        onClick={() => Cocinado(props.numero_pedido)}
-                        id={props.ID}
-                    >
-                        <ArrowRightCircle></ArrowRightCircle>
-                    </Button>
-                ),
-            },
-        ];
-
-        const columns2 = [
-            {
-                name: 'Eliminar',
-                cell: (props) => (
-                    <Button
-                        variant="danger"
-                        onClick={() => DevolverNoCocinado(props.numero_pedido)}
-                        id={props.ID}
-                    >
-                        <ArrowLeftCircle></ArrowLeftCircle>
-                    </Button>
-                ),
-            },
-            {
-                name: 'N_Pedido',
-                selector: (row) => row.numero_pedido,
-            },
-
-            {
-                name: 'Mesa',
-                selector: (row) => row.mesaID,
-            },
-        ];
-
-        const ExpandedComponent = ({ data }) => {
-            console.log('==================PRODUCTOS==============');
-            console.log(data.productos);
-
-            let ContenidoPedido = '==========Pedido==========\n';
-            for (let i = 0; i < data.productos.length; i++) {
-                ContenidoPedido +=
-                    data.productos[i].nombre_producto +
-                    '-' +
-                    data.productos[i].cantidad +
-                    '\n';
-            }
-            ContenidoPedido += '==========================';
-            return <pre>{ContenidoPedido}</pre>;
-        };
-
-        const rowPreExpanded = (row) => (row.all = true);
-
-        TablaCocinaIzquierda = (
-            <DataTable
-                columns={columns}
-                data={dataPending}
-                expandableRows
-                expandableRowsComponent={ExpandedComponent}
-                expandableRowExpanded={rowPreExpanded}
-            />
-        );
-
-        TablaCocinaDerecha = (
-            <DataTable
-                columns={columns2}
-                data={DATA}
-                expandableRows
-                expandableRowsComponent={ExpandedComponent}
-            />
-        );
-    }
+    const rowSelectCritera = (row) => {
+        SelectedRows.includes(row.numero_pedido);
+    };
 
     return (
         <div>
+            <CONFIRMBILL />
+            <CREARFACTURA />
+
             <BarraLateral />
             <Container className="mt-5">
                 <h1>Lista PEDIDOS</h1>
 
                 {FormtatoTabla}
-                {TablaFacturador}
+                <DataTable
+                    //   title="Mi tabla"
+                    columns={columns}
+                    data={DATA}
+                    //   theme="solarized"
+                    expandableRows
+                    selectableRows
+                    expandableRowsComponent={ExpandedComponent}
+                    //onSelectedRowsChange={handleChange}
+                    selectableRowSelected={rowSelectCritera}
+                    ref={miTablaRef}
+                />
 
                 <Row>
                     <Col>{TablaCocinaIzquierda}</Col>;

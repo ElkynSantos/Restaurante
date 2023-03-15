@@ -85,7 +85,7 @@ const newFactura = async (req, res, next) => {
             pendiente,
             pagado,
             idConfiguracionFactura,
-            idOrden,
+            listapedidos,
             usuarioAtiende,
         } = req.body;
 
@@ -102,11 +102,11 @@ const newFactura = async (req, res, next) => {
             pendiente,
             pagado,
             idConfiguracionFactura,
-            idOrden,
+            listapedidos,
             usuarioAtiende
         );
 
-        const emptyParams = Object.values({
+        /*     const emptyParams = Object.values({
             numeroFactura,
             nombreCliente,
             RtnCliente,
@@ -121,14 +121,16 @@ const newFactura = async (req, res, next) => {
             idConfiguracionFactura,
             idOrden,
             usuarioAtiende,
-        }).some((val) => !val);
+        }).some((val) => !val);*/
 
-        if (emptyParams) {
+        /*   if (emptyParams) {
+            console.log(emptyParams);
+
             return next(new AppError('Favor completar todos los campos', 400));
-        }
+        }*/
 
         const [newFactura] = await db.query(
-            'CALL new_bill(:p_numero_factura,:p_nombre_cliente,:p_rtn_cliente,:p_fecha_creacion,:p_subtotal,:p_total,:p_tarjeta_efectivo,:p_cambio, :p_anular, :p_pendiente,:p_pagado,:p_id_configuracion_factura,:p_id_orden,:p_usuario_atiende)',
+            'CALL db_rest.new_bills(:p_numero_factura,:p_nombre_cliente,:p_rtn_cliente,:p_fecha_creacion,:p_subtotal,:p_total,:p_tarjeta_efectivo,:p_cambio, :p_anular, :p_pendiente,:p_pagado,:p_id_configuracion_factura,:p_listaPedidos,:p_usuario_atiende)',
             {
                 replacements: {
                     p_numero_factura: numeroFactura,
@@ -143,7 +145,7 @@ const newFactura = async (req, res, next) => {
                     p_pendiente: pendiente,
                     p_pagado: pagado,
                     p_id_configuracion_factura: idConfiguracionFactura,
-                    p_id_orden: idOrden,
+                    p_listaPedidos: '[,' + listapedidos + ',]',
                     p_usuario_atiende: usuarioAtiende,
                 },
             }
@@ -164,4 +166,29 @@ const newFactura = async (req, res, next) => {
     }
 };
 
-export { getFacturas, editFacturas, newFactura, getFactura };
+const getBillData = async (req, res) => {
+    const { NPedido } = req.body;
+    console.log('Sucede');
+    console.log(NPedido);
+    const [Respuesta] = await db.query(
+        'CALL db_rest.obtener_productos_por_lista_pedidos(:p_NPedido)',
+        {
+            replacements: {
+                p_NPedido: NPedido,
+            },
+        }
+    );
+    if (Respuesta.response === 0) {
+        return res.status(404).json({
+            status: 'fail',
+            msg: user.msg,
+        });
+    }
+
+    return res.status(200).json({
+        status: 'Ok',
+        Respuesta,
+    });
+};
+
+export { getFacturas, editFacturas, newFactura, getFactura, getBillData };

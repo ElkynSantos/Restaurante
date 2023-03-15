@@ -105,6 +105,7 @@ function CREARUSUARIO() {
         // console.log(newErrors.email);
         return newErrors;
     }
+
     useEffect(() => {
         const getAllActiveRoles = async () => {
             await fetch('http://localhost:3000/users/activeroles')
@@ -116,6 +117,7 @@ function CREARUSUARIO() {
 
         getAllActiveRoles();
     }, []);
+
     async function handleSubmit(e) {
         e.preventDefault();
         let newErrors = findErrors();

@@ -30,7 +30,7 @@ import FormPass from './Components/FormPassword/index';
 import ChangePass from './Components/ChangePassword/index';
 import Facturas from './Components/ADMFACTURAS/index';
 import PRODUCTOS from './Components/Productos/Index';
-
+import REPORTES from './Components/Reportes/Index';
 // SERVICES
 import { getPermissionsByUser } from './services/roles';
 
@@ -140,6 +140,7 @@ function App() {
                 />
                 {/* <Route path="/users" element={<USERS />} /> */}
                 {/* <Route path="/editUser" element={<FormPassword />} /> */}
+                <Route path="/reports" element={<REPORTES />} />
                 <Route path="/invoice-list" element={<LISTAFACTURACION />} />
             </Routes>
         </BrowserRouter>

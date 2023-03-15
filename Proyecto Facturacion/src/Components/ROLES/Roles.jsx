@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react';
 import EDITARROLES from '../EDITARROLES/index';
 import CREARROL from '../CREARROL/index';
 import {
-    Button,
+    // Button,
     Col,
     Row,
     Container,
-    Card,
+    //  Card,
     Form,
     InputGroup,
 } from 'react-bootstrap';
@@ -17,16 +17,14 @@ import {
     Search,
     PencilFill,
     BookmarkDashFill,
-    Display,
+    // Display,
 } from 'react-bootstrap-icons';
 import Swal from 'sweetalert2';
-
 import { initRoles, addRoles, editRoles } from '../../features/rolesSlice';
 import { showModalCR, closeModalCR } from '../../features/creacionRoles';
-
 import { showModalER, closeModalER } from '../../features/editarRoles';
-
 import BarraLateral from '../common/index';
+//import { getAllRoles } from '../../services/roles';
 
 const paginationComponentOptions = {
     rowsPerPageText: 'Filas por página',
@@ -37,45 +35,43 @@ const paginationComponentOptions = {
 
 function ROLES() {
     const dispatch = useDispatch();
-    const [data, setData] = useState([]);
+    const roles = useSelector((state) => state.roles);
+    const createrolState = useSelector((state) => state.createrol);
+    const editrolState = useSelector((state) => state.editrol);
     const [ChangesUnEnabled, setChangesUnEnabled] = useState(false);
-    const show2 = useSelector((state) => state.createrol);
-    const show1 = useSelector((state) => state.editrol);
-    //const roles = useSelector((state) => state.roles);
-    //onst handleClose = () => {
-    //   dispatch(closeModalCR());
-    //};
 
+    // const [data, setData] = useState([]);
+    // const show2 = useSelector((state) => state.createrol);
+    //const show1 = useSelector((state) => state.editrol);
+
+    //Handlers
     const handleShow = () => {
         dispatch(showModalCR());
     };
-
     const handleShowEDIT = () => {
         dispatch(showModalER());
     };
-
     const handleInitRoles = (data) => {
         dispatch(initRoles(data));
     };
+    const handleDelete = (props, habil_deshabil) => {
+        deshabilitar_habilitar(props, habil_deshabil);
+    };
 
+    //UseEffect Obtener Roles y Deshabilitar/Habilitar
     useEffect(() => {
         const getAllRoles = async () => {
             await fetch('http://localhost:3000/roles')
                 .then((response) => response.json())
                 .then((data) => {
-                    console.log('================================');
-                    console.log(data.allRoles);
-
                     handleInitRoles(data.allRoles);
-                    setData(data.allRoles);
                 })
                 .catch((error) => {
                     console.error(error);
                 });
         };
-
         getAllRoles();
-    }, [ChangesUnEnabled, dispatch, show2, show1]);
+    }, [createrolState, editrolState, ChangesUnEnabled]);
 
     const deshabilitar_habilitar = async (NRol, habil_deshabil) => {
         try {
@@ -111,11 +107,7 @@ function ROLES() {
                     timer: 1500,
                 });
             }
-            if (ChangesUnEnabled) {
-                setChangesUnEnabled(false);
-            } else {
-                setChangesUnEnabled(true);
-            }
+            setChangesUnEnabled(!ChangesUnEnabled);
         } catch (error) {
             Swal.fire({
                 icon: 'error',
@@ -123,10 +115,6 @@ function ROLES() {
                 text: error,
             });
         }
-    };
-
-    const handleDelete = (props, habil_deshabil) => {
-        deshabilitar_habilitar(props, habil_deshabil);
     };
 
     const columns = [
@@ -242,13 +230,13 @@ function ROLES() {
         },
     };
 
+    //Filtro para el texfield Buscar
     const [filterText, setFilterText] = useState('');
     const handleFilterChange = (e) => {
         setFilterText(e.target.value);
-        // aquí puedes llamar a una función que utiliza el valor de filterText para hacer un filtro
     };
 
-    const filteredItems = data.filter((item) =>
+    const filteredItems = roles.filter((item) =>
         item.Nomb_Rol.toLowerCase().includes(filterText.toLowerCase())
     );
 
@@ -302,3 +290,23 @@ function ROLES() {
 }
 
 export default ROLES;
+
+/* useEffect(() => {
+        getAllRoles().then((data1) => setData(data1));
+        /*const getAllRoles = async () => {
+            await fetch('http://localhost:3000/roles')
+                .then((response) => response.json())
+                .then((data) => {
+                    console.log('================================');
+                    console.log(data.allRoles);
+
+                    handleInitRoles(data.allRoles);
+                    setData(data.allRoles);
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        };
+
+        getAllRoles();
+    }, [ChangesUnEnabled, dispatch, show2, show1]);*/

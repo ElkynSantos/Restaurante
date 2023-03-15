@@ -44,6 +44,7 @@ function PRODUCTOT() {
     const dispatch = useDispatch();
 
     const products = useSelector((state) => state.products);
+
     const show2 = useSelector((state) => state.EditarProducto);
     const show = useSelector((state) => state.CreateProduct);
     const [DATA, setData] = useState([]);
@@ -54,7 +55,6 @@ function PRODUCTOT() {
 
     const handleShowEditModal = async (codigo_producto) => {
         await getproduct(codigo_producto).then((dataproduct) => {
-            // console.log("userRespModal", dataUser)
             dispatch(guardar(dataproduct.products[0]));
             dispatch(showModalEP());
         });

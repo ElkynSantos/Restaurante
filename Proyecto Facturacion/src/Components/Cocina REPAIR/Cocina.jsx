@@ -52,6 +52,31 @@ function COCINA() {
 
     const handleFacturar = () => {};
 
+    useEffect(() => {
+        const interval = setInterval(() => {
+            console.log('This will run every second!');
+
+            const getAllPendingPedidos = async () => {
+                try {
+                    await fetch('http://localhost:3000/orders/pending')
+                        .then((response) => response.json())
+                        .then((dataPending) => {
+                            console.log('=========PENDING===========');
+
+                            console.log(dataPending.order.orders);
+                            setDataPending(dataPending.order.orders);
+                        });
+                } catch (error) {
+                    setDataPending([]);
+                }
+            };
+
+            getAllPendingPedidos();
+        }, 5000);
+
+        return () => clearInterval(interval);
+    }, []);
+
     const DevolverNoCocinado = async (idPedido) => {
         await fetch(`http://localhost:3000/orders/132`, {
             method: 'POST',

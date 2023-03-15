@@ -4,7 +4,7 @@ import { comparePassword } from '../utilities/handle.bcrypt.js';
 
 const allCompletedOrders = async (req, res, next) => {
     try {
-        const order = await db.query('call get_readytoFactOrders;');
+        const [order] = await db.query('call get_readytoFactOrders;');
 
         /*
   'CALL get_all_orders(:estadoCocina, :estadoFactura)',

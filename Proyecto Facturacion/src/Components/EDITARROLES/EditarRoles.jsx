@@ -4,30 +4,28 @@ import {
     Col,
     Button,
     Row,
-    Container,
-    Card,
+    //  Container,
+    //  Card,
     Form,
-    FormControl,
-    FormLabel,
+    //FormControl,
+    // FormLabel,
     CloseButton,
 } from 'react-bootstrap';
 import Swal from 'sweetalert2';
-
-//import { Register } from '../../services/REGISTER';
-
 import { showModalER, closeModalER } from '../../features/editarRoles';
 import { useDispatch, useSelector } from 'react-redux';
 
+//import { Register } from '../../services/REGISTER';
+
 function Example() {
     const dispatch = useDispatch();
+
     const handleClose = () => {
         dispatch(closeModalER());
     };
-
     const handleShow = () => {
         dispatch(showModalER());
     };
-
     const show1 = useSelector((state) => state.editrol);
 
     return (
@@ -161,11 +159,11 @@ function EDITARROL() {
             [field]: value,
         });
     };*/
-    function findErrors() {
+    /*function findErrors() {
         const newErrors = {};
         return newErrors;
-    }
-    useEffect(() => {}, [checkedList]);
+    }*/
+    //  useEffect(() => {}, [checkedList]);
 
     function handleSelect(id, event) {
         const isChecked = event.target.checked;
@@ -208,7 +206,7 @@ function EDITARROL() {
                                     onChange={(e) =>
                                         setNombreNuevo(e.target.value)
                                     }
-                                    required
+
                                     // isInvalid={!!errors.nombre}
                                 />
                             </Form.Group>
