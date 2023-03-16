@@ -28,7 +28,8 @@ try {
         numeroFactura,
         descripcionRestaurante, 
         fechaLimiteEmision,
-        rangoDocumentos
+        rangoDocumentos, 
+        mesas
         
 
     } = req.body;
@@ -44,11 +45,12 @@ try {
         numeroFactura,
         descripcionRestaurante, 
         fechaLimiteEmision,
-        rangoDocumentos
+        rangoDocumentos,
+        mesas
         );
 
     const updatedFactura = await db.query(
-        'CALL editar_configuracion_facturas(:p_RTN, :p_Nombre_Restaurante, :p_domicilio,:p_celular,:p_correo,:p_cai,:p_numero_factura,:p_descripcion_restaurante,:p_fecha_limite_emision,:p_rango_documentos)',
+        'CALL editar_configuracion_facturas(:p_RTN, :p_Nombre_Restaurante, :p_domicilio,:p_celular,:p_correo,:p_cai,:p_numero_factura,:p_descripcion_restaurante,:p_fecha_limite_emision,:p_rango_documentos,:p_mesas)',
         {
             replacements: {
                 p_RTN : integerSanitizer(Rtn), 
@@ -61,6 +63,7 @@ try {
                 p_descripcion_restaurante : descripcionRestaurante, 
                 p_fecha_limite_emision : fechaLimiteEmision, 
                 p_rango_documentos : integerSanitizer(rangoDocumentos), 
+                p_mesas : integerSanitizer(mesas)
                 
         
             },
@@ -99,7 +102,8 @@ try{
         numeroFactura,
         descripcionRestaurante, 
         fechaLimiteEmision,
-        rangoDocumentos
+        rangoDocumentos,
+        mesas
         
 
     } = req.body;
@@ -115,7 +119,8 @@ try{
         numeroFactura,
         descripcionRestaurante, 
         fechaLimiteEmision,
-        rangoDocumentos
+        rangoDocumentos,
+        mesas
         );
 
        const emptyParams = Object.values({
@@ -128,7 +133,8 @@ try{
         numeroFactura,
         descripcionRestaurante, 
         fechaLimiteEmision,
-        rangoDocumentos
+        rangoDocumentos,
+        mesas
         }).some((val) => !val);
 
     if (emptyParams) {
@@ -136,7 +142,7 @@ try{
     }
 
     const [newFactura] = await db.query(
-        'CALL new_configBill(:p_RTN, :p_Nombre_Restaurante, :p_domicilio,:p_celular,:p_correo,:p_cai,:p_numero_factura,:p_descripcion_restaurante,:p_fecha_limite_emision,:p_rango_documentos)',
+        'CALL new_configBill(:p_RTN, :p_Nombre_Restaurante, :p_domicilio,:p_celular,:p_correo,:p_cai,:p_numero_factura,:p_descripcion_restaurante,:p_fecha_limite_emision,:p_rango_documentos, :p_mesas)',
         {
             replacements: {
                 p_RTN : integerSanitizer(Rtn), 
@@ -149,7 +155,7 @@ try{
                 p_descripcion_restaurante : descripcionRestaurante, 
                 p_fecha_limite_emision : fechaLimiteEmision, 
                 p_rango_documentos : integerSanitizer(rangoDocumentos), 
-                
+                p_mesas : integerSanitizer(mesas)                
         
             },
         }
@@ -173,6 +179,7 @@ try{
 }
 
 }
+
 
 
 
