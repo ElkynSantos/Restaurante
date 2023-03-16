@@ -1,7 +1,7 @@
 import React, { useState,useEffect } from 'react';
 import { InputGroup, FormControl, Button, Table } from 'react-bootstrap';
-import { FaSearch, FaEdit, FaPrint, FaTrash } from 'react-icons/fa';
-import { getFactura} from '../../services/Factura';
+import { FaSearch, FaEdit, FaPrint, FaTimes } from 'react-icons/fa';
+import { anularFactura, getFactura} from '../../services/Factura';
 import axios from 'axios'
 import { setCurrentEditFactura, showModalFactura , closeModalFactura} from '../../features/editFacturaSlice';
 import EditRTNNAME from  '../editRTN&NAME';
@@ -12,6 +12,7 @@ import './Fact.css';
 
 function Facturas() {
   const dispatch = useDispatch();
+  const [anular, setAnular] = useState(false);
     const [facturas, setFacturas] = useState([]);
     const showF = useSelector((state) => state.editFactura).modalState;
     console.log("modal:"+showF);
@@ -25,7 +26,7 @@ function Facturas() {
         }
       }
       fetchFacturas();
-    }, [showF]);
+    }, [showF, anular]);
 
   const [searchTerm, setSearchTerm] = useState('');
   const [showEditModalFactura, setShowEditModalFactura] = useState(false);
@@ -51,6 +52,7 @@ function Facturas() {
          dispatch(setCurrentEditFactura(data.factura));
          dispatch(showModalFactura());
       })
+
     }
    
 };
@@ -75,9 +77,31 @@ function Facturas() {
     console.log(`Imprimir factura ${noFactura}`);
   };
 
-  const handleDeleteFactura = (noFactura) => {
-    const nuevasFacturas = facturas.filter((f) => f.noFactura !== noFactura);
-    setFacturas(nuevasFacturas);
+  const handleDeleteFactura = async(id, Anular) => 
+  {
+    console.log("id" + id);
+    console.log("Anular" + Anular);
+    if(Anular == 1)
+    {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Esta factura ya no es editable.',
+    });
+    setAnular(!anular);
+    }
+    else
+    {
+     const dataF2 = await anularFactura(id);
+     Swal.fire({
+      position: 'top-center',
+      icon: 'success',
+      title: dataF2.msg,
+      showConfirmButton: false,
+      timer: 1500,
+  });
+    setAnular(!anular);
+    }
   };
 
   
@@ -143,11 +167,11 @@ function Facturas() {
         <Button variant="primary" onClick={() => handleShowEditModal(factura.Numero_factura, factura.Pagado)}>
           <FaEdit />
         </Button>{' '}
-        <Button variant="info" onClick={() => handlePrintFactura(factura.noFactura)}>
+        <Button variant="info" onClick={() => handlePrintFactura(factura.id, factura.Anular)}>
           <FaPrint />
         </Button>{' '}
-        <Button variant="danger" onClick={() => handleDeleteFactura(factura.noFactura)}>
-          <FaTrash />
+        <Button variant="danger" onClick={() => handleDeleteFactura(factura.id, factura.Anular)}>
+          <FaTimes />
         </Button>
       </td>
     </tr>
