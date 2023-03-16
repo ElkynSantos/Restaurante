@@ -30,13 +30,13 @@ import PRODUCTOS from './Components/Productos/Index';
 import PrintFactura from './Components/APRINTFACTURA';
 import EditarPerf from './Components/EDITARPERFIL';
 
-
+import Report from './Components/REPORTEFACTURAS';
 
 function App() {
     return (
         <BrowserRouter>
             <Routes>
-                <Route index element={<INICIO />} />
+                <Route index element={<Report />} />
                 <Route path="/Home" element={<INICIO />} />
                 <Route path="/Pedidos" element={<PEDIDOS />} />
                 <Route path="/ListaPedidos" element={<LISTAPEDIDOS />} />
@@ -48,6 +48,7 @@ function App() {
                 <Route path="/bills" element={<Facturas />} />
                 <Route path="/printbills" element={<PrintFactura />} />
                 <Route path="/editprofile" element={<EditarPerf />} />
+                <Route path="/ReportS" element={<Report />} />
                 <Route
                     path="/auth/reset-password/:token"
                     element={<Recovery />}

@@ -77,10 +77,14 @@ function Facturas() {
             <th>Nombre del cliente</th>
             <th>RTN del cliente</th>
             <th>Fecha de creación</th>
+            <th>Pendiente</th>
+            <th>Pagado</th>
+            <th>Pagado</th>
             <th>Subtotal</th>
             <th>Total</th>
             <th>Usuario que atiende</th>
             <th>Anular</th>
+
           </tr>
         </thead>
         <tbody>
@@ -90,17 +94,19 @@ function Facturas() {
       <td>{factura.Nombre_cliente}</td>
       <td>{factura.RTN_cliente}</td>
       <td>{factura.Fecha_creacion}</td>
+      <td>{factura.Pendiente}</td>
+      <td>{factura.Pagado}</td>
       <td>{factura.Subtotal}</td>
       <td>{factura.Total}</td>
       <td>{factura.Usuario_atiende}</td>
       <td>{factura.Anular}</td>
       <td>
         
-    {factura.estado === 'Pagada' && (
-    <span className="pagado">Pagado</span>
+    {factura.estado === 'Pagado' && (
+    <span className="0">Pagado</span>
         )}
     {factura.estado === 'Pendiente' && (
-    <span className="pendiente">Pendiente</span>
+    <span className="1">Pendiente</span>
         )}
     {factura.estado === 'No pagada' && (
     <span className="no-pagado">No Pagado</span>
