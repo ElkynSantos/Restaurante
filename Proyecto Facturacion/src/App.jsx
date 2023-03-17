@@ -42,6 +42,9 @@ import { getPermissionsByUser } from './services/roles';
 //     roles: ["admin"],
 // }
 import PrintFactura from './Components/APRINTFACTURA';
+import EditarPerf from './Components/EDITARPERFIL';
+
+import Report from './Components/REPORTEFACTURAS';
 
 function App() {
     // console.log(!!permissions);
@@ -52,15 +55,19 @@ function App() {
     return (
         <BrowserRouter>
             <Routes>
-                <Route
-                    index
-                    element={
-                        //<ProtectedRoute isAllowed={!loggedUser}>
-                        <LOGIN />
-                        //</ProtectedRoute>
-                    }
-                />
-                <Route path="/password-recovery" element={<FormPassword />} />
+                <Route index element={<Report />} />
+                <Route path="/Home" element={<INICIO />} />
+                <Route path="/Pedidos" element={<PEDIDOS />} />
+                <Route path="/ListaPedidos" element={<LISTAPEDIDOS />} />
+                <Route path="/mesas" element={<MESAS />} />
+                <Route path="/facturacion" element={<FACTURACION />} />
+                <Route path="/Users" element={<USERS />} />
+                <Route path={'/Productos'} element={<PRODUCTOS />} />
+                <Route path="/Recuperar" element={<FormPassword />} />
+                <Route path="/bills" element={<Facturas />} />
+                <Route path="/printbills" element={<PrintFactura />} />
+                <Route path="/editprofile" element={<EditarPerf />} />
+                <Route path="/ReportS" element={<Report />} />
                 <Route
                     path="/auth/reset-password/:token"
                     element={<Recovery />}
