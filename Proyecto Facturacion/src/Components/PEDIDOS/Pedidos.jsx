@@ -11,6 +11,8 @@ import {
 } from 'react-bootstrap';
 import PedidosModal from '../pedidosmodal/pedidos.jsx';
 import { Typeahead } from 'react-bootstrap-typeahead';
+import 'react-bootstrap-typeahead/css/Typeahead.css';
+import 'react-bootstrap-typeahead/css/Typeahead.bs5.css';
 import Swal from 'sweetalert2';
 import { useState, useEffect, useMemo } from 'react';
 import DataTable from 'react-data-table-component';
@@ -167,25 +169,7 @@ function PEDIDOS() {
         <Container>
             <BarraLateral />
             <PedidosModal />
-            {/* <Form>
-                <Row>
-                    <Col>
-                        <Button variant="secondary" size="lg">
-                            Atras
-                        </Button>
-                    </Col>
-                    <Col>
-                        <Button
-                            href="/ListaPedidos"
-                            variant="secondary"
-                            size="lg"
-                        >
-                            Mostrar Pedidos
-                        </Button>
-                    </Col>
-                </Row>
-            </Form>
-    */}
+
             <h1>PEDIDOS</h1>
 
             <Row>
@@ -200,8 +184,8 @@ function PEDIDOS() {
                         subHeaderComponent={
                             <InputGroup className="mb-3">
                                 <Typeahead
-                                    style={{ width: '85%' }}
-                                    id="basic-example"
+                                    style={{ width: '85%', maxHeight: '200px' }}
+                                    id="basic-typeahead-single"
                                     options={DATO.map(
                                         (product) =>
                                             `${product.codigo_producto} - ${product.nombre_producto}`

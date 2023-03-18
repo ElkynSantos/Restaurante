@@ -33,7 +33,7 @@ function Example() {
                 .then((data) => {
                     console.log(data.RolesPermissions[0].ARRAY);
                     setCategories(data.RolesPermissions[0].ARRAY.Categorias);
-                    console.log('JUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAN');
+
                     console.log(Categories);
                 });
         };
@@ -104,6 +104,10 @@ function Example() {
 
     const User = localStorage.getItem('USER');
     const Rol = localStorage.getItem('ROL');
+
+    function eliminarLocalStorage(clave) {
+        localStorage.removeItem(clave);
+    }
 
     return (
         <>
@@ -232,7 +236,14 @@ function Example() {
                     </Container>
                 </Offcanvas.Body>
                 <div className="offcanvas-footer bg-blue">
-                    <a className="bg-transparent rounded text-white" href="/">
+                    <a
+                        className="bg-transparent rounded text-white"
+                        href="/"
+                        /* onClick={
+                            (eliminarLocalStorage('USER'),
+                            eliminarLocalStorage('USERNAME'))
+                        }*/
+                    >
                         Cerrar sesión{' '}
                         <Icons.ArrowBarRight className="fs-3"></Icons.ArrowBarRight>
                     </a>

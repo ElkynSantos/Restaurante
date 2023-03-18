@@ -6,7 +6,6 @@ export async function CreateProduct(
     productId,
     taxId
 ) {
-    console.log(productPrice);
     const options = {
         method: 'POST',
         url: `${import.meta.env.VITE_REACT_APP_API_URL}/products/`,

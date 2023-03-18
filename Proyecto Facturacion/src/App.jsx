@@ -55,7 +55,7 @@ function App() {
     return (
         <BrowserRouter>
             <Routes>
-                <Route index element={<Report />} />
+                <Route index element={<LOGIN />} />
                 <Route path="/Home" element={<INICIO />} />
                 <Route path="/Pedidos" element={<PEDIDOS />} />
                 <Route path="/ListaPedidos" element={<LISTAPEDIDOS />} />
@@ -66,7 +66,7 @@ function App() {
                 <Route path="/Recuperar" element={<FormPassword />} />
                 <Route path="/bills" element={<Facturas />} />
                 <Route path="/printbills" element={<PrintFactura />} />
-                <Route path="/editprofile" element={<EditarPerf />} />
+                <Route path="/profile" element={<EditarPerf />} />
                 <Route path="/ReportS" element={<Report />} />
                 <Route
                     path="/auth/reset-password/:token"

@@ -118,7 +118,7 @@ const getAllCategoriesByUser = async (req, res, next) => {
             `CALL ObtenerRolYPermisos(:p_Nom_Usuario)`,
             {
                 replacements: {
-                    p_Nom_Usuario: 'JORO7226',
+                    p_Nom_Usuario: currentUsername,
                 },
             }
         );
