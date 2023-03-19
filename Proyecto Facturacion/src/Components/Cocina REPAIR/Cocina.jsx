@@ -344,8 +344,14 @@ function COCINA() {
             },
 
             {
-                name: 'Fecha',
-                selector: (row) => row.fecha,
+                name: 'Hora',
+                selector: (row) => {
+                    const date = new Date(row.fecha);
+                    return date.toLocaleTimeString([], {
+                        hour: '2-digit',
+                        minute: '2-digit',
+                    });
+                },
             },
 
             {
@@ -421,6 +427,7 @@ function COCINA() {
                 data={DATA}
                 expandableRows
                 expandableRowsComponent={ExpandedComponent}
+                expandableRowExpanded={rowPreExpanded}
             />
         );
     }

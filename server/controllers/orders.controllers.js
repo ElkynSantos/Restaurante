@@ -163,11 +163,32 @@ const newOrder = async (req, res, next) => {
     }
 };
 
-const getOrder = (req, res) => {
-    res.status(500).json({
-        status: 'error',
-        message: 'This route is not yet implemented',
-    });
+const getAllOrdersfromListOrders = async (req, res) => {
+    try {
+        const { billid } = req.body;
+        console.log('getAllOrdersfromListOrders');
+        console.log(billid);
+        // Llamar al procedimiento almacenado `crear_pedido` utilizando `sequelize.query()`
+        const [newOrder] = await db.query(
+            'call db_rest.sp_getOrden(:p_billid);',
+            {
+                replacements: {
+                    p_billid: billid,
+                },
+            }
+        );
+
+        console.log('NEWORDER');
+
+        console.log(newOrder);
+        return res.status(200).json({
+            newOrder,
+        });
+    } catch (error) {
+        return next(
+            new AppError(`No se pudo obtener la informacion de la factura`, 500)
+        );
+    }
 };
 
 const updateOrder = async (req, res, next) => {
@@ -237,10 +258,10 @@ export {
     allCompletedOrders,
     allPendingOrders,
     newOrder,
-    getOrder,
     updateOrder,
     deleteOrder,
     CompletedOrder,
     BackCompleteOrder,
     allCookedOrders,
+    getAllOrdersfromListOrders,
 };

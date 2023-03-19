@@ -30,9 +30,10 @@ const getFactura = async (req, res) => {
             msg: user.msg,
         });
     }
-
+    console.log('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa');
+    console.log(factura);
     return res.status(200).json({
-        status: 'Ok',
+        status: 'Oki',
         factura,
     });
 };
@@ -150,10 +151,9 @@ const newFactura = async (req, res, next) => {
                 },
             }
         );
-
-        return res.status(201).json({
-            status: 'Ok',
-            msg: newFactura.msg,
+        console.log(newFactura.last_inserted_id);
+        return res.status(200).json({
+            msg: newFactura.last_inserted_id,
         });
     } catch (error) {
         console.log(error);

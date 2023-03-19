@@ -16,6 +16,12 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import DataTable from 'react-data-table-component';
 import Table from 'react-bootstrap/Table';
+
+import {
+    updateSubtotal,
+    updateTotal,
+} from '../../features/pedidoseleccionados';
+
 //import { CreateProduct } from '../../services/Factura';
 import Swal from 'sweetalert2';
 import { agetAllTaxes } from '../../services/Taxes';
@@ -64,11 +70,14 @@ function modalCrearConfirmarFactura() {
 }
 
 function BasicExample() {
+    const dispatch = useDispatch();
     const [DATA, setData] = useState([]);
     let UniversalData = [];
     const PedidosSeleccionados = useSelector(
         (state) => state.pedidoseleccionados
     ).value;
+    const Subtotal = useSelector((state) => state.pedidoseleccionados).subtotal;
+    const Total = useSelector((state) => state.pedidoseleccionados).total;
 
     const handleAddData = (newData) => {
         setData([...DATA, ...newData]);
@@ -227,6 +236,11 @@ function BasicExample() {
                 (1 + currentValue.impuesto_monto)
         );
     }, 0);
+
+    dispatch(updateSubtotal(subtotal.toFixed(2)));
+
+    dispatch(updateTotal(total.toFixed(2)));
+
     const customStyles = {
         headCells: {
             style: {

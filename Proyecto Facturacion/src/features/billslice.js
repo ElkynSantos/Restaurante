@@ -1,17 +1,17 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-    value: [],
+    value: 0,
 };
 export const billslice = createSlice({
     name: 'billslice',
     initialState,
     reducers: {
-        newBill: (state, action) => {
+        updateBillid: (state, action) => {
             state.value = action.payload;
         },
     },
 });
 
-export const { newBill } = billslice.actions;
+export const { updateBillid } = billslice.actions;
 export default billslice.reducer;

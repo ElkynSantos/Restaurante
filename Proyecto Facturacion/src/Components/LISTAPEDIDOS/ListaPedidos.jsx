@@ -31,6 +31,7 @@ import { updatepedidoseleccionados } from '../../features/pedidoseleccionados';
 import Swal from 'sweetalert2';
 import CREARFACTURA from '../CrearFactura/index';
 import CONFIRMBILL from '../ConfirmarPedidosTotal/index';
+import PAGARFACURA from '../PagarFactura/index';
 function OrdenarPedido(arrayPedido) {
     let Formato = '';
     for (let i = 0; i < arrayPedido.Pedido.length(); i++) {
@@ -52,7 +53,8 @@ function LISTAPEDIDOS() {
 
     const [dataPending, setDataPending] = useState([]);
     const [SelectedRows, setSelectedRows] = useState([]);
-
+    const [selectedRows2, setSelectedRows2] = useState(false);
+    const [toggledClearRows, setToggleClearRows] = useState(false);
     const [PedidosaFacturar, setPedidosaFacturar] = useState([]);
     const show2 = useSelector((state) => state.createbill);
 
@@ -75,26 +77,6 @@ function LISTAPEDIDOS() {
         console.log(show2);
     };
 
-    //HANDLERS
-    /*
-    useEffect(() => {
-        const interval = setInterval(() => {
-            console.log('This will run every second!');
-
-            const Cocinado = async (idPedido) => {
-                await fetch(`http://localhost:3000/orders/ready`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-
-                    body: JSON.stringify({ id: idPedido }),
-                });
-            };
-        }, 5000);
-        return () => clearInterval(interval);
-    }, []);*/
-
     const handleChangeFact = async () => {
         if (SelectedRows.length === 0) {
             Swal.fire({
@@ -108,102 +90,41 @@ function LISTAPEDIDOS() {
             return;
         }
         updatePedidos(SelectedRows);
-        //  updatePedidos(row.numero_pedido);
+
+        handleClearRows();
         handleShowCBill();
-
-        /*
-
-        const hoy = new Date().toISOString().split('T')[0];
-        console.log(hoy);
-        await fetch(`http://localhost:3000/bills/`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-
-            body: JSON.stringify({
-                numeroFactura: '100',
-                nombreCliente: 'Josue',
-                RtnCliente: '0501200302608',
-                fechaCreacion: hoy,
-                subtotal: 22.0,
-                total: 25.0,
-                tarjetaEfectivo: 0,
-                cambio: 20.0,
-                anular: 0,
-                pendiente: 0, //
-                pagado: 0, //
-                idConfiguracionFactura: 1,
-                listapedidos: '46',
-                usuarioAtiende: 'JORO7226',
-            }),
-        });*/
     };
 
-    const handleFacturar = () => {};
-
-    const DevolverNoCocinado = async (idPedido) => {
-        await fetch(`http://localhost:3000/orders/132`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-
-            body: JSON.stringify({ id: idPedido }),
-        });
-    };
-
-    /*  const getProductos = async () => {
-        await fetch('http://localhost:3000/orders/')
-            .then((response) => response.json())
-            .then((data) => {
-                console.log(data);
-            });
-    };*/
-    /*
-    useEffect(() => {
-        const getAllPendingPedidos = async () => {
-            await fetch('http://localhost:3000/orders/pending')
+    const getAllPedidos = async () => {
+        try {
+            await fetch('http://localhost:3000/orders/ready')
                 .then((response) => response.json())
-                .then((dataPending) => {
-                    console.log('=========PENDING===========');
-                    console.log(dataPending.order.orders),
-                        setDataPending(dataPending.order.orders);
+                .then((data1) => {
+                    console.log(data1.status);
+                    console.log('=========ReadytoFact===========');
+                    if (data1.status != 'fail') {
+                        console.log(data1.order.orders),
+                            setData(data1.order.orders);
+                    } else {
+                        setData([]);
+                    }
                 });
-        };
-
-        getAllPendingPedidos();
-    }, []);
-*/
+        } catch (error) {
+            setData([]);
+        }
+    };
 
     useEffect(() => {
         const interval = setInterval(() => {
-            console.log('This will run every second!');
-
-            const getAllPedidos = async () => {
-                try {
-                    await fetch('http://localhost:3000/orders/ready')
-                        .then((response) => response.json())
-                        .then((data1) => {
-                            console.log(data1.status);
-                            console.log('=========ReadytoFact===========');
-                            if (data1.status != 'fail') {
-                                console.log(data1.order.orders),
-                                    setData(data1.order.orders);
-                            } else {
-                                setData([]);
-                            }
-                        });
-                } catch (error) {
-                    setData([]);
-                }
-            };
-
             getAllPedidos();
-        }, 5000);
+            handleClearRows();
+        }, 8000);
         return () => clearInterval(interval);
     }, []);
-
+    useEffect(() => {
+        getAllPedidos();
+        handleClearRows();
+    }, []);
     /*
     useEffect(() => {
         const getAllPedidos = async () => {
@@ -228,15 +149,25 @@ function LISTAPEDIDOS() {
     let TablaCocinaIzquierda;
 
     const handleChange = ({ selectedRows }) => {
+        setSelectedRows2(selectedRows);
+
         console.log(selectedRows);
 
         const arraytemp = [];
         for (let i = 0; i < selectedRows.length; i++) {
-            arraytemp.push(selectedRows[i].numero_pedido);
+            if (SelectedRows.includes(selectedRows[i].numero_pedido)) {
+                console.log('==============================');
+                console.log(SelectedRows);
+            } else {
+                arraytemp.push(selectedRows[i].numero_pedido);
+                console.log('=============Se Ingreso=================');
+                console.log(SelectedRows);
+            }
         }
 
         setSelectedRows(arraytemp);
-
+        selectedRows = [];
+        console.log('Selected Rows: ', SelectedRows);
         console.log('Selected Rows: ', selectedRows);
     };
 
@@ -252,8 +183,14 @@ function LISTAPEDIDOS() {
         },
 
         {
-            name: 'Fecha',
-            selector: (row) => row.fecha,
+            name: 'Hora',
+            selector: (row) => {
+                const date = new Date(row.fecha);
+                return date.toLocaleTimeString([], {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                });
+            },
         },
 
         {
@@ -354,16 +291,22 @@ function LISTAPEDIDOS() {
 
     // const ExpandedComponent = OrdenarPedido(data);
     // console.log(data[[0]].Pedido.Producto);
+    //   const rowSelectCritera = (row) => selectedRows2.includes(row);
 
     const rowSelectCritera = (row) => {
         SelectedRows.includes(row.numero_pedido);
+    };
+    const handleClearRows = () => {
+        setSelectedRows([]);
+        setToggleClearRows(!toggledClearRows);
+        setSelectedRows([]);
     };
 
     return (
         <div>
             <CONFIRMBILL />
             <CREARFACTURA />
-
+            <PAGARFACURA />
             <BarraLateral />
             <Container className="mt-5">
                 <h1>Lista PEDIDOS</h1>
@@ -375,10 +318,11 @@ function LISTAPEDIDOS() {
                     data={DATA}
                     //   theme="solarized"
                     expandableRows
-                    selectableRows
                     expandableRowsComponent={ExpandedComponent}
-                    //onSelectedRowsChange={handleChange}
-                    selectableRowSelected={rowSelectCritera}
+                    selectableRows
+                    onSelectedRowsChange={handleChange}
+                    //  selectableRowSelected={rowSelectCritera}
+                    clearSelectedRows={toggledClearRows}
                     ref={miTablaRef}
                 />
 

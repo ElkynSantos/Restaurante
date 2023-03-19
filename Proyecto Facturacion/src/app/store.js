@@ -28,6 +28,7 @@ import editFacturaSlice from '../features/editFacturaSlice';
 import createbill from '../features/crearFacturaSlice';
 import billslice from '../features/billslice';
 import billconfirmslice from '../features/billconfirmslice';
+import pagarFacturaSlice from '../features/pagarFacturaSlice';
 
 export const store = configureStore({
     reducer: {
@@ -59,6 +60,7 @@ export const store = configureStore({
         createbill: createbill,
         billslice: billslice,
         billconfirmslice: billconfirmslice,
+        pagarFacturaSlice: pagarFacturaSlice,
     },
     middleware: [thunk],
 });

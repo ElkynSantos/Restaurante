@@ -254,7 +254,7 @@ function ECBMPUESTO() {
                                                                 event
                                                             ) => {
                                                                 if (
-                                                                    !/^[a-zA-Z0-9]{1,10}$/.test(
+                                                                    !/^[a-zA-Z0-9]{0,10}$/.test(
                                                                         event.key
                                                                     )
                                                                 ) {

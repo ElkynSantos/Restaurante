@@ -9,6 +9,13 @@ import {
     showModalCreateBill,
     closeModalCreateBill,
 } from '../../features/crearFacturaSlice';
+
+import {
+    showpagarFacturaSlice,
+    closepagarFacturaSlice,
+    UpdateidFactura,
+} from '../../features/pagarFacturaSlice.js';
+
 import { useDispatch, useSelector } from 'react-redux';
 //import { CreateProduct } from '../../services/Factura';
 import Swal from 'sweetalert2';
@@ -22,31 +29,33 @@ function modalCrearFactura() {
         (state) => state.pedidoseleccionados
     ).value;
 
+    const subtotal = useSelector((state) => state.pedidoseleccionados).subtotal;
+    const total = useSelector((state) => state.pedidoseleccionados).total;
+
     /*  const handleShowEditModal = async (codigo_producto) => {
         await getproduct(codigo_producto).then((dataproduct) => {
             dispatch(guardar(dataproduct.products[0]));
             dispatch(showModalEP());
         });
     };*/
+
+    const handleUpdateidFactura = (id) => {
+        dispatch(UpdateidFactura(id));
+    };
+
+    const handleChangePagar = () => {
+        dispatch(showpagarFacturaSlice());
+        handleClose();
+    };
+    const handleClose = () => {
+        dispatch(closeModalCreateBill());
+    };
+
+    const handleShow = () => {
+        dispatch(showModalCreateBill());
+    };
     const handleChangePendiente = async () => {
         console.log('===============INFORMACION PRECISADA===============');
-        /*
-const ObtenerDatosdeFactura = async (idPedido) => {
-    await fetch(`http://localhost:3000/bills/getBillData`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-
-        body: JSON.stringify({ NPedido: JSON.stringify(idPedido) }),
-    })
-        .then((response) => response.json())
-        .then((datos) => {
-            setData(datos.Respuesta.resultadosFinal);
-        });
-};
-*/
-
         const Atiende = localStorage.getItem('USER');
 
         console.log('ATIENDE: ' + Atiende);
@@ -64,50 +73,47 @@ const ObtenerDatosdeFactura = async (idPedido) => {
         if (RTN_Final.length === 0) {
             RTN_Final = '0000000000000';
         }
+        try {
+            const response = await fetch(`http://localhost:3000/bills/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
 
-        await fetch(`http://localhost:3000/bills/`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
+                body: JSON.stringify({
+                    numeroFactura: '101',
+                    nombreCliente: CLIENTE,
+                    RtnCliente: RTN_Final,
+                    fechaCreacion: hoy,
+                    subtotal: subtotal,
+                    total: total,
+                    tarjetaEfectivo: 0,
+                    cambio: 0.0,
+                    anular: 0,
+                    pendiente: 1, //
+                    pagado: 0, //
+                    idConfiguracionFactura: 1,
+                    listapedidos: PedidosSeleccionados,
+                    usuarioAtiende: Atiende,
+                }),
+            });
 
-            body: JSON.stringify({
-                numeroFactura: '101',
-                nombreCliente: CLIENTE,
-                RtnCliente: RTN_Final,
-                fechaCreacion: hoy,
-                subtotal: 0.0,
-                total: 0.0,
-                tarjetaEfectivo: 0,
-                cambio: 0.0,
-                anular: 0,
-                pendiente: 1, //
-                pagado: 0, //
-                idConfiguracionFactura: 1,
-                listapedidos: PedidosSeleccionados,
-                usuarioAtiende: Atiende,
-            }),
-        })
-            .then((data1) => {
+            const data1 = await response.json();
+            if (data1.msg) {
                 Swal.fire({
-                    text: data1.msg,
+                    text:
+                        'Factura generada correctamente con id - ' + data1.msg,
                     icon: 'success',
                 });
-            })
-            .catch((error) => {
-                Swal.fire({
-                    text: 'No se pudo generar la factura',
-                    icon: 'error',
-                });
+                handleUpdateidFactura(data1.msg);
+                handleChangePagar();
+            }
+        } catch (error) {
+            Swal.fire({
+                text: 'No se pudo generar la factura',
+                icon: 'error',
             });
-    };
-
-    const handleClose = () => {
-        dispatch(closeModalCreateBill());
-    };
-
-    const handleShow = () => {
-        dispatch(showModalCreateBill());
+        }
     };
 
     const show2 = useSelector((state) => state.createbill);
@@ -160,17 +166,14 @@ const ObtenerDatosdeFactura = async (idPedido) => {
                         Salir
                     </Button>
                     <Button variant="primary" onClick={handleChangePendiente}>
-                        Establecer Pendiente
-                    </Button>
-                    <Button variant="success" form="test" type="submit">
-                        Pagar
+                        Generar Factura
                     </Button>
                 </Modal.Footer>
             </Modal>
         </>
     );
 }
-
+/*
 function BasicExample() {
     const [form, setForm] = useState({});
     const [errors, setErrors] = useState({});
@@ -221,7 +224,7 @@ function BasicExample() {
         return newErrors;
     }
 
-    async function handleSubmit(e) {
+ /*   async function handleSubmit(e) {
         e.preventDefault();
         let newErrors = findErrors();
         // console.log(newErrors);
@@ -264,6 +267,10 @@ function BasicExample() {
             </Form.Group>
         </Form>
     );
-}
-
+}*/
+/*
+   <Button variant="success" onClick={handleChangePagar}>
+                        Pagar
+                    </Button>
+*/
 export default modalCrearFactura;
