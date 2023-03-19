@@ -2,108 +2,128 @@ import React, { useState, useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import Navbar from 'react-bootstrap/Navbar';
-import { Container, Accordion } from 'react-bootstrap';
+import { Container, Accordion, Dropdown, DropdownButton } from 'react-bootstrap';
 import * as Icons from 'react-bootstrap-icons';
 import { BsHouseFill } from 'react-icons/bs';
 import { IoIosExit } from 'react-icons/io';
 import { IoRestaurantSharp } from 'react-icons/io5';
-import CREARUSUARIO from '../CREARUSUARIO/index';
-import './BarraLateral.css';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { deleteSession } from '../../features/loggedStatus';
 
+import { getAllCategoriesByUser } from '../../services/roles';
+
+import CREARUSUARIO from '../CREARUSUARIO/index';
 import MESA from '../MESAS/Mesa';
 
-function Example() {
-    const [show, setShow] = useState(false);
+import './BarraLateral.css';
+import Swal from 'sweetalert2';
 
+function Example() {
+    const dispatch = useDispatch();
+    const [show, setShow] = useState(false);
+    const [infoUser, setInfoUser] = useState([]);
+    const [categories, setCategories] = useState([]);
+    
+    const navigate = useNavigate();
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
-    const [Categories, setCategories] = useState([]);
-    const [DATA, setData] = useState([]);
+
+    const handleLogout = () => {
+        dispatch(deleteSession());
+        console.log("after dispatch");
+        navigate("/");
+    }
 
     useEffect(() => {
         const getAllRoles = async () => {
-            await fetch('http://localhost:3000/roles/RoleandPermissions', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ User: localStorage.getItem('USER') }),
-            })
-                .then((response) => response.json())
-                .then((data) => {
-                    console.log(data.RolesPermissions[0].ARRAY);
-                    setCategories(data.RolesPermissions[0].ARRAY.Categorias);
-                    console.log('JUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAN');
-                    console.log(Categories);
-                });
+            await getAllCategoriesByUser()
+                .then(infoUser => {
+                    if(infoUser.status == "fail") {
+                        if(infoUser.message == "Token Vencido") {
+                            Swal.fire({
+                                title: "¡Token Inválido!",
+                                text: "Su token ha expirado o no es válido",
+                                icon: "error"
+                            })
+                                .then(() => {
+                                    handleLogout();
+                                })
+                            
+                        }
+                    }
+                    setInfoUser({fullname: infoUser.Nombre, rol: infoUser.Rol});
+                    setCategories(infoUser.Categorias);
+                })
+                .catch()
         };
 
         getAllRoles();
     }, []);
 
-    const optionsSidebar = [
-        {
-            Categoria: 'Configuración del sistema',
-            Icono: 'Gear',
-            Categorias: [
-                {
-                    N_Permiso: 'Roles',
-                    link: '/roles',
-                    icono: 'BookmarkFill',
-                },
-                {
-                    N_Permiso: 'Usuarios',
-                    link: '/Users',
-                    icono: 'PeopleFill',
-                },
-                {
-                    N_Permiso: 'Recuperar Contraseña',
-                    link: '/Recuperar',
-                    icono: 'PeopleFill',
-                },
-            ],
-        },
-        {
-            Categoria: 'Configuración del negocio',
-            Icono: 'Shop',
-            Categorias: [
-                {
-                    N_Permiso: 'Menú',
-                    link: '/productos',
-                    icono: 'LayoutTextSidebar',
-                },
-                {
-                    N_Permiso: 'Pedidos',
-                    link: '/Pedidos',
-                    icono: 'ListCheck',
-                },
-                {
-                    N_Permiso: 'Impuestos',
-                    link: '/Impuestos',
-                    icono: 'Percent',
-                },
-                // {
-                //     name: "Facturas",
-                //     url: "/bills",
-                //     icon: "PeopleFill"
-                // }
-            ],
-        },
-        {
-            Categoria: 'Reportes',
-            Icono: 'BarChartLineFill',
-            Categorias: [
-                {
-                    N_Permiso: 'Reportes',
-                    link: '/reports',
-                    icono: 'FileEarmarkBarGraphFill',
-                },
-            ],
-        },
-    ];
+    // const categories = [
+    //     {
+    //         name: 'Configuración del sistema',
+    //         icon: 'Gear',
+    //         permissions: [
+    //             {
+    //                 name: 'Roles',
+    //                 url: '/roles',
+    //                 icon: 'BookmarkFill',
+    //             },
+    //             {
+    //                 name: 'Usuarios',
+    //                 url: '/Users',
+    //                 icon: 'PeopleFill',
+    //             },
+    //             {
+    //                 name: 'Recuperar Contraseña',
+    //                 url: '/Recuperar',
+    //                 icon: 'PeopleFill',
+    //             },
+    //         ],
+    //     },
+    //     {
+    //         name: 'Configuración del negocio',
+    //         icon: 'Shop',
+    //         permissions: [
+    //             {
+    //                 name: 'Impuestos',
+    //                 url: '/taxes',
+    //                 icon: 'Percent',
+    //             },
+    //             {
+    //                 name: 'Menú',
+    //                 url: '/products',
+    //                 icon: 'LayoutTextSidebar',
+    //             },
+    //             {
+    //                 name: 'Pedidos',
+    //                 url: '/orders',
+    //                 icon: 'ListCheck',
+    //             },
+    //             // {
+    //             //     name: "Facturas",
+    //             //     url: "/bills",
+    //             //     icon: "PeopleFill"
+    //             // }
+    //         ],
+    //     },
+    //     {
+    //         name: 'Reportes',
+    //         icon: 'BarChartLineFill',
+    //         permissions: [
+    //             {
+    //                 name: 'Reportes',
+    //                 url: '/reports',
+    //                 icon: 'FileEarmarkBarGraphFill',
+    //             },
+    //         ],
+    //     },
+    // ];
 
-    const User = localStorage.getItem('USER');
-    const Rol = localStorage.getItem('ROL');
+    // console.log("INFOUSER:", infoUser);
+    // console.log("CAtegories:", categories);
 
     return (
         <>
@@ -122,20 +142,32 @@ function Example() {
                                 id="nav-brand"
                                 src="/assets/images/logo.png"
                                 className="imagen"
+                                title='Volver al inicio'
                             ></img>
                         </a>
                     </span>
                     <span className="profile-container">
                         <span className="profile-info text-white">
-                            <h6 className="profile-name">
-                                {User || 'Username'}
-                            </h6>
-                            <h7 className="profile-rol">{Rol || 'Rol'}</h7>
+                            <h5 className="profile-name">{infoUser.fullname}</h5>
+                            <h6 className="profile-rol">{infoUser.rol}</h6>
                         </span>
                         <span className="profile-image">
-                            <a href="/profile" title="Ver perfil">
-                                <Icons.PersonCircle className="fs-1 text-center text-white"></Icons.PersonCircle>
-                            </a>
+                            <Dropdown title="Opciones de usuario" className='border-none'>
+                                <Dropdown.Toggle className='bg-transparent border-none'>
+                                    <Icons.PersonCircle className="fs-1 text-center text-white"/>
+                                </Dropdown.Toggle>
+                                <Dropdown.Menu align="end">
+                                    <Dropdown.Item eventKey="1" className='d-flex align-items-center' href='/profile'>
+                                        <Icons.PersonSquare className='me-2'/> Ver perfil
+                                    </Dropdown.Item>
+                                    <Dropdown.Item eventKey="2" className='d-flex align-items-center' href='/password-recovery'>
+                                        <Icons.PersonFillLock className='me-2'/> Cambiar contraseña
+                                    </Dropdown.Item>
+                                    <Dropdown.Item eventKey="3" className='d-flex align-items-center' onClick={handleLogout}>
+                                        <Icons.ArrowBarRight className='me-2'/> Cerrar sesión
+                                    </Dropdown.Item>
+                                </Dropdown.Menu>
+                            </Dropdown>
                         </span>
                     </span>
                     {/* <p>Garifunas Food</p> */}
@@ -149,10 +181,13 @@ function Example() {
                     closeVariant="white"
                 >
                     <Container fluid>
-                        <img
-                            src="/assets/images/logo.png"
-                            className="imagen"
-                        ></img>
+                        <a onClick={() => navigate("/home")}>
+                            <img
+                                src="/assets/images/logo.png"
+                                className="imagen"
+                                title='Volver al inicio'
+                            ></img>
+                        </a>
                     </Container>
                 </Offcanvas.Header>
                 <Offcanvas.Body>
@@ -167,75 +202,58 @@ function Example() {
                         <div className="d-grid gap-2">
                             <Accordion defaultActiveKey="0">
                                 {
-                                    // <div>
-                                    //     {infoUser.Categorias[0]}
-                                    // </div>
-                                    Categories ? (
-                                        Categories.map((category, index) => {
-                                            const {
-                                                [category.Icono]:
-                                                    TempIconHeader,
-                                            } = Icons;
-                                            return category.Permisos ? (
-                                                <Accordion.Item
-                                                    eventKey={index}
-                                                    key={index}
-                                                >
-                                                    <Accordion.Header>
-                                                        <TempIconHeader />{' '}
-                                                        {category.Categoria}
-                                                    </Accordion.Header>
-                                                    <Accordion.Body>
-                                                        {category.Permisos.map(
-                                                            (
-                                                                permission,
-                                                                index
-                                                            ) => {
-                                                                const {
-                                                                    [permission.icono]:
-                                                                        TempIcon,
-                                                                } = Icons;
-                                                                return (
-                                                                    <div
-                                                                        className="sidebar-item"
-                                                                        key={
-                                                                            index
-                                                                        }
-                                                                    >
-                                                                        <TempIcon />
-                                                                        <a
-                                                                            className="siidebar-link pl-1"
-                                                                            href={
-                                                                                permission.link
-                                                                            }
+                                    categories
+                                        ?categories.map((category, index) => {
+                                            const { [category.Icono? category.Icono: "ExclamationOctagonFill"]: TempIconHeader } = Icons;
+                                            return (
+                                                category.Permisos?
+                                                    <Accordion.Item
+                                                        eventKey={index}
+                                                        key={index}
+                                                    >
+                                                        <Accordion.Header>
+                                                            <TempIconHeader />{' '}
+                                                            {category.Categoria}
+                                                        </Accordion.Header>
+                                                        <Accordion.Body>
+                                                            {category.Permisos.map(
+                                                                (permission, index) => {
+                                                                    const {
+                                                                        [permission.icono? permission.icono: "ExclamationCircleFill"]:
+                                                                            TempIcon,
+                                                                    } = Icons;
+                                                                    return (
+                                                                        <div
+                                                                            className="sidebar-item"
+                                                                            key={index}
                                                                         >
-                                                                            {
-                                                                                permission.N_Permiso
-                                                                            }
-                                                                        </a>
-                                                                    </div>
-                                                                );
+                                                                            <TempIcon />
+                                                                            <a
+                                                                                className="siidebar-link pl-1"
+                                                                                href={
+                                                                                    permission.link
+                                                                                }
+                                                                            >
+                                                                                {
+                                                                                    permission.N_Permiso
+                                                                                }
+                                                                            </a>
+                                                                        </div>
+                                                                    );
+                                                                })
                                                             }
-                                                        )}
-                                                    </Accordion.Body>
-                                                </Accordion.Item>
-                                            ) : (
-                                                ''
-                                            );
-                                        })
-                                    ) : (
-                                        <b>No se encontraron permisos</b>
-                                    )
+                                                        </Accordion.Body>
+                                                    </Accordion.Item>
+                                                : ""
+                                            )
+                                        }) 
+                                        : <b>No se encontraron permisos</b>
                                 }
                             </Accordion>
                         </div>
                     </Container>
                 </Offcanvas.Body>
                 <div className="offcanvas-footer bg-blue">
-                    <a className="bg-transparent rounded text-white" href="/">
-                        Cerrar sesión{' '}
-                        <Icons.ArrowBarRight className="fs-3"></Icons.ArrowBarRight>
-                    </a>
                 </div>
             </Offcanvas>
         </>

@@ -198,7 +198,7 @@ function ECBMPUESTO() {
         }
     };
     return (
-        <Container>
+        <div>
             <BarraLateral />
 
             <div>

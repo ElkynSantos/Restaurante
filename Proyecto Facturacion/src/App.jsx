@@ -18,9 +18,9 @@ import editarProductos from './Components/FormPassword/index';
 
 import LISTAFACTURACION from './Components/LISTAFACTURACION/index.js';
 
-import './App.css';
-import { useDispatch, useSelector } from 'react-redux';
+import { Provider, useDispatch, useSelector } from 'react-redux';
 
+import { store } from "./app/store.js"
 import ProtectedRoute from './Components/ProtectedRoute';
 import Email from './Components/EmailVerification/index';
 // import IMPUESTO from './Components/IMPUESTOS';
@@ -30,6 +30,15 @@ import FormPass from './Components/FormPassword/index';
 import ChangePass from './Components/ChangePassword/index';
 import Facturas from './Components/ADMFACTURAS/index';
 import PRODUCTOS from './Components/Productos/Index';
+import './App.css';
+
+// let loggedUser;
+// let loggedUser = {
+//     id: 1,
+//     name: "John",
+//     permissions: ["quye"],
+//     roles: ["admin"],
+// }
 import REPORTES from './Components/Reportes/Index';
 // SERVICES
 import { getPermissionsByUser } from './services/roles';
@@ -44,10 +53,7 @@ import { getPermissionsByUser } from './services/roles';
 import PrintFactura from './Components/APRINTFACTURA';
 
 function App() {
-    // console.log(!!permissions);
-    // console.log(permissions);
-    // console.log(!!permissions);
-    // console.log(permissions.includes("/users"));
+    const loggedStatus = useSelector(state => state.loggedStatus);
 
     return (
         <BrowserRouter>

@@ -212,7 +212,7 @@ function PEDIDOS() {
         }
     };
     return (
-        <Container>
+        <div>
             <BarraLateral />
             <PedidosModal />
             {/* <Form>
