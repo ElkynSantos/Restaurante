@@ -46,6 +46,11 @@
     color: var(--yellow) !important;
 }
 
+/* BORDERS */
+.border-none {
+    border: none !important;
+}
+
 .btn-transparent {
     background-color: transparent !important;
     border: none;

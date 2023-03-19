@@ -198,7 +198,7 @@ function ECBMPUESTO() {
         }
     };
     return (
-        <Container>
+        <div>
             <BarraLateral />
 
             <div>
@@ -438,7 +438,7 @@ function ECBMPUESTO() {
                     </Button>
                 </Form>
             </div>
-        </Container>
+        </div>
     );
 }
 

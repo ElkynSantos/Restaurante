@@ -89,109 +89,111 @@ function Facturas() {
     };
 
     return (
-        <Container>
-            <BarraLateral />
-            <div>
-                <EditRTNNAME />
+        <>
+        <BarraLateral />
+            <Container>
+                <div>
+                    <EditRTNNAME />
 
-                <div className="facturas">
-                    <h1>ADMINISTRAR FACTURAS</h1>
-                    <div className="busqueda">
-                        <InputGroup size="sm">
-                            <FormControl
-                                type="text"
-                                placeholder="# de factura o cliente"
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                            />
-                            <Button variant="primary" onClick={handleSearch}>
-                                <FaSearch />
-                            </Button>
-                        </InputGroup>
+                    <div className="facturas">
+                        <h1>ADMINISTRAR FACTURAS</h1>
+                        <div className="busqueda">
+                            <InputGroup size="sm">
+                                <FormControl
+                                    type="text"
+                                    placeholder="# de factura o cliente"
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                    />
+                                <Button variant="primary" onClick={handleSearch}>
+                                    <FaSearch />
+                                </Button>
+                            </InputGroup>
+                        </div>
+                        <Table striped bordered hover>
+                            <thead>
+                                <tr>
+                                    <th>Número de factura</th>
+                                    <th>Nombre del cliente</th>
+                                    <th>RTN del cliente</th>
+                                    <th>Fecha de creación</th>
+                                    <th>Subtotal</th>
+                                    <th>Total</th>
+                                    <th>Usuario que atiende</th>
+                                    <th>Anular</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {facturas.length > 0 &&
+                                    facturas.map((factura, index) => (
+                                        <tr key={index}>
+                                            <td>{factura.Numero_factura}</td>
+                                            <td>{factura.Nombre_cliente}</td>
+                                            <td>{factura.RTN_cliente}</td>
+                                            <td>{factura.Fecha_creacion}</td>
+                                            <td>{factura.Subtotal}</td>
+                                            <td>{factura.Total}</td>
+                                            <td>{factura.Usuario_atiende}</td>
+                                            <td>{factura.Anular}</td>
+                                            <td>
+                                                {factura.estado === 'Pagada' && (
+                                                    <span className="pagado">
+                                                        Pagado
+                                                    </span>
+                                                )}
+                                                {factura.estado === 'Pendiente' && (
+                                                    <span className="pendiente">
+                                                        Pendiente
+                                                    </span>
+                                                )}
+                                                {factura.estado === 'No pagada' && (
+                                                    <span className="no-pagado">
+                                                        No Pagado
+                                                    </span>
+                                                )}
+                                            </td>
+                                            <td>{factura.total}</td>
+                                            <td className="acciones">
+                                                <Button
+                                                    variant="primary"
+                                                    onClick={() =>
+                                                        handleShowEditModal(
+                                                            factura.Numero_factura,
+                                                            factura.Pagado
+                                                            )
+                                                    }
+                                                >
+                                                    <FaEdit />
+                                                </Button>{' '}
+                                                <Button
+                                                    variant="info"
+                                                    onClick={() =>
+                                                        handlePrintFactura(
+                                                            factura.noFactura
+                                                            )
+                                                        }
+                                                        >
+                                                    <FaPrint />
+                                                </Button>{' '}
+                                                <Button
+                                                    variant="danger"
+                                                    onClick={() =>
+                                                        handleDeleteFactura(
+                                                            factura.noFactura
+                                                            )
+                                                        }
+                                                        >
+                                                    <FaTrash />
+                                                </Button>
+                                            </td>
+                                        </tr>
+                                    ))}
+                            </tbody>
+                        </Table>
                     </div>
-                    <Table striped bordered hover>
-                        <thead>
-                            <tr>
-                                <th>Número de factura</th>
-                                <th>Nombre del cliente</th>
-                                <th>RTN del cliente</th>
-                                <th>Fecha de creación</th>
-                                <th>Subtotal</th>
-                                <th>Total</th>
-                                <th>Usuario que atiende</th>
-                                <th>Anular</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {facturas.length > 0 &&
-                                facturas.map((factura, index) => (
-                                    <tr key={index}>
-                                        <td>{factura.Numero_factura}</td>
-                                        <td>{factura.Nombre_cliente}</td>
-                                        <td>{factura.RTN_cliente}</td>
-                                        <td>{factura.Fecha_creacion}</td>
-                                        <td>{factura.Subtotal}</td>
-                                        <td>{factura.Total}</td>
-                                        <td>{factura.Usuario_atiende}</td>
-                                        <td>{factura.Anular}</td>
-                                        <td>
-                                            {factura.estado === 'Pagada' && (
-                                                <span className="pagado">
-                                                    Pagado
-                                                </span>
-                                            )}
-                                            {factura.estado === 'Pendiente' && (
-                                                <span className="pendiente">
-                                                    Pendiente
-                                                </span>
-                                            )}
-                                            {factura.estado === 'No pagada' && (
-                                                <span className="no-pagado">
-                                                    No Pagado
-                                                </span>
-                                            )}
-                                        </td>
-                                        <td>{factura.total}</td>
-                                        <td className="acciones">
-                                            <Button
-                                                variant="primary"
-                                                onClick={() =>
-                                                    handleShowEditModal(
-                                                        factura.Numero_factura,
-                                                        factura.Pagado
-                                                    )
-                                                }
-                                            >
-                                                <FaEdit />
-                                            </Button>{' '}
-                                            <Button
-                                                variant="info"
-                                                onClick={() =>
-                                                    handlePrintFactura(
-                                                        factura.noFactura
-                                                    )
-                                                }
-                                            >
-                                                <FaPrint />
-                                            </Button>{' '}
-                                            <Button
-                                                variant="danger"
-                                                onClick={() =>
-                                                    handleDeleteFactura(
-                                                        factura.noFactura
-                                                    )
-                                                }
-                                            >
-                                                <FaTrash />
-                                            </Button>
-                                        </td>
-                                    </tr>
-                                ))}
-                        </tbody>
-                    </Table>
                 </div>
-            </div>
-        </Container>
+            </Container>
+        </>
     );
 }
 

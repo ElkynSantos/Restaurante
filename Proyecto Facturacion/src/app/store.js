@@ -1,7 +1,6 @@
 import { configureStore, applyMiddleware, compose } from '@reduxjs/toolkit';
 import thunk from 'redux-thunk';
-
-//Imports Users
+import loggedStatusSlice from '../features/loggedStatus';
 import usersSlice from '../features/usersSlice';
 import createUserSlice from '../features/createUserSlice';
 import editUserSlice from '../features/editUserSlice';
@@ -32,7 +31,7 @@ import pagarFacturaSlice from '../features/pagarFacturaSlice';
 
 export const store = configureStore({
     reducer: {
-        //Slices de Usuario
+        loggedStatus: loggedStatusSlice,
         users: usersSlice,
         modalAddUserState: createUserSlice,
         modalEditUserState: editUserSlice,

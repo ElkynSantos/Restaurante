@@ -190,17 +190,9 @@ function USUARIOS() {
                                     handleDelete(row.DNI, row.status)
                                 }
                             >
-                                {row.status == 0 ? (
-                                    <PersonFillSlash
-                                        className="text-danger"
-                                        title="Desactivar usuario"
-                                    />
-                                ) : (
-                                    <PersonCheckFill
-                                        className="text-success"
-                                        title="Activar usuario"
-                                    />
-                                )}
+                                {/* {row.status == 1? <PersonFillSlash className="text-danger" title="Desactivar usuario"/>: <PersonCheckFill className="text-success" title="Activar usuario"/>} */}
+                                {row.status != 1? <PersonFillSlash className="text-danger" title="Activar usuario"/>: <PersonCheckFill className="text-success" title="Desactivar usuario"/>}
+                                    
                             </button>
                         </Col>
                     </Row>
