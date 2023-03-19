@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, useParams } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useParams, Navigate } from 'react-router-dom';
 // import { useState, useEffect } from 'react';
 
 import LOGIN from './Components/LOGIN/index';
@@ -58,7 +58,7 @@ function App() {
     return (
         <BrowserRouter>
             <Routes>
-                <Route path='*' element={<INICIO />}></Route> {/* RUTA QUE NO EXISTE */}
+                <Route path='*' element={<Navigate to={"/"} />}></Route> {/* RUTA QUE NO EXISTE */}
                 <Route
                     index
                     element={
