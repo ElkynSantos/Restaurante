@@ -20,6 +20,8 @@ export const getFactura = (Numero_factura) =>
   }).then(response => response.json())
 }
 
+
+
 export async function editFacturas(
   id,RTN_cliente,Nombre_cliente
 ) {
@@ -47,7 +49,29 @@ const newFactura = async (data) => {
   }
 };
 
+const anularFacturass = async (id) => {
+  try {
+    const response = await axios.patch('http://localhost:3000/bills/anular', id);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+export async function anularFactura(
+  id
+) {
+  const options = {
+      method: 'PATCH',
+      url: 'http://localhost:3000/bills/anular',
+      data: {
+          id
+      },
+  };
+  const response = await axios.request(options);
+
+  return response.data;
+}
 export {
   getFacturas,
-  newFactura,
+  newFactura
 };

@@ -70,6 +70,29 @@ const editFacturas = async (req, res, next) => {
     }
 };
 
+const anularFactura = async (req, res, next) => {
+    try {
+        const { id } = req.body;
+
+        if (id == null) {
+            return next(new AppError(`No se permiten campos vacios`, 400));
+        }
+
+        const [changeID] = await db.query(`CALL anular_factura(:p_id)`, {
+            replacements: {
+                p_id: id,
+            },
+        });
+
+        return res.status(200).json({
+            status: 'Ok',
+            msg: changeID.msg,
+        });
+    } catch (error) {
+        return next(new AppError(`Error en la base de datos ${error}`, 500));
+    }
+};
+
 const newFactura = async (req, res, next) => {
     try {
         const {
@@ -164,4 +187,4 @@ const newFactura = async (req, res, next) => {
     }
 };
 
-export { getFacturas, editFacturas, newFactura, getFactura };
+export { getFacturas, editFacturas, newFactura, getFactura, anularFactura };
