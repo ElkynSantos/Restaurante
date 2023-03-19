@@ -48,7 +48,6 @@ function LOGIN(props) {
         } else {
             try {
                 const data = await login(form.user, form.userpassword);
-                console.log(data);
 
                 if(data.status == "Ok") {
                     dispatch(initSession())
