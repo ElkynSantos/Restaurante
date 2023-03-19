@@ -47,6 +47,7 @@ function LOGIN(props) {
                 const data = await login(form.user, form.userpassword);
 
                 if(data.status == "Ok") {
+                    console.log("se logueó");
                     dispatch(initSession())
                     Swal.fire({
                         position: 'top-center',

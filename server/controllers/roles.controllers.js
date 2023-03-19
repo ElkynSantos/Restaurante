@@ -112,6 +112,7 @@ const getAllCategoriesByUser = async (req, res, next) => {
     try {
         // let { username } = req.params;
         let { currentUsername } = req;
+        console.log(currentUsername);
         const allRoles = await db.query(`CALL ObtenerRolYPermisos(:p_Nom_Usuario)`, {
             replacements: {
                 p_Nom_Usuario: currentUsername
@@ -120,6 +121,7 @@ const getAllCategoriesByUser = async (req, res, next) => {
 
         return res.status(200).json( allRoles[0].ARRAY);
     } catch (error) {
+        // console.log(error);
         return next(new AppError('Ups! Error en la base de datos', 500));
     }
 };

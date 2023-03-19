@@ -388,12 +388,6 @@ function LISTAPEDIDOS() {
                 </Row>
             </Container>
         </div>
-                <Row>
-                    <Col>{TablaCocinaIzquierda}</Col>;
-                    <Col>{TablaCocinaDerecha}</Col>
-                </Row>
-            </Container>
-        </div>
     );
 }
 

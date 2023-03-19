@@ -41,6 +41,7 @@ const paginationComponentOptions = {
 };
 
 function PRODUCTOT() {
+    console.log("productos")
     const dispatch = useDispatch();
 
     const products = useSelector((state) => state.products);

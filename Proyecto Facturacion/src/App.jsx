@@ -62,9 +62,9 @@ function App() {
                 <Route
                     index
                     element={
-                        //<ProtectedRoute isAllowed={!loggedUser}>
-                        <LOGIN />
-                        //</ProtectedRoute>
+                        <ProtectedRoute isAllowed={!loggedStatus} redirectTo="/home">
+                            <LOGIN />
+                        </ProtectedRoute>
                     }
                 />
                 <Route path="/password-recovery" element={<FormPassword />} />
@@ -73,14 +73,18 @@ function App() {
                     element={<Recovery />}
                 />
 
-                <Route path="/home" element={<INICIO />} />
+                <Route path="/home" element={
+                    <ProtectedRoute isAllowed={loggedStatus} redirectTo="/">
+                        <INICIO />
+                    </ProtectedRoute>
+                } />
 
                 {/* CONFIGURACIÓN DEL SISTEMA */}
 
                 <Route
                     path="/roles"
                     element={
-                        <ProtectedRoute>
+                        <ProtectedRoute isAllowed={loggedStatus}>
                             <ROLES />
                         </ProtectedRoute>
                     }
@@ -88,31 +92,48 @@ function App() {
                 <Route
                     path="/users"
                     element={
-                        // <ProtectedRoute permissions={permissions}>
-                        <ProtectedRoute>
+                        <ProtectedRoute isAllowed={loggedStatus}>
                             <USERS />
                         </ProtectedRoute>
                     }
                 />
-                <Route path="/bills" element={<Facturas />} />
-                <Route path="/printbills" element={<PrintFactura />} />
-                <Route path="/kitchen" element={<COCINA />} />
+                <Route path="/bills" element={
+                    <ProtectedRoute isAllowed={loggedStatus}>
+                        <Facturas />
+                    </ProtectedRoute>
+                } />
+                <Route path="/printbills" element={
+                    <ProtectedRoute isAllowed={loggedStatus}>
+                        <PrintFactura />
+                    </ProtectedRoute>
+                } />
+                <Route path="/kitchen" element={
+                    <ProtectedRoute isAllowed={loggedStatus}>
+                        <COCINA />
+                    </ProtectedRoute>
+                } />
 
                 {/* CONFIGURACIÓN DEL NEGOCIO */}
                 <Route
                     path="/taxes"
                     element={
-                        <ProtectedRoute>
+                        <ProtectedRoute isAllowed={loggedStatus}>
                             <ECBMPUESTO />
                         </ProtectedRoute>
                     }
                 />
-                <Route path={'/products'} element={<PRODUCTOS />} />
+                <Route 
+                    path={'/products'}
+                    element={
+                        <ProtectedRoute isAllowed={loggedStatus}>
+                            <PRODUCTOS />
+                        </ProtectedRoute>
+                    } 
+                />
                 <Route
                     path="/orders"
                     element={
-                        // <ProtectedRoute isAllowed={!!permissions}>
-                        <ProtectedRoute>
+                        <ProtectedRoute isAllowed={loggedStatus}>
                             <PEDIDOS />
                         </ProtectedRoute>
                     }
@@ -120,8 +141,7 @@ function App() {
                 <Route
                     path="/orders-list"
                     element={
-                        // <ProtectedRoute isAllowed={!!permissions} >
-                        <ProtectedRoute>
+                        <ProtectedRoute isAllowed={loggedStatus}>
                             <LISTAPEDIDOS />
                         </ProtectedRoute>
                     }
@@ -129,10 +149,8 @@ function App() {
                 <Route
                     path="/tables"
                     element={
-                        // <ProtectedRoute isAllowed={!!permissions}>
-                        <ProtectedRoute>
-                            <USERS />
-                            {/* <MESAS /> */}
+                        <ProtectedRoute isAllowed={loggedStatus}>
+                            <MESAS />
                         </ProtectedRoute>
                     }
                 />
@@ -140,15 +158,29 @@ function App() {
                     path="/invoicing"
                     element={
                         // <ProtectedRoute isAllowed={!!permissions}>
-                        <ProtectedRoute>
+                        <ProtectedRoute isAllowed={loggedStatus}>
                             <FACTURACION />
                         </ProtectedRoute>
                     }
                 />
                 {/* <Route path="/users" element={<USERS />} /> */}
                 {/* <Route path="/editUser" element={<FormPassword />} /> */}
-                <Route path="/reports" element={<REPORTES />} />
-                <Route path="/invoice-list" element={<LISTAFACTURACION />} />
+                <Route 
+                    path="/reports" 
+                    element={
+                        <ProtectedRoute isAllowed={loggedStatus}>
+                            <REPORTES />
+                        </ProtectedRoute>
+                    } 
+                />
+                <Route 
+                    path="/invoice-list" 
+                    element={
+                        <ProtectedRoute isAllowed={loggedStatus}>
+                            <LISTAFACTURACION />
+                        </ProtectedRoute>
+                    } 
+                />
             </Routes>
         </BrowserRouter>
     );

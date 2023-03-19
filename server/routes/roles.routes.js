@@ -21,8 +21,7 @@ rolesRoutes.route('/permissions').get(getAllPermisos);
 rolesRoutes
     .route('/user-permissions')
     .get(tokenVerification, getPermissionsByUser);
-rolesRoutes.route('/categories').get(getAllCategoriesByUser);
-//rolesRoutes.route('/categories').get(tokenVerification, getAllCategoriesByUser);
+rolesRoutes.route('/categories').get(tokenVerification, getAllCategoriesByUser);
 rolesRoutes.route('/CreateNewRole').post(CreateNewRole);
 rolesRoutes.route('/RoleandPermissions').post(getUsers_RoleandPermissions);
 rolesRoutes.route('/PermisosdeRol').post(getPermisosdeRol);

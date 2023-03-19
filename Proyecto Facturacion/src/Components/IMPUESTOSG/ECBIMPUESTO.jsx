@@ -438,7 +438,7 @@ function ECBMPUESTO() {
                     </Button>
                 </Form>
             </div>
-        </Container>
+        </div>
     );
 }
 
