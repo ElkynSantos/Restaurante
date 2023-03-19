@@ -52,6 +52,7 @@ function App() {
     return (
         <BrowserRouter>
             <Routes>
+                <Route path='*' element={<INICIO />}></Route> {/* RUTA QUE NO EXISTE */}
                 <Route
                     index
                     element={
