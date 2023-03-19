@@ -421,6 +421,7 @@ function COCINA() {
                 data={DATA}
                 expandableRows
                 expandableRowsComponent={ExpandedComponent}
+                expandableRowExpanded={rowPreExpanded}
             />
         );
     }
