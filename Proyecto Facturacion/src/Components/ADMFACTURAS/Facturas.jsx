@@ -231,7 +231,14 @@ function Facturas() {
                                         <Button
                                             variant="success"
                                             onClick={() => {
-                                                if (factura.Pagado == 1) {
+                                                if (factura.Anular == 1) {
+                                                    Swal.fire({
+                                                        text: 'La factura esta anulada',
+                                                        icon: 'info',
+                                                    });
+                                                } else if (
+                                                    factura.Pagado == 1
+                                                ) {
                                                     Swal.fire({
                                                         text: 'La factura ya esta pagada',
                                                         icon: 'info',
