@@ -19,13 +19,26 @@ import { useDispatch, useSelector } from 'react-redux';
 //import { CreateProduct } from '../../services/Factura';
 import Swal from 'sweetalert2';
 import { agetAllTaxes } from '../../services/Taxes';
-
+import DataTable from 'react-data-table-component';
+import Table from 'react-bootstrap/Table';
 function modalPagarFactura() {
     const dispatch = useDispatch();
     const [Cliente, setCliente] = useState('');
     const [RTN, setRTN] = useState('');
+    const [DatosFactura, setDatosFactura] = useState([]);
+    const [DatosOrden, setDatosOrden] = useState([]);
+    const [isChecked, setIsChecked] = useState(false);
+    const [Monto, setMonto] = useState(0);
+    const [Cambio, setCambio] = useState(0);
+
     const idFactura = useSelector((state) => state.pagarFacturaSlice).idFactura;
     const show2 = useSelector((state) => state.pagarFacturaSlice).modalState;
+
+    
+
+
+
+
     const getBillInfo = async () => {
         try {
             const DatosFactura = await fetch(
@@ -42,8 +55,10 @@ function modalPagarFactura() {
 
             const datos = await DatosFactura.json();
 
-            console.log(datos.factura.id_orden);
+            console.log(datos.factura);
+            setDatosFactura(datos.factura);
             const ID_orden = datos.factura.id_orden;
+
             const respuesta = await fetch(
                 'http://localhost:3000/orders/listorders',
                 {
@@ -58,7 +73,8 @@ function modalPagarFactura() {
 
             const data1 = await respuesta.json();
 
-            console.log(data1);
+            console.log(data1.newOrder.Datos);
+            setDatosOrden(data1.newOrder.Datos);
             /*
             const data = await response.json();
 
@@ -80,6 +96,14 @@ function modalPagarFactura() {
             getBillInfo();
         }
     }, [show2]);
+
+
+
+    const handleChange = (event) => {
+        setIsChecked(event.target.checked);
+      };
+    
+
 
     const handleChangePagado = async () => {
         console.log('===============INFORMACION PRECISADA===============');
@@ -126,6 +150,7 @@ function modalPagarFactura() {
             }),
         })
             .then((data1) => {
+
                 Swal.fire({
                     text: data1.msg,
                     icon: 'success',
@@ -147,6 +172,181 @@ function modalPagarFactura() {
         dispatch(showModalCreateBill());
     };
 
+    const handleMonto = (MontoIngresado) => {
+
+       setMonto(MontoIngresado);
+
+       let Cambio = MontoIngresado- DatosFactura.Total;
+
+   
+setCambio(Cambio);
+
+      };
+
+
+      const handlePagar = async () => {
+       
+if(!(Monto > 0 && Cambio >= 0)){
+    Swal.fire({
+        text: "El Monto debe ser mayor al Total",
+        icon: 'error',
+    });
+
+    return;
+}
+
+        await fetch(`http://localhost:3000/bills/payBill`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+
+            body: JSON.stringify({
+                idFactura_param: idFactura,
+                Monto_param: Monto,
+                Cambio_param: Cambio,
+                EstadoEfectivo_Tarjeta: isChecked,
+              
+            }),
+        })
+            .then((data1) => {
+
+
+console.log("=========DATA!============");
+                console.log(data1.status);
+
+if(data1.status != 200){
+    Swal.fire({
+        text: 'No se pudo pagar la factura',
+        icon: 'error',
+    });
+}else{  Swal.fire({
+    text: "Se realizó el pago correctamente",
+    icon: 'success',
+});}
+
+
+              
+            })
+            .catch((error) => {
+                Swal.fire({
+                    text: 'No se pudo pagar la factura',
+                    icon: 'error',
+                });
+            });
+
+
+
+
+
+
+
+
+            handleClose();
+
+
+
+
+
+    };
+
+
+
+
+
+      
+
+
+
+
+
+
+    const columns = [
+        {
+            name: 'Pedido ID',
+            selector: 'pedido_id',
+        },
+        {
+            name: 'Producto',
+            selector: 'producto_nombre',
+        },
+        {
+            name: 'Cantidad',
+            selector: 'cantidad',
+        },
+        {
+            name: 'Total',
+            selector: 'total',
+        },
+
+        {
+            name: 'Mesa',
+            selector: 'numero_mesa',
+        },
+    ];
+
+
+    const customStyles = {
+        headCells: {
+            style: {
+                backgroundColor: '#1043B1',
+                color: 'white',
+            },
+        },
+        rows: {
+            style: {
+                backgroundColor: 'lightblue',
+            },
+        },
+    };
+
+    function transformData(data) {
+        const transformedData = [];
+      
+        data.pedidos.forEach((pedido) => {
+          const pedidoId = pedido.idPedido;
+          pedido.productos.forEach((producto) => {
+            transformedData.push({
+              pedido_id: pedidoId,
+              producto_nombre: producto.nombreProducto,
+              cantidad: producto.cantidad,
+              impuesto_monto: producto.impuesto.amount,
+              impuesto_nombre: producto.impuesto.name,
+              producto_precio: producto.precioProducto,
+              numero_mesa: pedido.numeroMesa,
+              total:
+                'Lps. ' +
+                (
+                  producto.impuesto.amount * producto.precioProducto * producto.cantidad +
+                  producto.precioProducto * producto.cantidad
+                ).toFixed(2),
+            });
+          });
+        });
+      
+        return transformedData;
+      }
+
+
+
+
+
+      let transformedData = [];
+
+if(!(DatosOrden.length === 0)){
+    console.log(DatosOrden);
+    transformedData= transformData(DatosOrden);
+}
+    
+
+
+
+
+
+
+
+
+
     return (
         <>
             <Modal
@@ -157,11 +357,10 @@ function modalPagarFactura() {
                 backdrop="static"
             >
                 <Modal.Header className="bg-blue text-white">
-                    <Modal.Title>Pagar Factura</Modal.Title>
-                    <CloseButton variant="white" onClick={handleClose} />
+                    <Modal.Title >Pagar Factura</Modal.Title>
+                  
 
-                    <Button>Facturar</Button>
-                    <Button>Dejar como Pendiente</Button>
+                    <Button onClick={handleClose} >Dejar como Pendiente</Button>
                 </Modal.Header>
                 <Modal.Body>
                     <Form name="test" id="test">
@@ -169,26 +368,119 @@ function modalPagarFactura() {
 
                         <Form.Group>
                             <Form.Label>
-                                Nombre del Cliente (Opcional)
+                                Atendido por: {DatosFactura.Usuario_atiende}
                             </Form.Label>
+                              
+                        </Form.Group>
+                        <Form.Group>
+                            <Form.Label>
+                                Nombre del Cliente: {DatosFactura.Nombre_Cliente}
+                            </Form.Label>
+                              
+                        </Form.Group>
+                        <Form.Group>
+                            <Form.Label>
+                                RTN: {DatosFactura.RTN_cliente}
+                            </Form.Label>
+                              
                         </Form.Group>
 
+                     
+
+
                         <Form.Group>
-                            <Form.Label>Ingrese el Monto</Form.Label>
-                            <Form.Control
-                                type="text"
-                                required
-                                maxLength="10"
-                                minLength="10"
-                                onKeyPress={(event) => {
-                                    if (
-                                        !/^[a-zA-Z0-9]{0,10}$/.test(event.key)
-                                    ) {
-                                        event.preventDefault();
-                                    }
-                                }}
-                            />
+                        {transformedData.length !== 0 ? (
+    <DataTable
+      columns={columns}
+      data={transformedData}
+      customStyles={customStyles}
+    />
+
+  
+  ) : (
+    <p>No hay datos para mostrar</p>
+  )}
+
+<Table striped bordered hover>
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Monto</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Subtotal</td>
+            <td
+                style={{
+                    backgroundColor: '#FFFBB7',
+                    color: 'black',
+                }}
+            >
+                Lps. {DatosFactura.Subtotal}
+            </td>
+        </tr>
+        <tr>
+            <td>Total</td>
+            <td
+                style={{
+                    backgroundColor: '#DACD03',
+                    color: 'black',
+                }}
+            >
+                Lps. {DatosFactura.Total}
+            </td>
+        </tr>
+    </tbody>
+</Table>
+                       
                         </Form.Group>
+                        <Form.Group>
+                        <Form.Check
+        type="checkbox"
+        label="Pagar con Tarjeta"
+        checked={isChecked}
+        onChange={handleChange}
+      />
+ </Form.Group>
+
+
+ <Form.Group>
+ <FormControl
+  aria-label="Amount (to the nearest dollar)"
+  placeholder="Ingrese el Monto"
+  required
+  type="number"
+  min="0"
+  step="0.01"
+  max="9999999.99"
+  onKeyPress={(event) => {
+    if (!/^[0-9]{0,8}$/.test(event.key)) {
+      event.preventDefault();
+    }
+  }}
+  onChange={(e) => {
+    const inputValue = e.target.value.slice(0, 8); // Limita el valor a 8 caracteres
+    handleMonto(parseFloat(inputValue).toFixed(2));
+  }}
+/>
+                </Form.Group>
+
+
+
+                <Form.Group>
+
+{(Monto > 0 && Cambio >= 0) ? (
+    <Form.Label>
+     Cambio: {Cambio.toFixed(2)}
+    </Form.Label>
+         ) : (
+            <p>Ingrese un Monto Valido para evaluar el Cambio.</p>
+          )
+         }
+</Form.Group>
+
+                       
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
@@ -196,7 +488,7 @@ function modalPagarFactura() {
                         Salir
                     </Button>
 
-                    <Button variant="success" form="test" type="submit">
+                    <Button variant="success" form="test" onClick={handlePagar}>
                         Pagar Factura
                     </Button>
                 </Modal.Footer>
@@ -206,3 +498,27 @@ function modalPagarFactura() {
 }
 
 export default modalPagarFactura;
+
+/*
+  <CloseButton variant="white" onClick={handleClose} />
+                    <Button>Facturar</Button>
+*/
+/*
+ <Form.Group>
+                            <Form.Label>Ingrese el Monto</Form.Label>
+                            <Form.Control
+                                type="numeric"
+                                required
+                                maxLength="10"
+                                minLength="10"
+                                onKeyPress={(event) => {
+                                    if (
+                                        !/^[0-9]{0,10}$/.test(event.key)
+                                    ) {
+                                        event.preventDefault();
+                                    }
+                                }}
+                            />
+                        </Form.Group>
+
+*/

@@ -191,4 +191,39 @@ const getBillData = async (req, res) => {
     });
 };
 
-export { getFacturas, editFacturas, newFactura, getFactura, getBillData };
+
+
+const payBill = async (req, res) => {
+    const { idFactura_param, Monto_param, Cambio_param, EstadoEfectivo_Tarjeta } = req.body;
+  
+    const [Respuesta] = await db.query(
+        'CALL db_rest.sp_actualizarPagoFactura(:p_idFactura, :p_Monto, :p_Cambio, :p_EstadoEfectivo_Tarjeta)',
+        {
+            replacements: {
+                p_idFactura: idFactura_param,
+                p_Monto: Monto_param,
+                p_Cambio: Cambio_param,
+                p_EstadoEfectivo_Tarjeta: EstadoEfectivo_Tarjeta,
+            },
+        }
+    );
+    if (Respuesta.response === 0) {
+        return res.status(404).json({
+            status: 'fail',
+            msg: Respuesta,
+        });
+    }
+
+    return res.status(200).json({
+        status: 'Ok',
+        Respuesta,
+    });
+
+
+
+
+};
+
+
+
+export { getFacturas, editFacturas, newFactura, getFactura, getBillData, payBill };

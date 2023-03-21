@@ -317,6 +317,9 @@ function LISTAPEDIDOS() {
                     columns={columns}
                     data={DATA}
                     //   theme="solarized"
+                    noDataComponent={
+                        <div className="p-4">Aun no hay pedidos cocinados</div>
+                    }
                     expandableRows
                     expandableRowsComponent={ExpandedComponent}
                     selectableRows

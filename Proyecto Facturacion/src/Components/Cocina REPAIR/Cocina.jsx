@@ -78,6 +78,8 @@ function COCINA() {
     }, []);
 
     const DevolverNoCocinado = async (idPedido) => {
+
+
         await fetch(`http://localhost:3000/orders/132`, {
             method: 'POST',
             headers: {
@@ -87,6 +89,7 @@ function COCINA() {
             body: JSON.stringify({ id: idPedido }),
         });
 
+  
         if (HANDLER) {
             setHANDLER(false);
         } else {
@@ -139,6 +142,8 @@ function COCINA() {
                         if (data1.status != 'fail') {
                             console.log(data1.order.orders),
                                 setData(data1.order.orders);
+                        }else{
+                            setData([]);
                         }
                     });
             } catch (error) {
@@ -415,6 +420,9 @@ function COCINA() {
             <DataTable
                 columns={columns}
                 data={dataPending}
+                noDataComponent={
+                    <div className="p-4">Aun no se ha hecho un pedido</div>
+                }
                 expandableRows
                 expandableRowsComponent={ExpandedComponent}
                 expandableRowExpanded={rowPreExpanded}
@@ -425,6 +433,9 @@ function COCINA() {
             <DataTable
                 columns={columns2}
                 data={DATA}
+                noDataComponent={
+                    <div className="p-4">Aun no hay pedidos cocinados</div>
+                }
                 expandableRows
                 expandableRowsComponent={ExpandedComponent}
                 expandableRowExpanded={rowPreExpanded}

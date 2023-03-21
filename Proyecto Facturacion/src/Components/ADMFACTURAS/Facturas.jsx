@@ -6,7 +6,9 @@ import {
     Table,
     Container,
 } from 'react-bootstrap';
-import { FaSearch, FaEdit, FaPrint, FaTrash } from 'react-icons/fa';
+
+import { useDispatch, useSelector } from 'react-redux';
+import { FaSearch, FaEdit, FaPrint, FaTrash, FaMoneyBillWave } from 'react-icons/fa';
 import { getFactura } from '../../services/Factura';
 import axios from 'axios';
 import {
@@ -15,9 +17,18 @@ import {
     closeModalFactura,
 } from '../../features/editFacturaSlice';
 import EditRTNNAME from '../editRTN&NAME';
-import { useSelector, useDispatch } from 'react-redux';
+
 import Swal from 'sweetalert2';
 import './Fact.css';
+
+import PAGARFACTURA from '../PagarFactura/index';
+import {
+    showpagarFacturaSlice,
+    closepagarFacturaSlice,
+    UpdateidFactura,
+} from '../../features/pagarFacturaSlice.js';
+
+
 
 import BarraLateral from '../common/index.js';
 function Facturas() {
@@ -25,6 +36,14 @@ function Facturas() {
     const [facturas, setFacturas] = useState([]);
     const showF = useSelector((state) => state.editFactura).modalState;
     console.log('modal:' + showF);
+    const handleUpdateidFactura = (id) => {
+        dispatch(UpdateidFactura(id));
+    };
+    
+    const handleChangePagar = () => {
+        dispatch(showpagarFacturaSlice());
+      
+    };
     useEffect(() => {
         async function fetchFacturas() {
             try {
@@ -40,6 +59,17 @@ function Facturas() {
     const [searchTerm, setSearchTerm] = useState('');
     const [showEditModalFactura, setShowEditModalFactura] = useState(false);
     const [editFacturas, setEditFacturas] = useState(null);
+
+
+ 
+    const    handlePagarFactura = (id) => {
+
+        handleUpdateidFactura(id);
+        handleChangePagar();
+     
+    };
+
+
 
     const handleShowEditModal = async (Numero_factura, Impresa) => {
         console.log('sas' + Impresa);
@@ -92,6 +122,7 @@ function Facturas() {
         <>
         <BarraLateral />
             <Container>
+                <PAGARFACTURA/>
                 <div>
                     <EditRTNNAME />
 
@@ -184,6 +215,29 @@ function Facturas() {
                                                         }
                                                         >
                                                     <FaTrash />
+                                                </Button>
+                                                <Button
+                                                    variant="success"
+                                                    onClick={() =>{
+
+
+if(factura.Pagado == 1){
+    Swal.fire({
+        text: 'La factura ya esta pagada',
+        icon: 'info',
+    });
+}else{
+    handlePagarFactura(
+        factura.id
+        )
+}
+                                                        
+                                                        
+                                                        
+                                                        }
+                                                    }
+                                                        >
+                                                    <FaMoneyBillWave />
                                                 </Button>
                                             </td>
                                         </tr>

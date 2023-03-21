@@ -156,7 +156,15 @@ function modalCrearFactura() {
                                 required
                                 minLength="0"
                                 maxLength="13"
-                                onChange={(e) => setRTN(e.target.value)}
+                                onKeyPress={(event) => {
+                                    if (
+                                        !/^[0-9]{0,10}$/.test(event.key)
+                                    ) {
+                                        event.preventDefault();
+                                    }
+                                }}
+                                onChange={(e) => {
+                                    setRTN(e.target.value)}}
                             />
                         </Form.Group>
                     </Form>
