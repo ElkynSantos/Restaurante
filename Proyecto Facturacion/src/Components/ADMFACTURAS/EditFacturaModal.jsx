@@ -1,4 +1,4 @@
-/*import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 
 const EditFacturaModal = ({ show, handleClose, handleSave, factura }) => {
@@ -102,4 +102,4 @@ const EditFacturaModal = ({ show, handleClose, handleSave, factura }) => {
   );
 };
 
-export default EditFacturaModal;*/
+export default EditFacturaModal;

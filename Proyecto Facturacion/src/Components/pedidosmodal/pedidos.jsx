@@ -141,7 +141,7 @@ function PedidosModal() {
                 </Modal.Header>
                 <Modal.Body>
                     <Container>
-                        <Col align="end">
+                        <Col align="start">
                             <Dropdown
                                 variant="outline-primary"
                                 id="dropdown-basic"
@@ -164,7 +164,6 @@ function PedidosModal() {
                             </Dropdown>
                             <h7>Mesa: {value}</h7>
                         </Col>
-
                         <DataTable
                             title="Productos de la orden"
                             className="mt-3"

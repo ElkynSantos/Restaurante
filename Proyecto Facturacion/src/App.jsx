@@ -1,4 +1,10 @@
-import { BrowserRouter, Routes, Route, useParams, Navigate } from 'react-router-dom';
+import {
+    BrowserRouter,
+    Routes,
+    Route,
+    useParams,
+    Navigate,
+} from 'react-router-dom';
 // import { useState, useEffect } from 'react';
 
 import LOGIN from './Components/LOGIN/index';
@@ -20,7 +26,7 @@ import LISTAFACTURACION from './Components/LISTAFACTURACION/index.js';
 
 import { Provider, useDispatch, useSelector } from 'react-redux';
 
-import { store } from "./app/store.js"
+import { store } from './app/store.js';
 import ProtectedRoute from './Components/ProtectedRoute';
 import Email from './Components/EmailVerification/index';
 // import IMPUESTO from './Components/IMPUESTOS';
@@ -51,18 +57,25 @@ import { getPermissionsByUser } from './services/roles';
 //     roles: ["admin"],
 // }
 import PrintFactura from './Components/APRINTFACTURA';
+import EditarPerf from './Components/EDITARPERFIL';
+
+import Report from './Components/REPORTEFACTURAS';
 
 function App() {
-    const loggedStatus = useSelector(state => state.loggedStatus);
+    const loggedStatus = useSelector((state) => state.loggedStatus);
 
     return (
         <BrowserRouter>
             <Routes>
-                <Route path='*' element={<Navigate to={"/"} />}></Route> {/* RUTA QUE NO EXISTE */}
+                <Route path="*" element={<Navigate to={'/'} />}></Route>{' '}
+                {/* RUTA QUE NO EXISTE */}
                 <Route
                     index
                     element={
-                        <ProtectedRoute isAllowed={!loggedStatus} redirectTo="/home">
+                        <ProtectedRoute
+                            isAllowed={!loggedStatus}
+                            redirectTo="/home"
+                        >
                             <LOGIN />
                         </ProtectedRoute>
                     }
@@ -72,15 +85,15 @@ function App() {
                     path="/auth/reset-password/:token"
                     element={<Recovery />}
                 />
-
-                <Route path="/home" element={
-                    <ProtectedRoute isAllowed={loggedStatus} redirectTo="/">
-                        <INICIO />
-                    </ProtectedRoute>
-                } />
-
+                <Route
+                    path="/home"
+                    element={
+                        <ProtectedRoute isAllowed={loggedStatus} redirectTo="/">
+                            <INICIO />
+                        </ProtectedRoute>
+                    }
+                />
                 {/* CONFIGURACIÓN DEL SISTEMA */}
-
                 <Route
                     path="/roles"
                     element={
@@ -97,22 +110,30 @@ function App() {
                         </ProtectedRoute>
                     }
                 />
-                <Route path="/bills" element={
-                    <ProtectedRoute isAllowed={loggedStatus}>
-                        <Facturas />
-                    </ProtectedRoute>
-                } />
-                <Route path="/printbills" element={
-                    <ProtectedRoute isAllowed={loggedStatus}>
-                        <PrintFactura />
-                    </ProtectedRoute>
-                } />
-                <Route path="/kitchen" element={
-                    <ProtectedRoute isAllowed={loggedStatus}>
-                        <COCINA />
-                    </ProtectedRoute>
-                } />
-
+                <Route
+                    path="/bills"
+                    element={
+                        <ProtectedRoute isAllowed={loggedStatus}>
+                            <Facturas />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/printbills"
+                    element={
+                        <ProtectedRoute isAllowed={loggedStatus}>
+                            <PrintFactura />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/kitchen"
+                    element={
+                        <ProtectedRoute isAllowed={loggedStatus}>
+                            <COCINA />
+                        </ProtectedRoute>
+                    }
+                />
                 {/* CONFIGURACIÓN DEL NEGOCIO */}
                 <Route
                     path="/taxes"
@@ -122,13 +143,13 @@ function App() {
                         </ProtectedRoute>
                     }
                 />
-                <Route 
+                <Route
                     path={'/products'}
                     element={
                         <ProtectedRoute isAllowed={loggedStatus}>
                             <PRODUCTOS />
                         </ProtectedRoute>
-                    } 
+                    }
                 />
                 <Route
                     path="/orders"
@@ -163,23 +184,24 @@ function App() {
                         </ProtectedRoute>
                     }
                 />
+                <Route path="/profile" element={<EditarPerf />} />
                 {/* <Route path="/users" element={<USERS />} /> */}
                 {/* <Route path="/editUser" element={<FormPassword />} /> */}
-                <Route 
-                    path="/reports" 
+                <Route
+                    path="/reports"
                     element={
                         <ProtectedRoute isAllowed={loggedStatus}>
                             <REPORTES />
                         </ProtectedRoute>
-                    } 
+                    }
                 />
-                <Route 
-                    path="/invoice-list" 
+                <Route
+                    path="/invoice-list"
                     element={
                         <ProtectedRoute isAllowed={loggedStatus}>
                             <LISTAFACTURACION />
                         </ProtectedRoute>
-                    } 
+                    }
                 />
             </Routes>
         </BrowserRouter>

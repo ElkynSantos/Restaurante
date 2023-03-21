@@ -73,10 +73,10 @@ function PRODUCTOT() {
     };
 
     useEffect(() => {
-        dispatch(fetchProducts()).then((data) =>
-            setData(data.payload.allProducts)
-        );
+        dispatch(fetchProducts());
     }, [dispatch, show2, show, count]);
+
+    console.log(products);
 
     const handleDelete = (codigo_producto, status) => {
         Swal.fire({
@@ -147,7 +147,7 @@ function PRODUCTOT() {
         },
         {
             name: 'Precio',
-            selector: (row) => row.precio_producto,
+            selector: (row) => `Lps. ${row.precio_producto}`,
         },
         {
             name: 'Impuesto',
@@ -285,7 +285,7 @@ function PRODUCTOT() {
                 <DataTable
                     className="mt-3"
                     columns={columns}
-                    data={DATA}
+                    data={products.allProducts}
                     customStyles={customStyles}
                     noDataComponent={
                         <div className="p-4">No se encontraron productos</div>

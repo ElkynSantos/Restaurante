@@ -3,9 +3,10 @@ import {
     getFacturas,
     editFacturas,
     newFactura,
-    getFactura,
     getBillData,
-    payBill
+    payBill,
+    getFactura,
+    anularFactura,
 } from '../controllers/factura.controllers.js';
 
 const facturasRoutes = express.Router();
@@ -17,4 +18,5 @@ facturasRoutes.route('/numFactura').post(getFactura);
 
 facturasRoutes.route('/payBill').post(payBill);
 
+facturasRoutes.route('/anular').patch(anularFactura);
 export default facturasRoutes;

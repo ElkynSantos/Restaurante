@@ -113,13 +113,16 @@ const getAllCategoriesByUser = async (req, res, next) => {
         // let { username } = req.params;
         let { currentUsername } = req;
         console.log(currentUsername);
-        const allRoles = await db.query(`CALL ObtenerRolYPermisos(:p_Nom_Usuario)`, {
-            replacements: {
-                p_Nom_Usuario: currentUsername
+        const allRoles = await db.query(
+            `CALL ObtenerRolYPermisos(:p_Nom_Usuario)`,
+            {
+                replacements: {
+                    p_Nom_Usuario: currentUsername,
+                },
             }
-        });
+        );
 
-        return res.status(200).json( allRoles[0].ARRAY);
+        return res.status(200).json(allRoles[0].ARRAY);
     } catch (error) {
         // console.log(error);
         return next(new AppError('Ups! Error en la base de datos', 500));
@@ -130,13 +133,16 @@ const getPermissionsByUser = async (req, res, next) => {
     try {
         let { currentUsername } = req;
 
-        const permissions = await db.query(`CALL get_permissions_by_user(:username)`, {
-            replacements: {
-                username: currentUsername
+        const permissions = await db.query(
+            `CALL get_permissions_by_user(:username)`,
+            {
+                replacements: {
+                    username: currentUsername,
+                },
             }
-        });
+        );
 
-        return res.status(200).json( permissions[0].permissions );
+        return res.status(200).json(permissions[0].permissions);
     } catch (error) {
         return next(new AppError('Ups! Error en la base de datos', 500));
     }

@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 export const getAllUsers = () => {
     return fetch(`${import.meta.env.VITE_REACT_APP_API_URL}/users`, {
         credentials: 'include',
@@ -35,6 +37,16 @@ export const editUser = (user) => {
     }).then((response) => response.json());
 };
 
+export async function editProfile() {
+    const options = {
+        method: 'GET',
+        url: 'http://localhost:3000/users/Edit',
+        withCredentials: true,
+    };
+    const response = await axios.request(options);
+
+    return response.data;
+}
 export const editUserStatus = (DNI, status) => {
     return fetch(`${import.meta.env.VITE_REACT_APP_API_URL}/users/status`, {
         method: 'PATCH',

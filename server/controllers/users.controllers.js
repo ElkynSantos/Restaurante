@@ -156,6 +156,7 @@ const getUser = async (req, res) => {
         });
     }
 
+    console.log(user);
     return res.status(200).json({
         status: 'Ok',
         user,
@@ -163,6 +164,7 @@ const getUser = async (req, res) => {
 };
 
 const updateUser = async (req, res, next) => {
+    console.log(req.body);
     try {
         console.log(req.body);
         const {
@@ -293,6 +295,12 @@ const updatePassword = async (req, res, next) => {
     }
 };
 
+const editProfile = async (req, res, next) => {
+    console.log('valor: ', req.currentUsername);
+
+    res.send(req.currentUsername);
+};
+
 export {
     allUsers,
     createUser,
@@ -301,4 +309,5 @@ export {
     editUserStaus,
     updatePassword,
     getActiveRoles,
+    editProfile,
 };
