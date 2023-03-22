@@ -10,9 +10,10 @@ import editUserSlice from '../features/editUserSlice';
 import editFacturaSlice from '../features/editFacturaSlice';
 import createRolSlice from '../features/creacionRoles';
 import editrolslice from '../features/editarRoles';
-
+import modalImprimirSlice from '../features/modalImprimirSlice';
 export const store = configureStore({
     reducer: {
+        ModalImprimir: modalImprimirSlice,
         users: usersSlice,
         modalAddUserState: createUserSlice,
         EditarProducto: EditarProductoSlice,

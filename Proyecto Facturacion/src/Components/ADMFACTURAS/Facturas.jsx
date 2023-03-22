@@ -10,6 +10,8 @@ import Swal from 'sweetalert2';
 import './Fact.css';
 
 
+
+
 function Facturas() {
   const dispatch = useDispatch();
   const [anular, setAnular] = useState(false);
@@ -73,8 +75,58 @@ function Facturas() {
     setShowEditModal(true);
   }; */
 
-  const handlePrintFactura = (noFactura) => {
-    console.log(`Imprimir factura ${noFactura}`);
+  const handlePrintFactura = (id, Numero_factura,Nombre_cliente,RTN_cliente) => 
+  {
+			var a = window.open('', '', 'height=1000, width=1500');
+			a.document.write('<html>');
+      a.document.write('<header>');
+      a.document.write('<style>');
+      a.document.write('header {text-align: center;}');
+      a.document.write('body {text-align: justify;} ');
+      a.document.write('</style>');
+      a.document.write('Espresso Americano S.A.');
+      a.document.write('<br>');
+      a.document.write('"La pasión del café"');
+      a.document.write('<br>');
+      a.document.write('Col. Miramontes 5ta Calle #2212');
+      a.document.write('<br>');
+      a.document.write('Tegucigalpa M.D.C. Honduras');
+      a.document.write('<br>');
+      a.document.write('Local: Espresso Americano/UNITEC');
+      a.document.write('<br>');
+      a.document.write('<br>');
+      a.document.write('"F A C T U R A"');
+      a.document.write('<br>');
+      a.document.write('</header>');
+			a.document.write('<body>');
+      a.document.write('Correo: garifunasfood@gmail.com');
+      a.document.write('<br>');
+      a.document.write('RTN: 00000000000000');
+      a.document.write('&emsp;');
+      a.document.write('Tel: 89417810');
+      a.document.write('<br>');
+      a.document.write('C.A.I.: 0000000000000000000000000000');
+      a.document.write('<br>');
+      a.document.write('Fecha: 22/02/2023');
+      a.document.write('<br>');
+      a.document.write('Cliente: '+Nombre_cliente);
+      a.document.write('<br>');
+      a.document.write('RTN: '+RTN_cliente);
+      a.document.write('<br>');
+      a.document.write('No Compra Exenta:');
+      a.document.write('<br>');
+      a.document.write('No Constancia Registro Exonerado:');
+      a.document.write('<br>');
+      a.document.write('No Registro SAG:');
+      a.document.write('<br>');
+      a.document.write('Original: Cliente ');
+      a.document.write('&emsp;');
+      a.document.write('Copia: O.T. Emisor');
+      a.document.write('<br>');
+			a.document.write('</body></html>');
+			a.document.close();
+			a.print();
+      
   };
 
   const handleDeleteFactura = async(id, Anular) => 
@@ -108,8 +160,9 @@ function Facturas() {
 
   return (
     <div> 
+     
       <EditRTNNAME/>
-   
+    <div id ="gugugaga"></div>
     <div className="facturas">
       <h1>ADMINISTRAR FACTURAS</h1>
       <div className="busqueda">
@@ -167,7 +220,7 @@ function Facturas() {
         <Button variant="primary" onClick={() => handleShowEditModal(factura.Numero_factura, factura.Pagado)}>
           <FaEdit />
         </Button>{' '}
-        <Button variant="info" onClick={() => handlePrintFactura(factura.id, factura.Anular)}>
+        <Button variant="info" onClick={() => handlePrintFactura(factura.id, factura.Numero_factura, factura. Nombre_cliente,factura.RTN_cliente )}>
           <FaPrint />
         </Button>{' '}
         <Button variant="danger" onClick={() => handleDeleteFactura(factura.id, factura.Anular)}>
