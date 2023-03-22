@@ -45,7 +45,7 @@ import './App.css';
 //     permissions: ["quye"],
 //     roles: ["admin"],
 // }
-import REPORTES from './Components/Reportes/Index';
+import REPORTES from './Components/REPORTEFACTURAS/index';
 // SERVICES
 import { getPermissionsByUser } from './services/roles';
 

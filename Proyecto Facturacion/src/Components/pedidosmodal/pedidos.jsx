@@ -83,7 +83,7 @@ function PedidosModal() {
                     cantidad: pedidos1[i].cant_producto,
                 });
             }
-
+            const Atiende = localStorage.getItem('USER');
             await fetch('http://localhost:3000/orders/', {
                 method: 'POST',
                 headers: {
@@ -91,7 +91,7 @@ function PedidosModal() {
                 },
                 body: JSON.stringify({
                     tableId: value,
-                    waiterId: 37,
+                    waiterId: Atiende,
                     products: listaprod,
                     delivery: 0,
                 }),
