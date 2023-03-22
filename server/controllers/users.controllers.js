@@ -23,6 +23,21 @@ const allUsers = async (req, res, next) => {
     }
 };
 
+const getActiveRoles = async (req, res, next) => {
+    try {
+        const allActiveRoles = await db.query(
+            `CALL obtener_roles_habilitados()`
+        );
+
+        return res.status(200).json({
+            status: 'Ok',
+            allActiveRoles,
+        });
+    } catch (error) {
+        console.log(error);
+        return next(new AppError(`Ups! Error en la base de datos`, 500));
+    }
+};
 const createUser = async (req, res, next) => {
     //TODO: Parametros necesarios para crear un usuario
     try {
@@ -126,10 +141,10 @@ const createUser = async (req, res, next) => {
 
 const getUser = async (req, res) => {
     const { userID } = req.body;
-    
+
     const [user] = await db.query('CALL get_user(:userID, :opt)', {
         replacements: {
-            userID: userID,
+            userID,
             opt: 1,
         },
     });
@@ -141,6 +156,7 @@ const getUser = async (req, res) => {
         });
     }
 
+    console.log(user);
     return res.status(200).json({
         status: 'Ok',
         user,
@@ -148,6 +164,7 @@ const getUser = async (req, res) => {
 };
 
 const updateUser = async (req, res, next) => {
+    console.log(req.body);
     try {
         console.log(req.body);
         const {
@@ -176,7 +193,7 @@ const updateUser = async (req, res, next) => {
             phone,
             email,
         }).some((val) => !val);
-        
+
         if (emptyParams) {
             return next(
                 new AppError(`Por favor complete todos los campos`, 400)
@@ -221,9 +238,14 @@ const editUserStaus = async (req, res, next) => {
     try {
         const { opt, userDni } = req.body;
 
-        console.log("status-type", typeof opt, "userDni-type", typeof userDni);
-        console.log("status", opt, "userDni", userDni);
-        if (opt == null || opt == undefined || userDni == null || userDni == undefined) {
+        console.log('status-type', typeof opt, 'userDni-type', typeof userDni);
+        console.log('status', opt, 'userDni', userDni);
+        if (
+            opt == null ||
+            opt == undefined ||
+            userDni == null ||
+            userDni == undefined
+        ) {
             return next(new AppError(`No se permiten campos vacios`, 400));
         }
 
@@ -273,6 +295,12 @@ const updatePassword = async (req, res, next) => {
     }
 };
 
+const editProfile = async (req, res, next) => {
+    console.log('valor: ', req.currentUsername);
+
+    res.send(req.currentUsername);
+};
+
 export {
     allUsers,
     createUser,
@@ -280,4 +308,6 @@ export {
     updateUser,
     editUserStaus,
     updatePassword,
+    getActiveRoles,
+    editProfile,
 };

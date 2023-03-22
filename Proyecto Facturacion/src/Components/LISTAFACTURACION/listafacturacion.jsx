@@ -1,7 +1,7 @@
 import BarraLateral from '../common/index.js';
 import DataTable from 'react-data-table-component';
-import Container from 'react-bootstrap/Container';
-import Button from 'react-bootstrap/Button';
+import { Container, Button } from 'react-bootstrap';
+
 const columns = [
     {
         name: 'Title',
@@ -58,12 +58,14 @@ const columns2 = [
 
 function LISTAFACTURACION() {
     return (
-        <Container>
+        <div>
             <BarraLateral />
-            <h1>Lista Facturacion</h1>
+            <Container className='mt-5'>
+                <h1>Lista Facturacion</h1>
 
-            <DataTable columns={columns2} data={data} />
-        </Container>
+                <DataTable columns={columns2} data={data} />
+            </Container>
+        </div>
     );
 }
 

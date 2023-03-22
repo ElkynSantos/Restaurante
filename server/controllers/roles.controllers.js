@@ -16,20 +16,48 @@ const getUsers_RoleandPermissions = async (req, res, next) => {
     }
 };
 
-const setNewRoles = async (req, res, next) => {
+const unable_enable_role = async (req, res, next) => {
     try {
-        const { idrol, ArrayPermisos } = req.body;
+        const { id_Rol } = req.body;
+
+        const result = await db.query('CALL UnEnableRol(' + id_Rol + ' );');
+
+        return res.status(200).json({ result });
+    } catch (error) {
+        return next(new AppError('Ups! Error en la base de datos', 500));
+    }
+};
+
+const getPermisosdeRol = async (req, res, next) => {
+    try {
+        const { idrol } = req.body;
+
+        const Permisos = await db.query(
+            'CALL obtenerPermisosde_rol("' + idrol + '");'
+        );
+
+        return res.status(200).json({ Permisos });
+    } catch (error) {
+        return next(new AppError('Ups! Error en la base de datos', 500));
+    }
+};
+
+const setNewRoleandPermits = async (req, res, next) => {
+    try {
+        const { idrol, NuevoNombre, ArrayPermisos } = req.body;
         const permisosString = ArrayPermisos.join(',');
 
-        await db.query(
-            'CALL asignar_permisos_rol(' +
+        const Permisos = await db.query(
+            'CALL editar_permisos_rol(' +
                 idrol +
                 ', "' +
-                permisosString +
+                NuevoNombre +
+                '", "' +
+                ArrayPermisos +
                 '", @resultado);'
         );
 
-        return res.status(200).json({});
+        return res.status(200).json('Rol Editado Correctamente');
     } catch (error) {
         return next(new AppError('Ups! Error en la base de datos', 500));
     }
@@ -37,11 +65,18 @@ const setNewRoles = async (req, res, next) => {
 
 const CreateNewRole = async (req, res, next) => {
     try {
-        const { NombreRol } = req.body;
+        const { NombreRol, ArrayPermisos } = req.body;
 
-        await db.query("CALL crear_rol('" + NombreRol + "', 1);");
+        console.log('===========================LUGAR===========');
+        console.log(ArrayPermisos);
 
-        return res.status(200).json({});
+        let permisos_str = ArrayPermisos.join();
+        let permisos = JSON.stringify(permisos_str);
+        await db.query(
+            'CALL crear_rol("' + NombreRol + '", "' + ArrayPermisos + '");'
+        );
+
+        return res.status(200).json('Se Creo el Rol');
     } catch (error) {
         return next(new AppError('Ups! Error en la base de datos', 500));
     }
@@ -53,7 +88,7 @@ const DeleteRole = async (req, res, next) => {
 
         await db.query('CALL eliminar_rol(' + NRol + ');');
 
-        return res.status(200).json({});
+        return res.status(200).json('Rol Editado Correctamente');
     } catch (error) {
         return next(new AppError('Ups! Error en la base de datos', 500));
     }
@@ -68,6 +103,46 @@ const getAllRoles = async (req, res, next) => {
         return res.status(200).json({
             allRoles,
         });
+    } catch (error) {
+        return next(new AppError('Ups! Error en la base de datos', 500));
+    }
+};
+
+const getAllCategoriesByUser = async (req, res, next) => {
+    try {
+        // let { username } = req.params;
+        let { currentUsername } = req;
+        console.log(currentUsername);
+        const allRoles = await db.query(
+            `CALL ObtenerRolYPermisos(:p_Nom_Usuario)`,
+            {
+                replacements: {
+                    p_Nom_Usuario: currentUsername,
+                },
+            }
+        );
+
+        return res.status(200).json(allRoles[0].ARRAY);
+    } catch (error) {
+        // console.log(error);
+        return next(new AppError('Ups! Error en la base de datos', 500));
+    }
+};
+
+const getPermissionsByUser = async (req, res, next) => {
+    try {
+        let { currentUsername } = req;
+
+        const permissions = await db.query(
+            `CALL get_permissions_by_user(:username)`,
+            {
+                replacements: {
+                    username: currentUsername,
+                },
+            }
+        );
+
+        return res.status(200).json(permissions[0].permissions);
     } catch (error) {
         return next(new AppError('Ups! Error en la base de datos', 500));
     }
@@ -104,8 +179,11 @@ export {
     getAllRoles,
     getAllPermisos,
     getAllForBarralateral,
-    setNewRoles,
+    getAllCategoriesByUser,
+    getPermissionsByUser,
+    setNewRoleandPermits,
     CreateNewRole,
-    DeleteRole,
     getUsers_RoleandPermissions,
+    getPermisosdeRol,
+    unable_enable_role,
 };

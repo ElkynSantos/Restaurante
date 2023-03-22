@@ -1,58 +1,49 @@
 .facturas {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 300px;
-  padding-top: 100px;
-  
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 300px;
+    padding-top: 100px;
 }
 .facturas h1 {
-  margin-bottom: 40px;
+    margin-bottom: 40px;
 }
 
 .busqueda {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 20px;
-  width: 800px;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+    width: 800px;
 }
-
 
 .table {
-  width: 200%;
+    width: 200%;
 }
-
 
 .acciones {
-  text-align: center;
+    text-align: center;
 }
 
-
 .pendiente {
-  display: inline-block;
-  padding: 5px 10px;
-  background-color: rgb(219, 193, 42);
-  color: rgb(3, 3, 3);
-  border-radius: 5px;
- 
+    display: inline-block;
+    padding: 5px 10px;
+    background-color: rgb(219, 193, 42);
+    color: rgb(3, 3, 3);
+    border-radius: 5px;
 }
 
 .no-pagado {
-  display: inline-block;
-  padding: 5px 10px;
-  background-color: rgb(235, 33, 33);
-  color: rgb(3, 3, 3);
-  border-radius: 5px;
- 
+    display: inline-block;
+    padding: 5px 10px;
+    background-color: rgb(235, 33, 33);
+    color: rgb(3, 3, 3);
+    border-radius: 5px;
 }
 
 .pagado {
-  display: inline-block;
-  padding: 5px 10px;
-  background-color: rgb(41, 194, 27);
-  color: rgb(3, 3, 3);
-  border-radius: 5px;
-  
+    display: inline-block;
+    padding: 5px 10px;
+    background-color: rgb(41, 194, 27);
+    color: rgb(3, 3, 3);
+    border-radius: 5px;
 }
-
-

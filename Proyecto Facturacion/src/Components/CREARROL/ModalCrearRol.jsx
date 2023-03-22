@@ -19,14 +19,12 @@ import { useDispatch, useSelector } from 'react-redux';
 
 function Example() {
     const dispatch = useDispatch();
-    // const [show, setShow] = useState(false);
     const handleClose = () => {
-        console.log('entro');
         dispatch(closeModalCR());
     };
 
     const show2 = useSelector((state) => state.createrol);
-    console.log(show2);
+
     return (
         <>
             <Modal
@@ -60,43 +58,66 @@ function CREARROL() {
     const [checkedList, setCheckedList] = useState([]);
     const [PERMISOS, setPERMISOS] = useState([]);
 
-    const setNuevoRol = async (NR) => {
-        console.log('PERMISOS');
-
-        console.log(checkedList);
-
-        /* const response = await fetch(
-            'http://localhost:3000/roles/CreateNewRole',
-            {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-
-                body: JSON.stringify({ NombreRol: NR }),
-            }
-        );
-        const data = await response.json();*/
-    };
-
     useEffect(() => {
         const getAllPermisos = async () => {
-            await fetch('http://localhost:3000/roles/permits')
+            await fetch('http://localhost:3000/roles/permissions')
                 .then((response) => response.json())
                 .then((data) => {
-                    console.log('================================');
-                    console.log(data.allRoles);
-
-                    //   handleInitRoles(data.allRoles);
                     setPERMISOS(data.allRoles);
                 })
                 .catch((error) => {
                     console.error(error);
                 });
         };
-
         getAllPermisos();
     }, []);
+
+    const setNuevoRol = async (NR) => {
+        console.log('PERMISOS');
+
+        console.log(checkedList);
+        try {
+            const response = await fetch(
+                'http://localhost:3000/roles/CreateNewRole',
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+
+                    body: JSON.stringify({
+                        NombreRol: NR,
+                        ArrayPermisos: checkedList,
+                    }),
+                }
+            );
+            const data = await response.json();
+            /*  const getAllPermisos = async () => {
+                await fetch('http://localhost:3000/roles/permits')
+                    .then((response) => response.json())
+                    .then((data) => {
+                        setPERMISOS(data.allRoles);
+                    })
+                    .catch((error) => {
+                        console.error(error);
+                    });
+            };
+            getAllPermisos();*/
+            Swal.fire({
+                position: 'top-center',
+                icon: 'success',
+                title: data,
+                showConfirmButton: false,
+                timer: 1500,
+            });
+        } catch (error) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: error,
+            });
+        }
+    };
 
     const listaPermisos = [];
     for (let i = 0; i < PERMISOS.length; i++) {
@@ -116,16 +137,10 @@ function CREARROL() {
     const handleSelect = (id) => {
         const value = id;
         const isChecked = event.target.checked;
-        console.log('Antes');
-        console.log(value);
         if (isChecked) {
-            //Add checked item into checkList
             checkedList.push(value);
             setCheckedList(checkedList);
-            console.log('======CHEQUIADOS======');
-            console.log(checkedList);
         } else {
-            //Remove unchecked item from checkList
             const filteredList = checkedList.filter((item) => item !== value);
             setCheckedList(filteredList);
         }
@@ -137,8 +152,6 @@ function CREARROL() {
 
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors);
-        } else {
-            console.log('FUNCIONA');
         }
     }
 
@@ -198,7 +211,9 @@ function CREARROL() {
                             className="bg-blue"
                             form="test"
                             type="submit"
-                            onClick={() => setNuevoRol(Vsend)}
+                            onClick={() => {
+                                setNuevoRol(Vsend);
+                            }}
                         >
                             Guardar rol
                         </Button>

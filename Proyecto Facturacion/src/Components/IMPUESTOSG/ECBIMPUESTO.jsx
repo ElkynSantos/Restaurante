@@ -1,117 +1,207 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Table from 'react-bootstrap/Table';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+import Swal from 'sweetalert2';
 import './Crear.css';
 import BarraLateral from '../common/index.js';
 import { Container } from 'react-bootstrap';
-import '../../features/taxesSlice';
-import { CreateTax, getAllTaxes, editTax, deleteTax } from '../../services/Taxes';
-import Swal from 'sweetalert2';
+import { useSelector, useDispatch } from 'react-redux';
+import { deleteTax, editTax } from '../../services/Taxes';
+import axios from 'axios';
+import Modal from 'react-bootstrap/Modal';
 
+import InputGroup from 'react-bootstrap/InputGroup';
 function ECBMPUESTO() {
-    /*CreateTax('IVA', 16).then(response => {
-        console.log('El nuevo impuesto ha sido creado:', response);
-            }).catch(error => {
-        console.error('Error al crear el impuesto:', error);
-            });
-    
-    
-        getAllTaxes().then(response => {
-        console.log('Todos los impuestos:', response);
-        console.error('Error al obtener los impuestos:', error);
-        console.error('Error al obtener los impuestos:', error);
-            });
-    
-    
-    
-    
-        deleteTax(1, 1).then(response => {
-        console.log('El impuesto ha sido eliminado:', response);
-            }).catch(error => {
-        console.error('Error al eliminar el impuesto:', error);
-            });*/
- 
+    const [show, setShow] = useState(false);
+
     const [nombreImpuesto, setNombreImpuesto] = useState('');
     const [porcentajeImpuesto, setPorcentajeImpuesto] = useState('');
     const [impuestos, setImpuestos] = useState([]);
     const [impuestoEditando, setImpuestoEditando] = useState(null);
 
-    const handleAddImpuesto = async (e) => {
-        e.preventDefault();
-        if (!nombreImpuesto || !porcentajeImpuesto) return; // restricción para valores vacíos
-        if (impuestoEditando !== null) {
-          console.log("entro")
-          await editTax({  taxName: nombreImpuesto, taxAmount: porcentajeImpuesto}).then(response => {
+    const handleShow = () => setShow(true);
 
+    const handleEditClick = (id, name, percent) => {
+        setNombreImpuesto(name);
+        setPorcentajeImpuesto(percent);
+        handleShow();
+        setImpuestoEditando(id);
 
-            if(response.status = "Ok")
-            {
-              setImpuestos(
-                impuestos.map((impuesto, index) =>
-                  index === impuestoEditando ? { nombre: nombreImpuesto, porcentaje: porcentajeImpuesto } : impuesto
-                )
-              );
-              setNombreImpuesto('');
-              setPorcentajeImpuesto('');
-              setImpuestoEditando(null);
-    
-            Swal.fire({
-            text: "Se creo correctamente",
-            icon: "success"
+        console.log('EDITCLICK');
+    };
+
+    const handleClose = () => {
+        setShow(false);
+        setNombreImpuesto('');
+        setPorcentajeImpuesto('');
+        console.log('CLOSE');
+    };
+
+    const handleEditImpuesto = async (taxNameParam, taxAmountParam) => {
+        try {
+            await fetch('http://localhost:3000/taxes/', {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    taxId: impuestoEditando,
+                    taxName: taxNameParam,
+                    taxAmount: taxAmountParam,
+                }),
             })
-           return
-            }
+                .then((response) => response.json())
+                .then((data) => {
+                    console.log(data);
+
+                    Swal.fire({
+                        position: 'top-center',
+                        icon: 'success',
+                        title: data.msg,
+                        showConfirmButton: false,
+                        timer: 1500,
+                    });
+                });
+
+            await fetch('http://localhost:3000/taxes')
+                .then((response) => response.json())
+                .then((DATA) => {
+                    console.log(DATA.allTaxes);
+                    setImpuestos(DATA.allTaxes);
+                });
+
+            setNombreImpuesto('');
+            setPorcentajeImpuesto('');
+
+            //   const impuesto = impuestos[index];
+            //   setNombreImpuesto(impuesto.nombre);
+            //  setPorcentajeImpuesto(impuesto.porcentaje);
+            //   setImpuestoEditando(index);
+        } catch (error) {
             Swal.fire({
-              text: response.msg,
-              icon: "error"
-            })}).catch(() => {
-                Swal.fire({
-                text: "ocurrio un error a la hora de editar",
-                icon: "error"
-            })})
-    
-          // editando un impuesto existente
-          
-    
-        } else {
-          console.log("en2tro")
-          // agregando un nuevo impuesto
-          
-          setImpuestos([...impuestos, {  nombre: nombreImpuesto, porcentaje: porcentajeImpuesto }]);
-          setNombreImpuesto('');
-          setPorcentajeImpuesto('');
+                icon: 'error',
+                title: 'Oops...',
+                text: error,
+            });
         }
-      };
-
-
-
-
-
-
-
-
-    const handleEditImpuesto = (index) => {
-        const impuesto = impuestos[index];
-        setNombreImpuesto(impuesto.nombre);
-        setPorcentajeImpuesto(impuesto.porcentaje);
-        setImpuestoEditando(index);
     };
 
+    const handleDeleteImpuesto = async (idImpuesto, status) => {
+        try {
+            console.log('ID: ' + idImpuesto);
 
-// ARREGLAR DELETE IMPUESTO
-    const handleDeleteImpuesto = async  (index) => {
-        setImpuestos(impuestos.filter((_, i) => i !== index));
-        console.log("entssssro")
-    
-    
+            await fetch('http://localhost:3000/taxes/', {
+                method: 'delete',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    taxId: idImpuesto,
+                    taxStatus: status ? false : true,
+                }),
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    console.log(data);
+
+                    if (
+                        data.msg ==
+                        'No es posible deshabilitar un impuesto en uso'
+                    ) {
+                        Swal.fire({
+                            position: 'top-center',
+                            icon: 'error',
+                            title: data.msg,
+                            showConfirmButton: false,
+                            timer: 2000,
+                        });
+                    } else {
+                        Swal.fire({
+                            position: 'top-center',
+                            icon: 'success',
+                            title: data.msg,
+                            showConfirmButton: false,
+                            timer: 1500,
+                        });
+                    }
+                });
+
+            await fetch('http://localhost:3000/taxes')
+                .then((response) => response.json())
+                .then((DATA) => {
+                    console.log(DATA.allTaxes);
+                    setImpuestos(DATA.allTaxes);
+                });
+
+            //  setImpuestos(impuestos.filter((_, i) => i !== index));
+        } catch (error) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: error,
+            });
+        }
     };
+    useEffect(() => {
+        const getAllTaxes = async () => {
+            await fetch('http://localhost:3000/taxes')
+                .then((response) => response.json())
+                .then((data) => {
+                    console.log(data.allTaxes);
+                    setImpuestos(data.allTaxes);
+                });
+        };
 
+        getAllTaxes();
+    }, [nombreImpuesto, porcentajeImpuesto]);
+
+    const handleAddImpuesto = async (taxNameParam, taxAmountParam) => {
+        try {
+            await fetch('http://localhost:3000/taxes/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    taxDescription: taxNameParam,
+                    taxAmount: taxAmountParam,
+                }),
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    console.log(data);
+
+                    Swal.fire({
+                        position: 'top-center',
+                        icon: 'success',
+                        title: data.msg,
+                        showConfirmButton: false,
+                        timer: 1500,
+                    });
+                });
+            await fetch('http://localhost:3000/taxes')
+                .then((response) => response.json())
+                .then((DATA) => {
+                    console.log(DATA.allTaxes);
+                    setImpuestos(DATA.allTaxes);
+                });
+
+            setNombreImpuesto('');
+            setPorcentajeImpuesto('');
+        } catch (error) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: error,
+            });
+        }
+    };
     return (
-        <Container>
+        <div>
             <BarraLateral />
 
-            <div className="impuestos-table">
+            <div>
                 <h2>Lista de Impuestos</h2>
                 <Table striped bordered hover>
                     <thead>
@@ -123,52 +213,216 @@ function ECBMPUESTO() {
                     </thead>
                     <tbody>
                         {impuestos.map((impuesto, index) => (
-                            <tr key={index}>
-                                <td>{impuesto.nombre}</td>
-                                <td>{impuesto.porcentaje}</td>
+                            <tr key={impuesto.id}>
+                                <td>{impuesto.name}</td>
+                                <td>{impuesto.amount + '%'}</td>
                                 <td>
-                                    <Button
-                                        variant="warning"
-                                        className="mr-2"
-                                        onClick={() =>
-                                            handleEditImpuesto(index)
-                                        }
-                                    >
-                                        Editar
-                                    </Button>
-                                    <Button
-                                        variant="danger"
-                                        onClick={() =>
-                                            handleDeleteImpuesto(index)
-                                        }
-                                    >
-                                        Eliminar
-                                    </Button>
+                                    <>
+                                        <Button
+                                            variant="warning"
+                                            className="mr-2"
+                                            onClick={() =>
+                                                handleEditClick(
+                                                    impuesto.id,
+                                                    impuesto.name,
+                                                    impuesto.amount
+                                                )
+                                            }
+                                        >
+                                            Editar
+                                        </Button>
+
+                                        <Modal show={show} onHide={handleClose}>
+                                            <Modal.Header closeButton>
+                                                <Modal.Title>
+                                                    Editar Impuesto
+                                                </Modal.Title>
+                                            </Modal.Header>
+                                            <Modal.Body>
+                                                <Form>
+                                                    <Form.Group>
+                                                        <Form.Label>
+                                                            Nombre del impuesto
+                                                        </Form.Label>
+
+                                                        <Form.Control
+                                                            type="text"
+                                                            required
+                                                            maxLength="10"
+                                                            minLength="10"
+                                                            onKeyPress={(
+                                                                event
+                                                            ) => {
+                                                                if (
+                                                                    !/^[a-zA-Z0-9]{0,10}$/.test(
+                                                                        event.key
+                                                                    )
+                                                                ) {
+                                                                    event.preventDefault();
+                                                                }
+                                                            }}
+                                                            value={
+                                                                nombreImpuesto
+                                                            }
+                                                            onChange={(e) =>
+                                                                setNombreImpuesto(
+                                                                    e.target
+                                                                        .value
+                                                                )
+                                                            }
+                                                        />
+                                                    </Form.Group>
+                                                    <Form.Group>
+                                                        <Form.Label>
+                                                            Porcentaje del
+                                                            impuesto
+                                                        </Form.Label>
+
+                                                        <InputGroup className="mb-3">
+                                                            <Form.Control
+                                                                type="text"
+                                                                required
+                                                                maxLength="2"
+                                                                minLength="2"
+                                                                onKeyPress={(
+                                                                    event
+                                                                ) => {
+                                                                    if (
+                                                                        !/^(100|[1-9][0-9]?|0[1-9])$/.test(
+                                                                            event.key
+                                                                        )
+                                                                    ) {
+                                                                        event.preventDefault();
+                                                                    }
+                                                                }}
+                                                                value={
+                                                                    porcentajeImpuesto
+                                                                }
+                                                                onChange={(e) =>
+                                                                    setPorcentajeImpuesto(
+                                                                        e.target
+                                                                            .value
+                                                                    )
+                                                                }
+                                                            />
+
+                                                            <InputGroup.Text id="basic-addon2">
+                                                                %
+                                                            </InputGroup.Text>
+                                                        </InputGroup>
+                                                    </Form.Group>
+                                                </Form>
+                                            </Modal.Body>
+                                            <Modal.Footer>
+                                                <Button
+                                                    variant="danger"
+                                                    onClick={handleClose}
+                                                >
+                                                    Close
+                                                </Button>
+                                                <Button
+                                                    variant="warning"
+                                                    className="mr-2"
+                                                    onClick={() => {
+                                                        handleEditImpuesto(
+                                                            nombreImpuesto,
+                                                            porcentajeImpuesto
+                                                        );
+                                                        handleClose();
+                                                    }}
+                                                >
+                                                    Guardar Cambios
+                                                </Button>
+                                            </Modal.Footer>
+                                        </Modal>
+                                    </>
+
+                                    {impuesto.status ? (
+                                        <Button
+                                            variant="success"
+                                            onClick={() =>
+                                                handleDeleteImpuesto(
+                                                    impuesto.id,
+                                                    impuesto.status
+                                                )
+                                            }
+                                        >
+                                            Habilitado
+                                        </Button>
+                                    ) : (
+                                        <Button
+                                            variant="danger"
+                                            onClick={() =>
+                                                handleDeleteImpuesto(
+                                                    impuesto.id,
+                                                    impuesto.status
+                                                )
+                                            }
+                                        >
+                                            Deshabilitado
+                                        </Button>
+                                    )}
                                 </td>
                             </tr>
                         ))}
                     </tbody>
                 </Table>
-                <Form onSubmit={handleAddImpuesto}>
+                <Form>
                     <Form.Group>
                         <Form.Label>Nombre del impuesto</Form.Label>
                         <Form.Control
                             type="text"
+                            required
+                            maxLength="10"
+                            minLength="10"
+                            onKeyPress={(event) => {
+                                if (!/^[a-zA-Z0-9]{1,10}$/.test(event.key)) {
+                                    event.preventDefault();
+                                }
+                            }}
                             value={nombreImpuesto}
                             onChange={(e) => setNombreImpuesto(e.target.value)}
                         />
                     </Form.Group>
                     <Form.Group>
                         <Form.Label>Porcentaje del impuesto</Form.Label>
-                        <Form.Control
-                            type="text"
-                            value={porcentajeImpuesto}
-                            onChange={(e) =>
-                                setPorcentajeImpuesto(e.target.value)
-                            }
-                        />
+
+                        <InputGroup className="mb-3">
+                            <Form.Control
+                                type="text"
+                                required
+                                maxLength="2"
+                                minLength="2"
+                                onKeyPress={(event) => {
+                                    if (
+                                        !/^(100|[1-9][0-9]?|0[1-9])$/.test(
+                                            event.key
+                                        )
+                                    ) {
+                                        event.preventDefault();
+                                    }
+                                }}
+                                value={porcentajeImpuesto}
+                                onChange={(e) =>
+                                    setPorcentajeImpuesto(e.target.value)
+                                }
+                            />
+
+                            <InputGroup.Text id="basic-addon2">
+                                %
+                            </InputGroup.Text>
+                        </InputGroup>
                     </Form.Group>
-                    <Button variant="primary" type="submit" className="mt-3">
+                    <Button
+                        variant="primary"
+                        className="mt-3"
+                        onClick={() =>
+                            handleAddImpuesto(
+                                nombreImpuesto,
+                                porcentajeImpuesto
+                            )
+                        }
+                    >
                         Agregar Impuesto
                     </Button>{' '}
                     <Button
@@ -184,7 +438,7 @@ function ECBMPUESTO() {
                     </Button>
                 </Form>
             </div>
-        </Container>
+        </div>
     );
 }
 

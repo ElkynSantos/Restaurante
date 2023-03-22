@@ -19,7 +19,6 @@ const login = async (req, res, next) => {
     try {
         const { user, userPassword } = req.body;
 
-        console.log(user, userPassword);
         if (!user || !userPassword) {
             return next(
                 new AppError(
@@ -41,8 +40,7 @@ const login = async (req, res, next) => {
         if (userExists.response === 0) {
             return next(new AppError(userExists.msg, 404));
         }
-        console.log('valor:', userExists.status);
-        console.log('valor:', userExists);
+
         if (userExists.status !== 1) {
             return next(
                 new AppError('El usuario se encuentra desactivado', 401)
@@ -64,12 +62,18 @@ const login = async (req, res, next) => {
             userExists.name
         );
 
-        return res.status(200).json({
-            status: 'Ok',
-            jwtToken,
+        const cookieOptions = {
+            sameSite: 'none',
+            secure: true,
+        };
 
-            msg: `¡Bienvenido al sistema, ${userExists.name}!`,
-        });
+        res.status(200)
+            .cookie('_token', jwtToken, cookieOptions)
+            .json({
+                status: 'Ok',
+                jwtToken,
+                msg: `¡Bienvenido al sistema, ${userExists.name}!`,
+            });
     } catch (error) {
         return next(new AppError(`Error en la base de datos ${error}`, 500));
     }

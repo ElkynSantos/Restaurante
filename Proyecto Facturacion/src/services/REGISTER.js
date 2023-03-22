@@ -28,7 +28,7 @@ export async function Register(
     // console.log(placeofBirth);
     const options = {
         method: 'POST',
-        url: 'http://localhost:3000/users/',
+        url: `${import.meta.env.VITE_REACT_APP_API_URL}/users/`,
         data: {
             name,
             lastName,
@@ -41,11 +41,10 @@ export async function Register(
             email,
             password,
         },
+        withCredentials: true,
     };
 
-    //console.log(options.data);
     const response = await axios.request(options);
-    // console.log(response);
 
     return response.data;
 }

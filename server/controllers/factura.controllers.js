@@ -3,7 +3,7 @@ import { integerSanitizer } from '../utilities/data.sanitizer.js';
 
 import db from '../db.js';
 
-const getFacturas = async(req,res,next)=>{
+const getFacturas = async (req, res, next) => {
     try {
         const allFacturas = await db.query('CALL get_bills()');
         return res.status(200).json({
@@ -14,19 +14,171 @@ const getFacturas = async(req,res,next)=>{
     } catch (error) {
         return next(new AppError('Ups! Error en la base de datos', 500));
     }
-}
-const getFactura = async (req, res) => 
-{
+};
+const getFactura = async (req, res) => {
     const { Numero_factura } = req.body;
-    console.log("11111111" + Numero_factura);
-    const [factura] = await db.query('CALL get_bill(:p_numeroFactura)', 
-    {
+    console.log('11111111' + Numero_factura);
+    const [factura] = await db.query('CALL get_bill(:p_numeroFactura)', {
         replacements: {
-             p_numeroFactura: Numero_factura,
+            p_numeroFactura: Numero_factura,
         },
     });
-    console.log("aaaaaaaaaa" + Numero_factura);
+    console.log('aaaaaaaaaa' + Numero_factura);
     if (factura.response === 0) {
+        return res.status(404).json({
+            status: 'fail',
+            msg: user.msg,
+        });
+    }
+    console.log('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa');
+    console.log(factura);
+    return res.status(200).json({
+        status: 'Oki',
+        factura,
+    });
+};
+
+const editFacturas = async (req, res, next) => {
+    try {
+        const { id, RTN_cliente, Nombre_cliente } = req.body;
+
+        console.log(id, RTN_cliente, Nombre_cliente);
+        const updatedFactura = await db.query(
+            'CALL edit_bills(:p_id,:p_rtn_cliente, :p_nombre_cliente)',
+            {
+                replacements: {
+                    p_id: id,
+                    p_rtn_cliente: RTN_cliente,
+                    p_nombre_cliente: Nombre_cliente,
+                },
+            }
+        );
+
+        if (updatedFactura[0].response === 0) {
+            return res.status(400).json({
+                status: 'fail',
+                msg: updatedFactura[0].msg,
+            });
+        }
+
+        return res.status(200).json({
+            status: 'Ok',
+            msg: updatedFactura[0].msg,
+        });
+    } catch (error) {
+        console.log(error);
+        return next(new AppError('Ha ocurrido algún error', 500));
+    }
+};
+
+const newFactura = async (req, res, next) => {
+    try {
+        const {
+            numeroFactura,
+            nombreCliente,
+            RtnCliente,
+            fechaCreacion,
+            subtotal,
+            total,
+            tarjetaEfectivo,
+            cambio,
+            anular,
+            pendiente,
+            pagado,
+            idConfiguracionFactura,
+            listapedidos,
+            usuarioAtiende,
+        } = req.body;
+
+        console.log(
+            numeroFactura,
+            nombreCliente,
+            RtnCliente,
+            fechaCreacion,
+            subtotal,
+            total,
+            tarjetaEfectivo,
+            cambio,
+            anular,
+            pendiente,
+            pagado,
+            idConfiguracionFactura,
+            listapedidos,
+            usuarioAtiende
+        );
+
+        /*     const emptyParams = Object.values({
+            numeroFactura,
+            nombreCliente,
+            RtnCliente,
+            fechaCreacion,
+            subtotal,
+            total,
+            tarjetaEfectivo,
+            cambio,
+            anular,
+            pendiente,
+            pagado,
+            idConfiguracionFactura,
+            idOrden,
+            usuarioAtiende,
+        }).some((val) => !val);*/
+
+        /*   if (emptyParams) {
+            console.log(emptyParams);
+
+            return next(new AppError('Favor completar todos los campos', 400));
+        }*/
+
+        const [newFactura] = await db.query(
+            'CALL db_rest.new_bills(:p_numero_factura,:p_nombre_cliente,:p_rtn_cliente,:p_fecha_creacion,:p_subtotal,:p_total,:p_tarjeta_efectivo,:p_cambio, :p_anular, :p_pendiente,:p_pagado,:p_id_configuracion_factura,:p_listaPedidos,:p_usuario_atiende)',
+            {
+                replacements: {
+                    p_numero_factura: numeroFactura,
+                    p_nombre_cliente: nombreCliente,
+                    p_rtn_cliente: RtnCliente,
+                    p_fecha_creacion: fechaCreacion,
+                    p_subtotal: subtotal,
+                    p_total: total,
+                    p_tarjeta_efectivo: tarjetaEfectivo,
+                    p_cambio: cambio,
+                    p_anular: anular,
+                    p_pendiente: pendiente,
+                    p_pagado: pagado,
+                    p_id_configuracion_factura: idConfiguracionFactura,
+                    p_listaPedidos: '[,' + listapedidos + ',]',
+                    p_usuario_atiende: usuarioAtiende,
+                },
+            }
+        );
+        console.log(newFactura.last_inserted_id);
+        return res.status(200).json({
+            msg: newFactura.last_inserted_id,
+        });
+    } catch (error) {
+        console.log(error);
+        return next(
+            new AppError(
+                'Ha ocurrido algún error al crear la nueva factura',
+                500
+            )
+        );
+    }
+};
+
+const getBillData = async (req, res) => {
+    const { NPedido } = req.body;
+    console.log('Sucede');
+    console.log(NPedido);
+    const [Respuesta] = await db.query(
+        'CALL db_rest.obtener_productos_por_lista_pedidos(:p_NPedido)',
+        {
+            replacements: {
+                p_NPedido: NPedido,
+            },
+        }
+    );
+    if (Respuesta.response === 0) {
         return res.status(404).json({
             status: 'fail',
             msg: user.msg,
@@ -35,48 +187,43 @@ const getFactura = async (req, res) =>
 
     return res.status(200).json({
         status: 'Ok',
-        factura,
+        Respuesta,
     });
-    
-}
+};
 
-const editFacturas =async (req,res,next)=>{
-try {
-    const {id,RTN_cliente,Nombre_cliente} = req.body;
+const payBill = async (req, res) => {
+    const {
+        idFactura_param,
+        Monto_param,
+        Cambio_param,
+        EstadoEfectivo_Tarjeta,
+    } = req.body;
 
-    console.log(id,RTN_cliente,Nombre_cliente);
-    const updatedFactura = await db.query(
-        'CALL edit_bills(:p_id,:p_rtn_cliente, :p_nombre_cliente)',
+    const [Respuesta] = await db.query(
+        'CALL db_rest.sp_actualizarPagoFactura(:p_idFactura, :p_Monto, :p_Cambio, :p_EstadoEfectivo_Tarjeta)',
         {
             replacements: {
-            p_id: id,
-            p_rtn_cliente: RTN_cliente ,
-            p_nombre_cliente: Nombre_cliente
+                p_idFactura: idFactura_param,
+                p_Monto: Monto_param,
+                p_Cambio: Cambio_param,
+                p_EstadoEfectivo_Tarjeta: EstadoEfectivo_Tarjeta,
             },
         }
     );
-
-    if (updatedFactura[0].response === 0) {
-        return res.status(400).json({
+    if (Respuesta.response === 0) {
+        return res.status(404).json({
             status: 'fail',
-            msg: updatedFactura[0].msg,
+            msg: Respuesta,
         });
     }
 
     return res.status(200).json({
         status: 'Ok',
-        msg: updatedFactura[0].msg,
+        Respuesta,
     });
+};
 
-}catch(error)
-{
-    console.log(error);
-    return next(new AppError('Ha ocurrido algún error', 500));
-}
-}
-
-const anularFactura = async (req,res,next)=>
-{
+const anularFactura = async (req, res, next) => {
     try {
         const { id } = req.body;
 
@@ -84,14 +231,11 @@ const anularFactura = async (req,res,next)=>
             return next(new AppError(`No se permiten campos vacios`, 400));
         }
 
-        const [changeID] = await db.query(
-            `CALL anular_factura(:p_id)`,
-            {
-                replacements: {
-                    p_id: id
-                },
-            }
-        );
+        const [changeID] = await db.query(`CALL anular_factura(:p_id)`, {
+            replacements: {
+                p_id: id,
+            },
+        });
 
         return res.status(200).json({
             status: 'Ok',
@@ -100,120 +244,13 @@ const anularFactura = async (req,res,next)=>
     } catch (error) {
         return next(new AppError(`Error en la base de datos ${error}`, 500));
     }
-    
-}
-
-const newFactura =async (req,res,next) =>{
-try{
-
-    const { 
-       
-        numeroFactura,
-        nombreCliente,
-        RtnCliente,
-        fechaCreacion,
-        subtotal,
-        total,
-        tarjetaEfectivo,
-        cambio,
-        anular,
-        pendiente,
-        pagado,
-        idConfiguracionFactura,
-        idOrden,
-        usuarioAtiende
-
-    } = req.body;
-
-    console.log( 
-
-        numeroFactura,
-        nombreCliente,
-        RtnCliente,
-        fechaCreacion,
-        subtotal,
-        total,
-        tarjetaEfectivo,
-        cambio,
-        anular,
-        pendiente,
-        pagado,
-        idConfiguracionFactura,
-        idOrden,
-        usuarioAtiende
-
-        );
-
-       const emptyParams = Object.values({
-        numeroFactura,
-        nombreCliente,
-        RtnCliente,
-        fechaCreacion,
-        subtotal,
-        total,
-        tarjetaEfectivo,
-        cambio,
-        anular,
-        pendiente,
-        pagado,
-        idConfiguracionFactura,
-        idOrden,
-        usuarioAtiende
-
-        }).some((val) => !val);
-
-    if (emptyParams) {
-        return next(new AppError('Favor completar todos los campos', 400));
-    }
-
-    const [newFactura] = await db.query(
-        'CALL new_bill(:p_numero_factura,:p_nombre_cliente,:p_rtn_cliente,:p_fecha_creacion,:p_subtotal,:p_total,:p_tarjeta_efectivo,:p_cambio, :p_anular, :p_pendiente,:p_pagado,:p_id_configuracion_factura,:p_id_orden,:p_usuario_atiende)',
-        {
-            replacements: {
-     
-                p_numero_factura : numeroFactura,
-                p_nombre_cliente : nombreCliente, 
-                p_rtn_cliente : RtnCliente, 
-                p_fecha_creacion : fechaCreacion, 
-                p_subtotal : subtotal, 
-                p_total : total, 
-                p_tarjeta_efectivo : tarjetaEfectivo, 
-                p_cambio : cambio,  
-                p_anular : anular,  
-                p_pendiente : pendiente,
-                p_pagado: pagado,
-                p_id_configuracion_factura:idConfiguracionFactura,
-                p_id_orden:idOrden,
-                p_usuario_atiende : usuarioAtiende
-        
-            },
-        }
-    );
-
-    return res.status(201).json({
-        status: 'Ok',
-        msg: newFactura.msg,
-    });
-
-}catch(error)
-{
-    console.log(error);
-    return next(
-        new AppError(
-            'Ha ocurrido algún error al crear la nueva factura',
-            500
-        )
-    );
-
-}
-
-}
-
- 
+};
 export {
     getFacturas,
     editFacturas,
     newFactura,
     getFactura,
-    anularFactura
-}
+    getBillData,
+    payBill,
+    anularFactura,
+};

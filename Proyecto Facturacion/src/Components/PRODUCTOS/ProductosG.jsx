@@ -9,13 +9,14 @@ import {
     Form,
     InputGroup,
 } from 'react-bootstrap';
+
 import DataTable from 'react-data-table-component';
 import { useSelector, useDispatch } from 'react-redux';
 import {
     PersonPlusFill,
     Search,
     PencilFill,
-    Trash3Fill,
+    Basket2,
     Display,
 } from 'react-bootstrap-icons';
 
@@ -25,6 +26,7 @@ import Swal from 'sweetalert2';
 import { showModalEP, closeModalEP } from '../../features/EditarProducto';
 import { showModalCP, closeModalCP } from '../../features/CreateProduct';
 import { guardar } from '../../features/sendeditableproduct';
+import { editar, getproduct, EditStatus } from '../../services/Product';
 
 import BarraLateral from '../common/index';
 import CREARPRODUCTO from '../CREARPRODUCTOS/index';
@@ -39,31 +41,27 @@ const paginationComponentOptions = {
 };
 
 function PRODUCTOT() {
+    console.log("productos")
     const dispatch = useDispatch();
 
     const products = useSelector((state) => state.products);
+
     const show2 = useSelector((state) => state.EditarProducto);
     const show = useSelector((state) => state.CreateProduct);
     const [DATA, setData] = useState([]);
+    const [count, setcount] = useState(0);
     const [selectedRow, setSelectedRow] = useState(null);
     const [filterText, setFilterText] = useState('');
+    const valores = useSelector((state) => state.sendeditableproduct).value;
 
-    const handleRowClicked = (row) => {
-        if (products == null) {
-            setSelectedRow(row);
-        } else {
-            setSelectedRow(row);
-        }
+    const handleShowEditModal = async (codigo_producto) => {
+        await getproduct(codigo_producto).then((dataproduct) => {
+            dispatch(guardar(dataproduct.products[0]));
+            dispatch(showModalEP());
+        });
     };
-    useEffect(() => {
-        // Do something with the selected row data each time it changes
-
-        dispatch(guardar(selectedRow));
-        //setSelectedRow(null);
-    }, [selectedRow]);
 
     const handleShowEP = () => {
-        dispatch(guardar(selectedRow));
         dispatch(showModalEP());
     };
     const handleCloseCP = () => {
@@ -75,10 +73,54 @@ function PRODUCTOT() {
     };
 
     useEffect(() => {
-        dispatch(fetchProducts()).then((data) =>
-            setData(data.payload.allProducts)
-        );
-    }, [dispatch, show2, show]);
+        dispatch(fetchProducts());
+    }, [dispatch, show2, show, count]);
+
+    console.log(products);
+
+    const handleDelete = (codigo_producto, status) => {
+        Swal.fire({
+            icon: 'info',
+            text: `¿Desea ${
+                status == 1 ? 'desactivar' : 'activar'
+            } el producto con el DNI ${codigo_producto}?`,
+            showCancelButton: true,
+            cancelButtonColor: '#DC3545',
+            cancelButtonText: 'Cancelar',
+            confirmButtonColor: 'var(--blue)',
+            confirmButtonText: 'Si',
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                if (status == 0) {
+                    console.log('entro');
+
+                    status = 1;
+                } else {
+                    status = 0;
+                }
+
+                await EditStatus(codigo_producto, status)
+                    .then((data) => {
+                        if (data.status != 'Ok') {
+                            Swal.fire({
+                                text: data.message,
+                                icon: 'error',
+                            });
+                            return;
+                        }
+
+                        Swal.fire({
+                            text: data.msg,
+                            icon: 'success',
+                        });
+                        setcount(count + 1);
+                    })
+                    .catch((error) => {
+                        console.error(error);
+                    });
+            }
+        });
+    };
 
     useEffect(() => {
         if (products.allProducts && products.allProducts[0]) {
@@ -105,39 +147,83 @@ function PRODUCTOT() {
         },
         {
             name: 'Precio',
-            selector: (row) => row.precio_producto,
+            selector: (row) => `Lps. ${row.precio_producto}`,
+        },
+        {
+            name: 'Impuesto',
+            selector: (row) => row.name,
+        },
+        {
+            name: 'Habilitado',
+            selector: (row) => {
+                return row.status == 1 ? 'Activo' : 'Inactivo';
+            },
         },
 
         {
             name: 'Acciones',
             selector: (row) => {
-                return (
-                    <Row>
-                        <Col>
-                            <button
-                                className="btn-transparent text-blue p-0"
-                                title="Editar"
-                                onClick={() => {
-                                    handleRowClicked(row);
-                                    handleShowEP();
-                                }}
-                            >
-                                <PencilFill />
-                            </button>
-                        </Col>
-                        <Col>
-                            <button
-                                className="btn-transparent text-danger p-0"
-                                title="Eliminar"
-                                onClick={() =>
-                                    handleDelete(row.DNI, row.status)
-                                }
-                            >
-                                <Trash3Fill />
-                            </button>
-                        </Col>
-                    </Row>
-                );
+                if (row.status == 1) {
+                    return (
+                        <Row>
+                            <Col>
+                                <button
+                                    className="btn-transparent text-blue p-0"
+                                    title="Editar"
+                                    onClick={() =>
+                                        handleShowEditModal(row.codigo_producto)
+                                    }
+                                >
+                                    <PencilFill />
+                                </button>
+                            </Col>
+                            <Col>
+                                <button
+                                    className="btn-transparent text-success p-0"
+                                    title="Habilitar/Deshabilitar"
+                                    onClick={() =>
+                                        handleDelete(
+                                            row.codigo_producto,
+                                            row.status
+                                        )
+                                    }
+                                >
+                                    <Basket2 />
+                                </button>
+                            </Col>
+                        </Row>
+                    );
+                } else {
+                    return (
+                        <Row>
+                            <Col>
+                                <button
+                                    className="btn-transparent text-blue p-0"
+                                    title="Editar"
+                                    onClick={() =>
+                                        handleShowEditModal(row.codigo_producto)
+                                    }
+                                >
+                                    <PencilFill />
+                                </button>
+                            </Col>
+                            <Col>
+                                <button
+                                    className="btn-transparent text-danger p-0"
+                                    title="Habilitar/Deshabilitar"
+                                    onClick={() =>
+                                        handleDelete(
+                                            row.codigo_producto,
+                                            row.status
+                                        )
+                                    }
+                                >
+                                    <Basket2 />
+                                </button>
+                            </Col>
+                        </Row>
+                    );
+                }
             },
         },
     ];
@@ -199,7 +285,7 @@ function PRODUCTOT() {
                 <DataTable
                     className="mt-3"
                     columns={columns}
-                    data={DATA}
+                    data={products.allProducts}
                     customStyles={customStyles}
                     noDataComponent={
                         <div className="p-4">No se encontraron productos</div>

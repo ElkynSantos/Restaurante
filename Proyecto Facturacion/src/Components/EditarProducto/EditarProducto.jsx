@@ -19,13 +19,16 @@ import { guardar } from '../../features/sendeditableproduct';
 import { editar, getproduct } from '../../services/Product';
 import { useDispatch, useSelector } from 'react-redux';
 import { FileEarmarkRichtext } from 'react-bootstrap-icons';
+import { agetAllTaxes } from '../../services/Taxes';
 
 function EditarProducto() {
     const valores = useSelector((state) => state.sendeditableproduct).value;
-    const [codeold, setcodeold] = useState([]);
+    const [datadrop, setDATADROP] = useState([]);
+    const [codeold, setcodeold] = useState();
     const [data, setDATA] = useState([]);
     const [form, setForm] = useState({});
     const [errors, setErrors] = useState({});
+    const [dropdown, setdropdown] = useState([]);
     const dispatch = useDispatch();
 
     const handleClose = () => {
@@ -33,10 +36,28 @@ function EditarProducto() {
         dispatch(closeModalEP());
     };
 
-    const handleShow = () => {
-        dispatch(showModalEP());
-    };
     const show2 = useSelector((state) => state.EditarProducto);
+
+    useEffect(() => {
+        const response = Promise.all([agetAllTaxes()])
+            .then((data1) => {
+                const ActiveTaxes = [];
+                for (let i = 0; i < data1[0].allTaxes.length; i++) {
+                    if (data1[0].allTaxes[i].status == 1) {
+                        ActiveTaxes.push(data1[0].allTaxes[i]);
+                    }
+                }
+
+                setdropdown(ActiveTaxes);
+            })
+            .catch((error) => {
+                console.log(error);
+                Swal.fire({
+                    text: 'No se pudieron cargar los impuestos',
+                    icon: 'error',
+                });
+            });
+    }, []);
 
     const setField = (field, value) => {
         setForm({
@@ -46,12 +67,12 @@ function EditarProducto() {
     };
 
     useEffect(() => {
-        // console.log(valores);
+        console.log(valores);
         setDATA(valores);
         setForm(valores);
         setcodeold(valores);
     }, [valores]);
-
+    console.log(dropdown);
     function findErrors() {
         const newErrors = {};
         let { nombre_producto, precio_producto } = form;
@@ -85,14 +106,17 @@ function EditarProducto() {
 
             try {
                 //console.log(form);
+
                 const data = await getproduct(codeold.codigo_producto);
 
                 if (data.status == 'Ok') {
+                    console.log(data.products[0].id);
                     const data2 = await editar(
                         data.products[0].id,
                         form.codigo_producto,
                         form.nombre_producto,
-                        form.precio_producto
+                        form.precio_producto,
+                        form.tax_rate
                     );
 
                     console.log(data2);
@@ -116,7 +140,7 @@ function EditarProducto() {
             }
         }
     }
-
+    console.log(form);
     return (
         <>
             <Modal
@@ -152,7 +176,7 @@ function EditarProducto() {
                         <Form.Group>
                             <Form.Label>Nombre producto</Form.Label>
                             <Form.Control
-                                defaultValue={data?.nombre_producto || ''}
+                                defaultValue={valores?.nombre_producto || ''}
                                 type="text"
                                 placeholder="Ingrese nombre del producto"
                                 required
@@ -188,6 +212,30 @@ function EditarProducto() {
                                 />
                             </Form.Group>
                         </InputGroup>
+                        <Form.Label className="text-center fw-semibold">
+                            Escoger el nuevo Impuesto:
+                        </Form.Label>
+                        <Form.Group>
+                            <Form.Select
+                                aria-label="Asignar impuesto"
+                                onChange={(e) => {
+                                    setField('tax_rate', e.target.value);
+                                }}
+                            >
+                                <option
+                                    value={data?.tax_rate}
+                                    selected
+                                    disabled
+                                >
+                                    {data?.name_tax || ' '}
+                                </option>
+                                {dropdown.map((option) => (
+                                    <option value={option.id}>
+                                        {option.name}
+                                    </option>
+                                ))}
+                            </Form.Select>
+                        </Form.Group>
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>

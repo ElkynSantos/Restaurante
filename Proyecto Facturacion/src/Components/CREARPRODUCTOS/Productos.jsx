@@ -2,15 +2,17 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import FormControl from 'react-bootstrap/FormControl';
 import Modal from 'react-bootstrap/Modal';
-import React, { useState } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { CloseButton } from 'react-bootstrap';
 import InputGroup from 'react-bootstrap/InputGroup';
 import { showModalCP, closeModalCP } from '../../features/CreateProduct';
 import { useDispatch, useSelector } from 'react-redux';
 import { CreateProduct } from '../../services/Product';
 import Swal from 'sweetalert2';
+import { agetAllTaxes } from '../../services/Taxes';
+import { fetchProducts } from '../../features/Productos';
+
 function modalCrearP() {
-    const [show, setShow] = useState(false);
     const dispatch = useDispatch();
     const handleClose = () => {
         dispatch(closeModalCP());
@@ -19,6 +21,7 @@ function modalCrearP() {
     const handleShow = () => {
         dispatch(showModalCP());
     };
+
     const show2 = useSelector((state) => state.CreateProduct);
     return (
         <>
@@ -50,8 +53,33 @@ function modalCrearP() {
 }
 
 function BasicExample() {
+    const dispatch = useDispatch();
     const [form, setForm] = useState({});
     const [errors, setErrors] = useState({});
+
+    const [dropdown, setdropdown] = useState([]);
+
+    useEffect(() => {
+        const response = Promise.all([agetAllTaxes()])
+            .then((data1) => {
+                const ActiveTaxes = [];
+                for (let i = 0; i < data1[0].allTaxes.length; i++) {
+                    if (data1[0].allTaxes[i].status == 1) {
+                        ActiveTaxes.push(data1[0].allTaxes[i]);
+                    }
+                }
+
+                setdropdown(ActiveTaxes);
+            })
+            .catch((error) => {
+                console.log(error);
+                Swal.fire({
+                    text: 'No se pudieron cargar los impuestos',
+                    icon: 'error',
+                });
+            });
+    }, []);
+
     const setField = (field, value) => {
         setForm({
             ...form,
@@ -78,6 +106,7 @@ function BasicExample() {
         console.log(newErrors.password);
         return newErrors;
     }
+
     async function handleSubmit(e) {
         e.preventDefault();
         let newErrors = findErrors();
@@ -88,13 +117,16 @@ function BasicExample() {
             console.log('entroERROR');
         } else {
             //LLAMEN A LA API
-            console.log('entro');
+            console.log(form);
+
             try {
                 console.log('entro');
+
                 const data = await CreateProduct(
                     form.productName,
                     form.precio_producto,
-                    form.code
+                    form.code,
+                    form.impuesto
                 );
 
                 if (data.msg == 'Este codigo ya existe en el menú') {
@@ -104,6 +136,7 @@ function BasicExample() {
                         text: data.msg,
                     });
                 } else {
+                    dispatch(fetchProducts());
                     Swal.fire({
                         position: 'top-center',
                         icon: 'success',
@@ -113,6 +146,7 @@ function BasicExample() {
                     });
                 }
             } catch (error) {
+                console.log(error);
                 Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
@@ -123,6 +157,7 @@ function BasicExample() {
 
         e.target.reset();
     }
+
     return (
         <Form onSubmit={handleSubmit} name="test" id="test">
             <br></br>
@@ -172,6 +207,22 @@ function BasicExample() {
                     />
                 </Form.Group>
             </InputGroup>
+            <Form.Label className="text-center fw-semibold">
+                Escoger Impuesto:
+            </Form.Label>
+            <Form.Group>
+                <Form.Select
+                    aria-label="Asignar impuesto"
+                    onChange={(e) => setField('impuesto', e.target.value)}
+                >
+                    <option disabled selected value>
+                        Escoger Impuesto
+                    </option>
+                    {dropdown.map((option) => (
+                        <option value={option.id}>{option.name}</option>
+                    ))}
+                </Form.Select>
+            </Form.Group>
         </Form>
     );
 }

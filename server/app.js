@@ -1,6 +1,7 @@
 import express from 'express';
 import morgan from 'morgan';
 import dotenv from 'dotenv';
+import cookieParser from 'cookie-parser';
 
 import authRoutes from './routes/auth.routes.js';
 import usersRoutes from './routes/users.routes.js';
@@ -8,6 +9,7 @@ import orderRoutes from './routes/orders.routes.js';
 import rolesRoutes from './routes/roles.routes.js';
 import taxesRoutes from './routes/taxes.routes.js';
 import billRoutes from './routes/facturas.routes.js';
+import reportRoutes from './routes/reports.routes.js';
 
 //import pedidosRoutes from './routes/pedidos.routes.js';
 import productosRoutes from './routes/products.routes.js';
@@ -18,6 +20,8 @@ import db from './db.js';
 // ! ERROR HANDLER
 
 dotenv.config();
+
+// ? COOKIES
 
 // ? DATABASE
 
@@ -30,7 +34,14 @@ try {
 
 // ? MIDDLEWARES
 const app = express();
-app.use(cors());
+app.use(cookieParser());
+app.use(
+    cors({
+        origin: 'http://localhost:5173',
+        credentials: true,
+    })
+);
+
 app.use(morgan('dev'));
 app.use(express.json());
 
@@ -41,7 +52,7 @@ app.use('/orders', orderRoutes);
 app.use('/roles', rolesRoutes);
 app.use('/taxes', taxesRoutes);
 app.use('/bills', billRoutes);
-
+app.use('/reportroute', reportRoutes);
 
 //app.use('/pedidos', pedidosRoutes);
 app.use('/products', productosRoutes);

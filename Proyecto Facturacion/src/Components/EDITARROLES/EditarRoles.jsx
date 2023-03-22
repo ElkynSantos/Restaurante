@@ -4,37 +4,34 @@ import {
     Col,
     Button,
     Row,
-    Container,
-    Card,
+    //  Container,
+    //  Card,
     Form,
-    FormControl,
-    FormLabel,
+    //FormControl,
+    // FormLabel,
     CloseButton,
 } from 'react-bootstrap';
 import Swal from 'sweetalert2';
-
-import { Register } from '../../services/REGISTER';
-
 import { showModalER, closeModalER } from '../../features/editarRoles';
 import { useDispatch, useSelector } from 'react-redux';
 
+//import { Register } from '../../services/REGISTER';
+
 function Example() {
     const dispatch = useDispatch();
-    // const [show, setShow] = useState(false);
+
     const handleClose = () => {
         dispatch(closeModalER());
     };
-
     const handleShow = () => {
         dispatch(showModalER());
     };
-
-    const show2 = useSelector((state) => state.editrol);
+    const show1 = useSelector((state) => state.editrol);
 
     return (
         <>
             <Modal
-                show={show2}
+                show={show1}
                 size="lg"
                 onHide={handleClose}
                 class="modal-dialog modal-dialog-scrollable"
@@ -59,22 +56,27 @@ function Example() {
 }
 
 function EDITARROL() {
+    const dispatch = useDispatch();
     const [form, setForm] = useState({});
     const [errors, setErrors] = useState({});
 
     const [checkedList, setCheckedList] = useState([]);
     const [DATA, setData] = useState([]);
+    const [NombreNuevo, setNombreNuevo] = useState([]);
+
+    const handleClose = () => {
+        dispatch(closeModalER());
+    };
 
     useEffect(() => {
         const getAllPermisos = async () => {
-            await fetch('http://localhost:3000/roles/permits')
+            await fetch('http://localhost:3000/roles/permissions')
                 .then((response) => response.json())
                 .then((data) => {
                     console.log('================================');
                     console.log(data.allRoles);
-
-                    //   handleInitRoles(data.allRoles);
                     setData(data.allRoles);
+                    setNombreNuevo(localStorage.getItem('N_ROLaEDITAR'));
                 })
                 .catch((error) => {
                     console.error(error);
@@ -84,69 +86,99 @@ function EDITARROL() {
         getAllPermisos();
     }, []);
 
-    const setPermisos = async (idRol, arrayPermisos) => {
-        const response = await fetch(
-            'http://localhost:3000/roles/NuevosPermisos',
-            {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+    useEffect(() => {
+        const PermitsdeRol = async () => {
+            const response = await fetch(
+                'http://localhost:3000/roles/PermisosdeRol',
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
 
-                body: JSON.stringify({ idrol: 3, ArrayPermisos: [1, 2] }),
+                    body: JSON.stringify({
+                        idrol: localStorage.getItem('ROLaEDITAR'),
+                    }),
+                }
+            );
+            const data = await response.json();
+
+            let ArrayTemp = [];
+            for (let i = 0; i < data.Permisos.length; i++) {
+                ArrayTemp.push(data.Permisos[i].id);
             }
-        );
-        const data = await response.json();
-    };
+            setCheckedList(ArrayTemp);
+        };
 
-    console.log('===========DATA==============');
-    console.log(DATA);
+        PermitsdeRol();
+    }, []);
+
+    const setPermisos = async (idRol, NNombre, arrayPermisos) => {
+        try {
+            const response = await fetch(
+                'http://localhost:3000/roles/NuevosPermisos',
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+
+                    body: JSON.stringify({
+                        idrol: idRol,
+                        NuevoNombre: NNombre,
+                        ArrayPermisos: arrayPermisos,
+                    }),
+                }
+            );
+            const data = await response.json();
+
+            Swal.fire({
+                position: 'top-center',
+                icon: 'success',
+                title: data,
+                showConfirmButton: false,
+                timer: 500,
+            });
+        } catch (error) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: error,
+            });
+        }
+    };
 
     let listaPermisos = [];
     for (let i = 0; i < DATA.length; i++) {
         listaPermisos.push({ id: DATA[i].id, value: DATA[i].N_Permiso });
     }
-
-    console.log('===========listaPermisos==============');
-    console.log(listaPermisos);
-    /*   const listaPermisos = [
-        { id: '1', value: 'Crear facturas' },
-        { id: '2', value: 'Crear y modificar usuarios' },
-        { id: '3', value: 'Crear y modificar productos' },
-    //    { id: '4', value: 'Ver y generar reportes' },
-    ];*/
+    /*
     const setField = (field, value) => {
         setForm({
             ...form,
             [field]: value,
         });
-    };
-    function findErrors() {
+    };*/
+    /*function findErrors() {
         const newErrors = {};
         return newErrors;
-    }
-    const handleSelect = (event) => {
-        const value = event.target.value;
-        const isChecked = event.target.checked;
+    }*/
+    //  useEffect(() => {}, [checkedList]);
 
+    function handleSelect(id, event) {
+        const isChecked = event.target.checked;
         if (isChecked) {
-            //Add checked item into checkList
-            setCheckedList([...checkedList, value]);
+            setCheckedList([...checkedList, id]);
         } else {
-            //Remove unchecked item from checkList
-            const filteredList = checkedList.filter((item) => item !== value);
-            setCheckedList(filteredList);
+            setCheckedList(checkedList.filter((item) => item !== id));
         }
-    };
+    }
+
     async function handleSubmit(e) {
         e.preventDefault();
-        let newErrors = findErrors();
-        // console.log(newErrors);
 
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors);
-        } else {
-            console.log('FUNCIONA');
         }
     }
 
@@ -157,7 +189,6 @@ function EDITARROL() {
                 editar.{' '}
             </h5>
             <br></br>
-            <h3 className="text-center ">-- USUARIO ACTUAL --</h3>
 
             <div className="mb-3">
                 <Form onSubmit={handleSubmit} name="test" id="test">
@@ -169,11 +200,13 @@ function EDITARROL() {
                                 </Form.Label>
                                 <Form.Control
                                     type="text"
-                                    placeholder="Ingrese el nombre del rol"
+                                    placeholder={localStorage.getItem(
+                                        'N_ROLaEDITAR'
+                                    )}
                                     onChange={(e) =>
-                                        setField('nombre', e.target.value)
+                                        setNombreNuevo(e.target.value)
                                     }
-                                    required
+
                                     // isInvalid={!!errors.nombre}
                                 />
                             </Form.Group>
@@ -196,7 +229,12 @@ function EDITARROL() {
                                                 type="checkbox"
                                                 name="permisos"
                                                 value={item.value}
-                                                onChange={handleSelect}
+                                                onChange={(event) =>
+                                                    handleSelect(item.id, event)
+                                                }
+                                                checked={checkedList.includes(
+                                                    item.id
+                                                )}
                                             />
                                             <label>&nbsp;{item.value}</label>
                                         </div>
@@ -209,7 +247,13 @@ function EDITARROL() {
                             className="bg-blue"
                             form="test"
                             type="submit"
-                            onClick={() => setPermisos(1, 2)}
+                            onClick={() => {
+                                setPermisos(
+                                    localStorage.getItem('ROLaEDITAR'),
+                                    NombreNuevo,
+                                    checkedList
+                                );
+                            }}
                         >
                             Guardar cambios
                         </Button>

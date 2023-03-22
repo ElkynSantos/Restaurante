@@ -5,24 +5,17 @@ import AppError from '../utilities/app.error.js';
 import db from '../db.js';
 
 const tokenVerification = async (req, res, next) => {
-    // ? Check if the token exists
-    let token;
-    if (
-        req.headers.authorization &&
-        req.headers.authorization.startsWith('Bearer')
-    ) {
-        token = req.headers.authorization.split(' ')[1];
-    }
+    const { _token } = req.cookies;
 
-    if (!token) {
+    if (!_token) {
         return next(new AppError('El usuario no ha ingresado', 401));
     }
 
-    // ? Validate if the token is valid
+    // ? Validate if the _token is valid
 
     try {
         const decoded = await promisify(jwt.verify)(
-            token,
+            _token,
             process.env.JWT_SECRET
         );
 
@@ -34,7 +27,7 @@ const tokenVerification = async (req, res, next) => {
             {
                 replacements: {
                     userID: decoded.id,
-                    opt: 1,
+                    opt: 0,
                 },
             }
         );
@@ -43,8 +36,9 @@ const tokenVerification = async (req, res, next) => {
             return next(new AppError(`Usuario no existe`, 401));
         }
 
-        //TODO: Acceso a la siguiente ruta
+        req.currentUsername = decoded.id;
 
+        //TODO: Acceso a la siguiente ruta
         next();
     } catch (error) {
         let errorType =

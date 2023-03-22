@@ -3,35 +3,37 @@ import axios from 'axios';
 export async function CreateTax(taxName, taxPercentage) {
     const options = {
         method: 'POST',
-        url: 'http://localhost:3000/taxes/',
+        url: `${import.meta.env.VITE_REACT_APP_API_URL}/taxes/`,
         data: {
             taxName,
             taxPercentage,
         },
+        withCredentials: true,
     };
     const response = await axios.request(options);
 
     return response.data;
 }
 
-export const getAllTaxes = async () => {
-    return await fetch('http://localhost:3000/taxes').then((response) =>
-        response.json()
-    );
+export const agetAllTaxes = async () => {
+    return await fetch(`${import.meta.env.VITE_REACT_APP_API_URL}/taxes/`, {
+        credentials: 'include',
+    }).then((response) => response.json());
 };
 
 export const editTax = (tax) => {
-    return fetch('http://localhost:3000/taxes', {
+    return fetch(`${import.meta.env.VITE_REACT_APP_API_URL}/taxes/`, {
         method: 'PATCH',
         body: JSON.stringify(tax),
         headers: {
             'Content-Type': 'application/json',
         },
+        credentials: 'include',
     }).then((response) => response.json());
 };
 
 export const deleteTax = (tax, status) => {
-    return fetch('http://localhost:3000/taxes', {
+    return fetch(`${import.meta.env.VITE_REACT_APP_API_URL}/taxes/`, {
         method: 'DELETE',
         body: JSON.stringify({
             taxId: tax,
@@ -40,5 +42,6 @@ export const deleteTax = (tax, status) => {
         headers: {
             'Content-Type': 'application/json',
         },
+        credentials: 'include',
     }).then((response) => response.json());
 };
