@@ -5,13 +5,14 @@ import db from '../db.js';
 
 const getConfigFacturas = async(req,res,next)=>{
     try {
-        const allFacturas = await db.query('CALL get_configBills()');
+        const allConfig = await db.query('CALL get_configBills()');
         return res.status(200).json({
             status: 'Ok',
-            msg: 'Lista de todos los awewe',
-            allFacturas,
+            msg: 'Funciona',
+            allConfig,
         });
-    } catch (error) {
+    } catch (error) 
+    {   console.log(error);
         return next(new AppError('Ups! Error en la base de datos', 500));
     }
 }

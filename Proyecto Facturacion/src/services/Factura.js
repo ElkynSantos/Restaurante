@@ -137,4 +137,9 @@ export async function anularFactura(id) {
 
     return response.data;
 }
+export async function getConfigFacturas() {
+    return await fetch('http://localhost:3000/config/').then((response) =>
+        response.json()
+    );
+}
 export { getFacturas, newFactura };

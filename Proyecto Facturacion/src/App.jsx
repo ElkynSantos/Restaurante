@@ -72,12 +72,10 @@ function App() {
                 <Route
                     index
                     element={
-                        <ProtectedRoute
-                            isAllowed={!loggedStatus}
-                            redirectTo="/home"
-                        >
+                       
+                        
                             <LOGIN />
-                        </ProtectedRoute>
+                        
                     }
                 />
                 <Route path="/password-recovery" element={<FormPassword />} />
@@ -88,100 +86,100 @@ function App() {
                 <Route
                     path="/home"
                     element={
-                        <ProtectedRoute isAllowed={loggedStatus} redirectTo="/">
+                        
                             <INICIO />
-                        </ProtectedRoute>
+                        
                     }
                 />
                 {/* CONFIGURACIÓN DEL SISTEMA */}
                 <Route
                     path="/roles"
                     element={
-                        <ProtectedRoute isAllowed={loggedStatus}>
+                        
                             <ROLES />
-                        </ProtectedRoute>
+                        
                     }
                 />
                 <Route
                     path="/users"
                     element={
-                        <ProtectedRoute isAllowed={loggedStatus}>
+                       
                             <USERS />
-                        </ProtectedRoute>
+                       
                     }
                 />
                 <Route
                     path="/bills"
                     element={
-                        <ProtectedRoute isAllowed={loggedStatus}>
+                        
                             <Facturas />
-                        </ProtectedRoute>
+                        
                     }
                 />
                 <Route
                     path="/printbills"
                     element={
-                        <ProtectedRoute isAllowed={loggedStatus}>
+                       
                             <PrintFactura />
-                        </ProtectedRoute>
+                        
                     }
                 />
                 <Route
                     path="/kitchen"
                     element={
-                        <ProtectedRoute isAllowed={loggedStatus}>
+                        
                             <COCINA />
-                        </ProtectedRoute>
+                       
                     }
                 />
                 {/* CONFIGURACIÓN DEL NEGOCIO */}
                 <Route
                     path="/taxes"
                     element={
-                        <ProtectedRoute isAllowed={loggedStatus}>
+                       
                             <ECBMPUESTO />
-                        </ProtectedRoute>
+                       
                     }
                 />
                 <Route
                     path={'/products'}
                     element={
-                        <ProtectedRoute isAllowed={loggedStatus}>
+                       
                             <PRODUCTOS />
-                        </ProtectedRoute>
+                        
                     }
                 />
                 <Route
                     path="/orders"
                     element={
-                        <ProtectedRoute isAllowed={loggedStatus}>
+                        
                             <PEDIDOS />
-                        </ProtectedRoute>
+                        
                     }
                 />
                 <Route
                     path="/orders-list"
                     element={
-                        <ProtectedRoute isAllowed={loggedStatus}>
+                        
                             <LISTAPEDIDOS />
-                        </ProtectedRoute>
+                       
                     }
                 />
                 <Route
                     path="/tables"
                     element={
-                        <ProtectedRoute isAllowed={loggedStatus}>
+                        
                             <MESAS />
-                        </ProtectedRoute>
+                       
                     }
                 />
                 <Route
                     path="/invoicing"
                     element={
                         // <ProtectedRoute isAllowed={!!permissions}>
-                        <ProtectedRoute isAllowed={loggedStatus}>
+                       
                             <FACTURACION />
-                        </ProtectedRoute>
+                        
                     }
                 />
                 <Route path="/profile" element={<EditarPerf />} />
@@ -190,17 +188,17 @@ function App() {
                 <Route
                     path="/reports"
                     element={
-                        <ProtectedRoute isAllowed={loggedStatus}>
+                        
                             <REPORTES />
-                        </ProtectedRoute>
+                       
                     }
                 />
                 <Route
                     path="/invoice-list"
                     element={
-                        <ProtectedRoute isAllowed={loggedStatus}>
+                        
                             <LISTAFACTURACION />
-                        </ProtectedRoute>
+                        
                     }
                 />
             </Routes>

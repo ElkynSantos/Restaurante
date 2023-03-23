@@ -5,8 +5,8 @@ import {
     newConfigFactura 
 } from '../controllers/configFacturas.controllers.js'
 
-const facturasRoutes = express.Router();
+const configRoutes = express.Router();
 
-facturasRoutes.route('/').get(getConfigFacturas).post(newConfigFactura).patch(editConfigFacturas);
+configRoutes.route('/').get(getConfigFacturas).post(newConfigFactura).patch(editConfigFacturas);
 
-export default facturasRoutes;
+export default configRoutes;

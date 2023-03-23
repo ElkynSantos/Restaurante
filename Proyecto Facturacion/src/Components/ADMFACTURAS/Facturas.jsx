@@ -20,7 +20,7 @@ import {
     closeModalFactura,
 } from '../../features/editFacturaSlice';
 import EditRTNNAME from '../editRTN&NAME';
-
+import BarraLateral from '../common';
 import Swal from 'sweetalert2';
 import './Fact.css';
 
@@ -37,6 +37,7 @@ function Facturas() {
     const dispatch = useDispatch();
     const [anular, setAnular] = useState(false);
     const [facturas, setFacturas] = useState([]);
+    const[config, setConfig] = useState([]);
     const showF = useSelector((state) => state.editFactura).modalState;
     console.log('modal:' + showF);
     const handleUpdateidFactura = (id) => {
@@ -103,50 +104,51 @@ function Facturas() {
     setEditFacturas(factura);
     setShowEditModal(true);
   }; */
-
+  async function getConfig(){
+  try {
+    const response = await axios.get('http://localhost:3000/config/');
+    setConfig(response.data.allConfig);
+} catch (error) {
+    console.log(error);
+}
+  }
   const handlePrintFactura = (id, Numero_factura,Nombre_cliente,RTN_cliente) => 
   {
+       getConfig();
+       console.log("config"+config);
 			var a = window.open('', '', 'height=1000, width=1500');
+        let b = "@media print {"+ "\n @page {" +"\nmargin-top: 0;" +"\nmargin-bottom: 0;" +"\n}" +"\nbody {"+"\npadding-top: 72px;"+"\npadding-bottom: 72px ;"+ "\n}"+ "\n}";
 			a.document.write('<html>');
       a.document.write('<header>');
       a.document.write('<style>');
       a.document.write('header {text-align: center;}');
+      a.document.write(b)
       a.document.write('body {text-align: justify;} ');
       a.document.write('</style>');
-      a.document.write('Espresso Americano S.A.');
+      a.document.write(config[0].Nombre_Restaurante);
       a.document.write('<br>');
-      a.document.write('"La pasión del café"');
+      a.document.write(config[0].descripcion_restaurante);
       a.document.write('<br>');
-      a.document.write('Col. Miramontes 5ta Calle #2212');
-      a.document.write('<br>');
-      a.document.write('Tegucigalpa M.D.C. Honduras');
-      a.document.write('<br>');
-      a.document.write('Local: Espresso Americano/UNITEC');
+      a.document.write(config[0].domicilio);
       a.document.write('<br>');
       a.document.write('<br>');
       a.document.write('"F A C T U R A"');
       a.document.write('<br>');
       a.document.write('</header>');
 			a.document.write('<body>');
-      a.document.write('Correo: garifunasfood@gmail.com');
+      a.document.write('Correo: '+ config[0].correo);
       a.document.write('<br>');
-      a.document.write('RTN: 00000000000000');
+      a.document.write('RTN: '+config[0].RTN);
       a.document.write('&emsp;');
-      a.document.write('Tel: 89417810');
+      a.document.write('Tel: ' +config[0].celular);
       a.document.write('<br>');
-      a.document.write('C.A.I.: 0000000000000000000000000000');
+      a.document.write('C.A.I.: '+ config[0].cai);
       a.document.write('<br>');
-      a.document.write('Fecha: 22/02/2023');
+      a.document.write('Fecha: '+config[0].fecha_limite_emision);
       a.document.write('<br>');
       a.document.write('Cliente: '+Nombre_cliente);
       a.document.write('<br>');
       a.document.write('RTN: '+RTN_cliente);
-      a.document.write('<br>');
-      a.document.write('No Compra Exenta:');
-      a.document.write('<br>');
-      a.document.write('No Constancia Registro Exonerado:');
-      a.document.write('<br>');
-      a.document.write('No Registro SAG:');
       a.document.write('<br>');
       a.document.write('Original: Cliente ');
       a.document.write('&emsp;');
@@ -267,8 +269,7 @@ function Facturas() {
                                             variant="info"
                                             onClick={() =>
                                                 handlePrintFactura(
-                                                    factura.id,
-                                                    factura.Anular
+                                                  factura.id, factura.Numero_factura,factura.Nombre_cliente,factura. RTN_cliente
                                                 )
                                             }
                                         >
